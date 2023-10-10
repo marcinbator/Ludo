@@ -18,9 +18,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -30,9 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">

@@ -1,19 +1,36 @@
 #include "Tile.h"
 
 Tile::Tile() {
+    this->id = 0;
     this->texture.loadFromFile("tile.png");
     this->sprite.setTexture(texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->width=this->sprite.getGlobalBounds().getSize().x;
-    this->height=this->sprite.getGlobalBounds().getSize().y;
+    this->width = this->sprite.getGlobalBounds().getSize().x;
+    this->height = this->sprite.getGlobalBounds().getSize().y;
 }
 
 void Tile::setPosition(float x, float y) {
     this->sprite.setPosition(x, y);
 }
 
-void Tile::rotate(float angle) {
-    this->sprite.rotate(angle);
+void Tile::setId(int id)
+{
+    this->id = id;
+}
+
+int Tile::getId()
+{
+    return this->id;
+}
+
+int Tile::getHeight()
+{
+    return this->height;
+}
+
+int Tile::getWidth()
+{
+    return this->width;
 }
 
 Sprite Tile::getSprite() const

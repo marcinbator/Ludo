@@ -22,12 +22,10 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ludo.cpp" />
-    <ClCompile Include="Point.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Point.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
