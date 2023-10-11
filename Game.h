@@ -11,9 +11,12 @@ class Game
     int centerX;
     int centerY;
     void drawBoard();
-    RenderWindow& window;
+    void pollEvents();
+    RenderWindow* window;
     Tile tiles[18];
 public:
-    Game(RenderWindow& window);
-    void run();
+    Game();
+    void update();
+    void render();
+    bool isRunning();
 };

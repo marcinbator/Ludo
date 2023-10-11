@@ -4,8 +4,10 @@
 using namespace sf;
 
 int main() {
-    RenderWindow window(VideoMode(900, 900), "Ludo!");
-    Game game(window);
-    game.run();
+    Game game;
+    while (game.isRunning()) {
+        game.update();
+        game.render();
+    }
     return 0;
 }

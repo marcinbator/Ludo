@@ -1,35 +1,49 @@
 #include "Game.h"
 
-Game::Game(RenderWindow& window)
-    : window(window)
+
+Game::Game()
 {
-    this->centerX = window.getSize().x / 2;
-    this->centerY = window.getSize().y / 2;
+    this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
+    this->centerX = window->getSize().x / 2;
+    this->centerY = window->getSize().y / 2;
 }
 
-void Game::run()
+void Game::update()
 {
-    window.clear();
-    drawBoard();
-    window.display();
-    while (window.isOpen()) {
-        Event event;
-        while (window.pollEvent(event))
+    pollEvents();
+}
+
+void Game::pollEvents()
+{
+    Event event;
+    while (this->window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
         {
-            if (event.type == Event::Closed)
-                window.close();
-            else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+            this->window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            for (const auto& tile : tiles)
             {
-                for (const auto& tile : tiles)
-                {
-                    if (tile.isClicked(event)) {
-                        tile.handleClick();
-                    }
+                if (tile.isClicked(event)) {
+                    tile.handleClick();
                 }
             }
         }
     }
+}
 
+void Game::render()
+{
+    this->window->clear();
+    drawBoard();
+    this->window->display();
+}
+
+bool Game::isRunning()
+{
+    return this->window->isOpen();
 }
 
 void Game::drawBoard() 
@@ -38,25 +52,25 @@ void Game::drawBoard()
     tiles[id].setId(id);
     for (int i = 0; i < 5; i++) {
         tiles[id].setPosition(centerX, centerY + tiles[id].getHeight() * i);
-        window.draw(tiles[id].getSprite());
+        this->window->draw(tiles[id].getSprite());
         id++;
         tiles[id].setId(id);
     }
     for (int i = 1; i <= 4; i++) {
         tiles[id].setPosition(centerX, centerY - tiles[id].getHeight() * i);
-        window.draw(tiles[id].getSprite());
+        this->window->draw(tiles[id].getSprite());
         id++;
         tiles[id].setId(id);
     }
     for (int i = 1; i <= 4; i++) {
         tiles[id].setPosition(centerX + tiles[id].getWidth() * i, centerY);
-        window.draw(tiles[id].getSprite());
+        this->window->draw(tiles[id].getSprite());
         id++;
         tiles[id].setId(id);
     }
     for (int i = 1; i <= 4; i++) {
         tiles[id].setPosition(centerX - tiles[id].getWidth() * i, centerY);
-        window.draw(tiles[id].getSprite());
+        this->window->draw(tiles[id].getSprite());
         id++;
         tiles[id].setId(id);
     }
