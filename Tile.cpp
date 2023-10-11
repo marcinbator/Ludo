@@ -18,11 +18,6 @@ void Tile::setId(int id)
     this->id = id;
 }
 
-int Tile::getId()
-{
-    return this->id;
-}
-
 int Tile::getHeight()
 {
     return this->height;

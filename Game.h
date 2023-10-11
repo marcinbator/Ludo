@@ -8,12 +8,9 @@ using namespace std;
 
 class Game
 {
-    int centerX;
-    int centerY;
-    void drawBoard();
-    void pollEvents();
-    RenderWindow* window;
     Tile tiles[100];
+    RenderWindow* window;
+    void pollEvents();
 public:
     Game();
     void update();

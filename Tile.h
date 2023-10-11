@@ -16,11 +16,10 @@ public:
     Tile();
     void setPosition(int x, int y);
     void setId(int id);
-    int getId();
-    int getHeight();
-    int getWidth();
     int getPositionX();
     int getPositionY();
+    int getHeight();
+    int getWidth();
     Sprite getSprite() const;
     bool isClicked(Event event) const;
     void handleClick() const;
