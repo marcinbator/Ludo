@@ -2,14 +2,14 @@
 
 Tile::Tile() {
     this->id = 0;
-    this->texture.loadFromFile("tile.png");
+    this->texture.loadFromFile("images/tile.png");
     this->sprite.setTexture(texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
     this->width = this->sprite.getGlobalBounds().getSize().x;
     this->height = this->sprite.getGlobalBounds().getSize().y;
 }
 
-void Tile::setPosition(float x, float y) {
+void Tile::setPosition(int x, int y) {
     this->sprite.setPosition(x, y);
 }
 
@@ -33,9 +33,19 @@ int Tile::getWidth()
     return this->width;
 }
 
+int Tile::getPositionX()
+{
+    return this->sprite.getPosition().x;
+}
+
 Sprite Tile::getSprite() const
 {
     return this->sprite;
+}
+
+int Tile::getPositionY()
+{
+    return this->sprite.getPosition().y;
 }
 
 bool Tile::isClicked(Event event) const
@@ -51,4 +61,32 @@ bool Tile::isClicked(Event event) const
 
 void Tile::handleClick() const{
     cout << this->id << endl;
+}
+
+void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window)
+{
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->setPosition(x, y);
+    this->setId(id);
+    window->draw(this->getSprite());
+}
+
+void Tile::drawTile(string texturePath,int rotateDeg, int x, int y, RenderWindow* window)
+{
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->sprite.setRotation(rotateDeg);
+    this->setPosition(x, y);
+    this->setId(id);
+    window->draw(this->getSprite());
+}
+
+void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window, int& id) {
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->setPosition(x , y);
+    this->setId(id);
+    id++;
+    window->draw(this->getSprite());
 }

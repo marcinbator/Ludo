@@ -49,29 +49,50 @@ bool Game::isRunning()
 void Game::drawBoard() 
 {
     int id = 0;
-    tiles[id].setId(id);
-    for (int i = 0; i < 5; i++) {
-        tiles[id].setPosition(centerX, centerY + tiles[id].getHeight() * i);
-        this->window->draw(tiles[id].getSprite());
-        id++;
-        tiles[id].setId(id);
+    //up
+    for (int i = 1; i < 5; i++) {
+        for (int j = -1; j <= 1; j+=2) {
+            tiles[id].drawTile("images/tile.png", centerX + j * tiles[id].getWidth(), centerY + tiles[id].getHeight() * i, this->window, id);
+        }
+        tiles[id].drawTile("images/tileRed.png", centerX, centerY + tiles[id].getHeight() * i, this->window, id);
     }
+    for (int i = -1; i <= 1; i++) {
+        tiles[id].drawTile("images/tile.png", centerX + i * tiles[id].getWidth(), centerY + tiles[id].getHeight() * 5, this->window, id);
+    }
+    //down
     for (int i = 1; i <= 4; i++) {
-        tiles[id].setPosition(centerX, centerY - tiles[id].getHeight() * i);
-        this->window->draw(tiles[id].getSprite());
-        id++;
-        tiles[id].setId(id);
+        for (int j = -1; j <= 1; j += 2) {
+            tiles[id].drawTile("images/tile.png", centerX + j * tiles[id].getWidth(), centerY - tiles[id].getHeight() * i, this->window, id);
+        }
+        tiles[id].drawTile("images/tileGreen.png", centerX, centerY - tiles[id].getHeight() * i, this->window, id);
     }
-    for (int i = 1; i <= 4; i++) {
-        tiles[id].setPosition(centerX + tiles[id].getWidth() * i, centerY);
-        this->window->draw(tiles[id].getSprite());
-        id++;
-        tiles[id].setId(id);
+    for (int i = -1; i <= 1; i++) {
+        tiles[id].drawTile("images/tile.png", centerX + i * tiles[id].getWidth(), centerY - tiles[id].getHeight() * 5, this->window, id);
     }
-    for (int i = 1; i <= 4; i++) {
-        tiles[id].setPosition(centerX - tiles[id].getWidth() * i, centerY);
-        this->window->draw(tiles[id].getSprite());
-        id++;
-        tiles[id].setId(id);
+    //left
+    tiles[id].drawTile("images/tileBlue.png", centerX - tiles[id].getWidth(), centerY, this->window, id);
+    for (int i = 2; i <= 4; i++) {
+        for (int j = -1; j <= 1; j += 2) {
+            tiles[id].drawTile("images/tile.png", centerX - tiles[id].getWidth() * i, centerY + j * tiles[id].getHeight(), this->window, id);
+        }
+        tiles[id].drawTile("images/tileBlue.png", centerX - tiles[id].getWidth() * i, centerY, this->window, id);
     }
+    for (int i = -1; i <= 1; i++) {
+        tiles[id].drawTile("images/tile.png", centerX - tiles[id].getWidth() * 5, centerY - i * tiles[id].getHeight(), this->window, id);
+    }
+    //right
+    tiles[id].drawTile("images/tileYellow.png", centerX + tiles[id].getWidth(), centerY, this->window, id);
+    for (int i = 2; i <= 4; i++) {
+        for (int j = -1; j <= 1; j += 2) {
+            tiles[id].drawTile("images/tile.png", centerX + tiles[id].getWidth() * i, centerY + j * tiles[id].getHeight(), this->window, id);
+        }
+        tiles[id].drawTile("images/tileYellow.png", centerX + tiles[id].getWidth() * i, centerY, this->window, id);
+    }
+    for (int i = -1; i <= 1; i++) {
+        tiles[id].drawTile("images/tile.png", centerX + tiles[id].getWidth() * 5, centerY - i * tiles[id].getHeight(), this->window, id);
+    }
+    tiles[12].drawTile("images/arrow.png", tiles[12].getPositionX(), tiles[12].getPositionY(), this->window);
+    tiles[42].drawTile("images/arrow.png", 90, tiles[42].getPositionX(), tiles[42].getPositionY(), this->window);
+    tiles[29].drawTile("images/arrow.png", 180, tiles[29].getPositionX(), tiles[29].getPositionY(), this->window);
+    tiles[53].drawTile("images/arrow.png", 270, tiles[53].getPositionX(), tiles[53].getPositionY(), this->window);
 }

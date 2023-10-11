@@ -13,7 +13,7 @@ class Game
     void drawBoard();
     void pollEvents();
     RenderWindow* window;
-    Tile tiles[18];
+    Tile tiles[100];
 public:
     Game();
     void update();
