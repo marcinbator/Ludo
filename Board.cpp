@@ -81,10 +81,20 @@ void Board::drawBoard(RenderWindow* window)
     tiles[id].drawTile("images/tileRed.png", centerX - tiles[id].getWidth() * 5, centerY + tiles[id].getHeight() * 4, window, id);
 }
 
-Tile* Board::getTiles()
-{
+Tile* Board::getTiles() {
     return this->tiles;
 }
+
+Tile* Board::getTileById(int id)
+{
+    for (int i = 0; i < 72; i++) {
+        if (tiles[i].getId() == id) {
+            return &tiles[i];
+        }
+    }
+    return nullptr;
+}
+
 
 void Board::setIds() {
     //main route

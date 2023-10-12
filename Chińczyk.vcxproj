@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Pawn.cpp" />
-    <ClCompile Include="Team.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ludo.cpp" />
@@ -29,7 +28,6 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Pawn.h" />
-    <ClInclude Include="Team.h" />
     <ClInclude Include="TeamName.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Game.h" />

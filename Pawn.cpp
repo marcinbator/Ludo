@@ -1,49 +1,42 @@
 #include "Pawn.h"
 
-bool Pawn::setPosition(Tile* tile)
-{
-	return false;
-}
-
-Pawn::Pawn(int id, Team* team)
+Pawn::Pawn(int id, TeamName teamName, RenderWindow* window)
 {
 	this->id = id;
-	this->team = team;
 	this->currentTile = nullptr;
 	this->isAtBase = true;
 	this->isAtTarget = false;
+	this->texture.loadFromFile("images/Rpawn.png");
+	this->sprite.setTexture(this->texture);
+	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
+	this->window = window;
+}
+
+bool Pawn::draw(Tile* tile)
+{
+	this->sprite.setPosition(tile->getPositionX(), tile->getPositionY());
+	this->window->draw(this->sprite);
+	return true;
 }
 
 void Pawn::move(int tiles)
 {
-	for (int i = 0; i < tiles; i++) {
-		this->setPosition(this->getNextTile());
-	}
+	
 }
 
 void Pawn::deploy()
 {
-	Tile tile = this->team->getStartTile();
-	this->setPosition(&tile);
+	
 }
 
 void Pawn::setInBase()
 {
-	
+
 }
 
-int Pawn::getId()
-{
-	return this->id;
-}
 
 Tile* Pawn::getCurrentTile()
 {
 	return this->currentTile;
-}
-
-Tile* Pawn::getNextTile()
-{
-	return nullptr;
 }
 

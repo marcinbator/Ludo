@@ -3,7 +3,7 @@
 Tile::Tile() {
     this->id = 0;
     this->texture.loadFromFile("images/tile.png");
-    this->sprite.setTexture(texture);
+    this->sprite.setTexture(this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
     this->width = this->sprite.getGlobalBounds().getSize().x;
     this->height = this->sprite.getGlobalBounds().getSize().y;

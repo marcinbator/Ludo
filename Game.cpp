@@ -7,7 +7,7 @@ Game::Game()
 
 void Game::update()
 {
-    pollEvents();
+    this->pollEvents();
 }
 
 void Game::pollEvents()
@@ -23,18 +23,26 @@ void Game::pollEvents()
         {
             for (int i=0; i<100; i++)
             {
-                if (board->getTiles()[i].isClicked(event)) {
-                    board->getTiles()[i].handleClick();
+                Tile tile = this->board->getTiles()[i];
+                if (tile.isClicked(event)) {
+                    tile.handleClick();
                 }
             }
         }
     }
 }
 
+void Game::renderPawns() {
+    Tile* tile = this->board->getTileById(102);
+    Pawn pawn(1, TeamName(red), this->window);
+    pawn.draw(tile);
+}
+
 void Game::render()
 {
     this->window->clear();
     this->board = new Board(this->window);
+    renderPawns();
     this->window->display();
 }
 

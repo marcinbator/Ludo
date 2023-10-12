@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Team.h"
+#include "TeamName.h"
 #include "Tile.h"
 
 using namespace sf;
@@ -12,20 +12,18 @@ class Pawn
 {
 	int id;
 	Sprite sprite;
+	Texture texture;
 	Tile* currentTile;
+	RenderWindow* window;
 	bool isAtBase;
 	bool isAtTarget;
-	Team* team;
-	bool setPosition(Tile* tile);
 public:
 	Pawn() = delete;
-	Pawn(int id, Team* team);
+	Pawn(int id, TeamName teamName, RenderWindow* window);
 	void move(int tiles);
 	void deploy();
-	void setTeamId(int id);
 	void setInBase();
-	int getId();
 	Tile* getCurrentTile();
-	Tile* getNextTile();
+	bool draw(Tile* tile);
 };
 
