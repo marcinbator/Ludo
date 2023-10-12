@@ -26,7 +26,7 @@ public:
     void setCurrentPawnId(int id);
     Sprite getSprite() const;
     bool isClicked(Event event) const;
-    int handleClick() const;
+    void handleClick() const;
     void drawTile(string texturePath, int x, int y, RenderWindow* window);
     void drawTile(string texturePath, int rotateDeg, int x, int y, RenderWindow* window);
     void drawTile(string texturePath, int x, int y, RenderWindow* window, int& id);

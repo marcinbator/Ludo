@@ -29,9 +29,12 @@ void Game::pollEvents()
             {
                 Tile tile = this->board->getTiles()[i];
                 if (tile.isClicked(event)) {
-                    cout << tile.handleClick() << endl;
-                    this->pawns[tile.handleClick()]->handleClick();
-                    break;
+                    tile.handleClick();
+                }
+            }
+            for (int i = 0; i < 16; i++) {
+                if (pawns[i]->isClicked(event)) {
+                    this->pawns[i]->handleClick();
                 }
             }
             

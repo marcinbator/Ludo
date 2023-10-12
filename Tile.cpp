@@ -70,13 +70,8 @@ void Tile::setCurrentPawnId(int id)
     this->currentPawnId = id;
 }
 
-int Tile::handleClick() const{
-    if(this->currentPawnId!=0){
-        cout << this->id << " " << this->currentPawnId << endl;
-        return this->currentPawnId;
-    }
+void Tile::handleClick() const{
     cout << this->id <<" "<< endl;
-    return 0;
 }
 
 void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window)
