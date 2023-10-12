@@ -30,6 +30,9 @@
     <ClCompile Include="Pawn.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -47,15 +50,15 @@
     <ClInclude Include="TeamName.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="images\tile.xcf" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\arrow.png">
-      <Filter>Resource files</Filter>
-    </Image>
     <Image Include="images\Barrow.png">
       <Filter>Resource files</Filter>
     </Image>
@@ -81,6 +84,18 @@
       <Filter>Resource files</Filter>
     </Image>
     <Image Include="images\Yarrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Bpawn.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Gpawn.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Rpawn.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Ypawn.png">
       <Filter>Resource files</Filter>
     </Image>
   </ItemGroup>

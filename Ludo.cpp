@@ -5,9 +5,10 @@ using namespace sf;
 
 int main() {
     Game game;
+    game.render();
     while (game.isRunning()) {
         game.update();
-        game.render();
+        
     }
     return 0;
 }

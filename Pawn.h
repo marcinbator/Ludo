@@ -23,7 +23,11 @@ public:
 	void move(int tiles);
 	void deploy();
 	void setInBase();
+	int getId();
 	Tile* getCurrentTile();
 	bool draw(Tile* tile);
+
+	bool isClicked(Event event);
+	void handleClick();
 };
 
