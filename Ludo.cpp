@@ -8,7 +8,6 @@ int main() {
     game.render();
     while (game.isRunning()) {
         game.update();
-        
     }
     return 0;
 }

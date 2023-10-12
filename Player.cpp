@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player(int id, string name, Pawn* pawns, Tile* startingTile)
+Player::Player(int id, string name, Pawn* pawns[4], Tile* startingTile)
 {
     this->id = id;
     this->name = name;
-    this->pawns = pawns;
+    this->pawns = *pawns;
     this->startingTile = startingTile;
 }
 

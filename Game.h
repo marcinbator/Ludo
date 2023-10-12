@@ -14,7 +14,7 @@ class Game
     void pollEvents();
     void renderPawns();
     Board* board = nullptr;
-    Pawn* pawns = nullptr;
+    Pawn* pawns[16];
     Player* players = nullptr;
 public:
     Game();

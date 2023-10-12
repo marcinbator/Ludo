@@ -12,6 +12,9 @@ void Game::update()
 
 void Game::pollEvents()
 {
+    /*for (int i = 0; i < 16; i++) {
+        cout << this->pawns[i]->getId() << endl;
+    }*/
     Event event;
     this->window->setFramerateLimit(60);
     while (this->window->pollEvent(event))
@@ -26,7 +29,8 @@ void Game::pollEvents()
             {
                 Tile tile = this->board->getTiles()[i];
                 if (tile.isClicked(event)) {
-                    tile.handleClick();
+                    cout << tile.handleClick() << endl;
+                    this->pawns[tile.handleClick()]->handleClick();
                     break;
                 }
             }
@@ -36,41 +40,30 @@ void Game::pollEvents()
 }
 
 void Game::renderPawns() {
-    Pawn pawns[] = {
-        Pawn(1, TeamName(red), this->window),
-        Pawn(2, TeamName(red), this->window),
-        Pawn(3, TeamName(red), this->window),
-        Pawn(4, TeamName(red), this->window),
-        Pawn(5, TeamName(blue), this->window),
-        Pawn(6, TeamName(blue), this->window),
-        Pawn(7, TeamName(blue), this->window),
-        Pawn(8, TeamName(blue), this->window),
-        Pawn(9, TeamName(green), this->window),
-        Pawn(10, TeamName(green), this->window),
-        Pawn(11, TeamName(green), this->window),
-        Pawn(12, TeamName(green), this->window),
-        Pawn(13, TeamName(yellow), this->window),
-        Pawn(14, TeamName(yellow), this->window),
-        Pawn(15, TeamName(yellow), this->window),
-        Pawn(16, TeamName(yellow), this->window)
-    };
     for (int i = 0; i < 4; i++) {
-        Tile* tile = this->board->getTileById(101+i);
-        pawns[i].draw(tile);
+        Pawn* pawn = new Pawn(i, TeamName(red), this->window);
+        this->pawns[i] = pawn;
+        Tile* tile = this->board->getTileById(101 + i);
+        this->pawns[i]->draw(tile);
     }
     for (int i = 4; i < 8; i++) {
+        Pawn* pawn = new Pawn(i, TeamName(blue), this->window);
+        this->pawns[i] = pawn;
         Tile* tile = this->board->getTileById(111 + i-4);
-        pawns[i].draw(tile);
+        this->pawns[i]->draw(tile);
     }
     for (int i = 8; i < 12; i++) {
+        Pawn* pawn = new Pawn(i, TeamName(green), this->window);
+        this->pawns[i] = pawn;
         Tile* tile = this->board->getTileById(121 + i-8);
-        pawns[i].draw(tile);
+        this->pawns[i]->draw(tile);
     }
     for (int i = 12; i < 16; i++) {
+        Pawn* pawn = new Pawn(i, TeamName(yellow), this->window);
+        this->pawns[i] = pawn;
         Tile* tile = this->board->getTileById(131 + i-12);
-        pawns[i].draw(tile);
+        this->pawns[i]->draw(tile);
     }
-    this->pawns = pawns;
 }
 
 void Game::render()
