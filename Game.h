@@ -1,16 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Tile.h"
 #include <iostream>
+#include "Board.h"
 
 using namespace sf;
 using namespace std;
 
 class Game
 {
-    Tile tiles[100];
     RenderWindow* window;
     void pollEvents();
+    Board* board = nullptr;
 public:
     Game();
     void update();

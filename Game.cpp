@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Board.h"
 
 Game::Game()
 {
@@ -22,10 +21,10 @@ void Game::pollEvents()
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
-            for (const auto& tile : tiles)
+            for (int i=0; i<100; i++)
             {
-                if (tile.isClicked(event)) {
-                    tile.handleClick();
+                if (board->getTiles()[i].isClicked(event)) {
+                    board->getTiles()[i].handleClick();
                 }
             }
         }
@@ -35,7 +34,7 @@ void Game::pollEvents()
 void Game::render()
 {
     this->window->clear();
-    Board board(this->tiles, this->window);
+    this->board = new Board(this->window);
     this->window->display();
 }
 
@@ -43,3 +42,5 @@ bool Game::isRunning()
 {
     return this->window->isOpen();
 }
+
+

@@ -20,14 +20,35 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Team.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ludo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Team.h" />
+    <ClInclude Include="TeamName.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Game.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="images\tile.xcf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\arrow.png" />
+    <Image Include="images\Barrow.png" />
+    <Image Include="images\Garrow.png" />
+    <Image Include="images\Rarrow.png" />
+    <Image Include="images\tile.png" />
+    <Image Include="images\tileBlue.png" />
+    <Image Include="images\tileGreen.png" />
+    <Image Include="images\tileRed.png" />
+    <Image Include="images\tileYellow.png" />
+    <Image Include="images\Yarrow.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

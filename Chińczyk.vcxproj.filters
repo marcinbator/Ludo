@@ -27,6 +27,12 @@
     <ClCompile Include="Board.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Pawn.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Team.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -38,5 +44,50 @@
     <ClInclude Include="Board.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="Pawn.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Team.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamName.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="images\tile.xcf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\arrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Barrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Garrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Rarrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tile.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileBlue.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileGreen.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileRed.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileYellow.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\Yarrow.png">
+      <Filter>Resource files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

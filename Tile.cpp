@@ -7,6 +7,7 @@ Tile::Tile() {
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
     this->width = this->sprite.getGlobalBounds().getSize().x;
     this->height = this->sprite.getGlobalBounds().getSize().y;
+    this->currentPawnId = 0;
 }
 
 void Tile::setPosition(int x, int y) {
@@ -16,6 +17,11 @@ void Tile::setPosition(int x, int y) {
 void Tile::setId(int id)
 {
     this->id = id;
+}
+
+int Tile::getId()
+{
+    return this->id;
 }
 
 int Tile::getHeight()
@@ -54,6 +60,16 @@ bool Tile::isClicked(Event event) const
     return false;
 }
 
+int Tile::getCurrentPawnId()
+{
+    return this->currentPawnId;
+}
+
+void Tile::setCurrentPawnId(int id)
+{
+    this->currentPawnId = id;
+}
+
 void Tile::handleClick() const{
     cout << this->id << endl;
 }
@@ -84,4 +100,14 @@ void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window, int&
     this->setId(id);
     id++;
     window->draw(this->getSprite());
+}
+
+Tile* getTileById(int id, Tile* tiles)
+{
+    for (int i = 0; i < 16; i++) {
+        if (tiles[i].getId() == id) {
+            return &tiles[i];
+        }
+    }
+    return nullptr;
 }

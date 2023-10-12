@@ -10,16 +10,20 @@ class Tile
     int id;
     int height;
     int width;
+    int currentPawnId;
     Texture texture;
     Sprite sprite;
 public:
     Tile();
     void setPosition(int x, int y);
     void setId(int id);
+    int getId();
     int getPositionX();
     int getPositionY();
     int getHeight();
     int getWidth();
+    int getCurrentPawnId();
+    void setCurrentPawnId(int id);
     Sprite getSprite() const;
     bool isClicked(Event event) const;
     void handleClick() const;

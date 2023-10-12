@@ -1,10 +1,9 @@
 #include "Board.h"
 
-Board::Board(Tile* tiles, RenderWindow* window)
+Board::Board(RenderWindow* window)
 {
     this->centerX = window->getSize().x / 2;
     this->centerY = window->getSize().y / 2;
-    this->tiles = tiles;
     drawBoard(window);
     setIds();
 }
@@ -80,6 +79,11 @@ void Board::drawBoard(RenderWindow* window)
     tiles[id].drawTile("images/tileRed.png", centerX - tiles[id].getWidth() * 4, centerY + tiles[id].getHeight() * 5, window, id);
     tiles[id].drawTile("images/tileRed.png", centerX - tiles[id].getWidth() * 4, centerY + tiles[id].getHeight() * 4, window, id);
     tiles[id].drawTile("images/tileRed.png", centerX - tiles[id].getWidth() * 5, centerY + tiles[id].getHeight() * 4, window, id);
+}
+
+Tile* Board::getTiles()
+{
+    return this->tiles;
 }
 
 void Board::setIds() {
