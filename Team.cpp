@@ -16,25 +16,25 @@ void Team::asignTeams(TeamName teamName)
     case red: {
         this->id = 1;
         this->texture.loadFromFile("Rpawn");
-        this->startTile = 1;
+        this->startTile.setId(1);
         baseId = 60;
     };
     case blue: {
         this->id = 1;
         this->texture.loadFromFile("Bpawn");
-        this->startTile = 11;
+        this->startTile.setId(11);
         baseId = 70;
     };
     case green: {
         this->id = 1;
         this->texture.loadFromFile("Gpawn");
-        this->startTile = 21;
+        this->startTile.setId(21);
         baseId = 80;
     };
     case yellow: {
         this->id = 1;
         this->texture.loadFromFile("Ypawn");
-        this->startTile = 31;
+        this->startTile.setId(31);
         baseId = 90;
     };
     }
@@ -63,7 +63,7 @@ int Team::getPlace()
     return this->place;
 }
 
-int Team::getStartTile()
+Tile Team::getStartTile()
 {
     return this->startTile;
 }

@@ -2,6 +2,7 @@
 
 #include "TeamName.h"
 #include <SFML/Graphics.hpp>
+#include "Tile.h"
 
 using namespace std;
 using namespace sf;
@@ -13,7 +14,7 @@ class Team
 	Texture texture;
 	int numberWon;
 	int place;
-	int startTile;
+	Tile startTile;
 	int baseTilesIds[4];
 	int* pawnsIds;
 	void asignTeams(TeamName teamName);
@@ -24,7 +25,7 @@ public:
 	void setPlace(int place);
 	int getNumberWond();
 	int getPlace();
-	int getStartTile();
+	Tile getStartTile();
 	int* getBaseTilesIds();
 	TeamName getTeamName();
 	Texture getTexture();

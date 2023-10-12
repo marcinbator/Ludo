@@ -1,36 +1,49 @@
 #include "Pawn.h"
 
-Pawn::Pawn(int id, TeamName teamName)
+bool Pawn::setPosition(Tile* tile)
 {
+	return false;
+}
+
+Pawn::Pawn(int id, Team* team)
+{
+	this->id = id;
+	this->team = team;
+	this->currentTile = nullptr;
+	this->isAtBase = true;
+	this->isAtTarget = false;
 }
 
 void Pawn::move(int tiles)
 {
+	for (int i = 0; i < tiles; i++) {
+		this->setPosition(this->getNextTile());
+	}
 }
 
 void Pawn::deploy()
 {
+	Tile tile = this->team->getStartTile();
+	this->setPosition(&tile);
 }
 
 void Pawn::setInBase()
 {
+	
 }
 
 int Pawn::getId()
 {
-	return 0;
+	return this->id;
 }
 
-int Pawn::getCurrentTileId()
+Tile* Pawn::getCurrentTile()
 {
-	return 0;
-}
-int Pawn::getNextTileId()
-{
-	return 0;
+	return this->currentTile;
 }
 
-TeamName Pawn::getTeamName()
+Tile* Pawn::getNextTile()
 {
-	return TeamName();
+	return nullptr;
 }
+
