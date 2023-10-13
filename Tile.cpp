@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "Pawn.h"
 
 Tile::Tile() {
     this->id = 0;
@@ -7,7 +8,7 @@ Tile::Tile() {
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
     this->width = this->sprite.getGlobalBounds().getSize().x;
     this->height = this->sprite.getGlobalBounds().getSize().y;
-    this->currentPawnId = 0;
+    this->currentPawn = nullptr;
 }
 
 void Tile::setPosition(int x, int y) {
@@ -60,16 +61,6 @@ bool Tile::isClicked(Event event) const
     return false;
 }
 
-int Tile::getCurrentPawnId()
-{
-    return this->currentPawnId;
-}
-
-void Tile::setCurrentPawnId(int id)
-{
-    this->currentPawnId = id;
-}
-
 void Tile::handleClick() const{
     cout << this->id <<" "<< endl;
 }
@@ -81,6 +72,17 @@ void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window)
     this->setPosition(x, y);
     this->setId(id);
     window->draw(this->getSprite());
+}
+
+
+void Tile::setCurrentPawn(Pawn* pawn)
+{
+    this->currentPawn = pawn;
+}
+
+Pawn* Tile::getCurrentPawn()
+{
+    return this->currentPawn;
 }
 
 void Tile::drawTile(string texturePath,int rotateDeg, int x, int y, RenderWindow* window)

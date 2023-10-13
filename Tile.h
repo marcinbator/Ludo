@@ -5,12 +5,14 @@
 using namespace sf;
 using namespace std;
 
+class Pawn;
+
 class Tile
 {
     int id;
     int height;
     int width;
-    int currentPawnId;
+    Pawn* currentPawn;
     Texture texture;
     Sprite sprite;
 public:
@@ -22,8 +24,8 @@ public:
     int getPositionY();
     int getHeight();
     int getWidth();
-    int getCurrentPawnId();
-    void setCurrentPawnId(int id);
+    void setCurrentPawn(Pawn* pawn);
+    Pawn* getCurrentPawn();
     Sprite getSprite() const;
     bool isClicked(Event event) const;
     void handleClick() const;

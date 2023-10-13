@@ -1,38 +1,26 @@
 #include "Pawn.h"
+#include "Tile.h"
+#include "Team.h"
 
-Pawn::Pawn(int id, TeamName teamName, RenderWindow* window)
+Pawn::Pawn(int id, Team* team, RenderWindow* window)
 {
 	this->id = id;
 	this->currentTile = nullptr;
 	this->isAtBase = true;
 	this->isAtTarget = false;
-	string texturePath = "images/";
-	switch (teamName) {
-	case red:
-		texturePath += "Rpawn";
-		break;
-	case blue:
-		texturePath += "Bpawn";
-		break;
-	case green:
-		texturePath += "Gpawn";
-		break;
-	case yellow:
-		texturePath += "Ypawn";
-	}
-	this->texture.loadFromFile(texturePath+".png");
+	this->team = team;
+	this->texture.loadFromFile(this->team->getTexturePath());
 	this->sprite.setTexture(this->texture);
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 	this->window = window;
 }
 
-bool Pawn::draw(Tile* tile)
+void Pawn::draw(Tile* tile)
 {
 	this->sprite.setPosition(tile->getPositionX(), tile->getPositionY());
 	this->window->draw(this->sprite);
 	this->currentTile = tile;
-	this->currentTile->setCurrentPawnId(this->id);
-	return true;
+	this->currentTile->setCurrentPawn(this);
 }
 
 bool Pawn::isClicked(Event event) 
@@ -61,6 +49,15 @@ void Pawn::deploy()
 	
 }
 
+void Pawn::setTeam(Team* team)
+{
+}
+
+Team* Pawn::getTeam()
+{
+	return nullptr;
+}
+
 void Pawn::setInBase()
 {
 
@@ -69,6 +66,17 @@ void Pawn::setInBase()
 int Pawn::getId()
 {
 	return this->id;
+}
+
+bool Pawn::place(Tile* tile)
+{
+	if (tile->getCurrentPawn() != nullptr) {
+		if (tile->getCurrentPawn()->team == this->team) {
+			return false;
+		}
+	}
+	this->draw(tile);
+	return true;
 }
 
 Tile* Pawn::getCurrentTile()

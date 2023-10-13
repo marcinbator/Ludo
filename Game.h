@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Board.h"
-#include "Player.h"
+#include "Team.h"
 #include "Pawn.h"
 
 using namespace sf;
@@ -13,7 +13,7 @@ class Game
     RenderWindow* window;
     Board* board;
     Pawn* pawns[16];
-    Player* players;
+    Team* teams[4];
     void pollEvents();
     void renderPawns();
 public:
