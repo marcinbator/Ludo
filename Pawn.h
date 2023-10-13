@@ -26,7 +26,6 @@ public:
 	int getId();
 	Tile* getCurrentTile();
 	bool draw(Tile* tile);
-
 	bool isClicked(Event event);
 	void handleClick();
 };

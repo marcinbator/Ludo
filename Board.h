@@ -2,7 +2,7 @@
 #include "Tile.h"
 class Board
 {
-	Tile tiles[200];
+	Tile tiles[72];
 	int centerX;
 	int centerY;
 	void setIds();

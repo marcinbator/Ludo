@@ -3,18 +3,19 @@
 Game::Game()
 {
     this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
+    this->board = nullptr;
+    this->players = nullptr;
+    *this->pawns = nullptr;
 }
 
 void Game::update()
 {
     this->pollEvents();
+    this->createTeams();
 }
 
 void Game::pollEvents()
 {
-    /*for (int i = 0; i < 16; i++) {
-        cout << this->pawns[i]->getId() << endl;
-    }*/
     Event event;
     this->window->setFramerateLimit(60);
     while (this->window->pollEvent(event))
@@ -25,7 +26,7 @@ void Game::pollEvents()
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
-            for (int i=0; i<73; i++)
+            for (int i=0; i<72; i++)
             {
                 Tile tile = this->board->getTiles()[i];
                 if (tile.isClicked(event)) {
@@ -73,17 +74,17 @@ void Game::render()
 {
     this->window->clear();
     this->board = new Board(this->window);
-    renderPawns();
+    this->renderPawns();
     this->window->display();
 }
 
-void Game::create()
+void Game::createTeams()
 {
     Player players[] = {
         Player(1, "Czerwony", this->pawns, this->board->getTileById(1)),
-        Player(2, "Niebieski", this->pawns, this->board->getTileById(1)),
-        Player(3, "Zielony", this->pawns, this->board->getTileById(1)),
-        Player(4, "Zolty", this->pawns, this->board->getTileById(1))
+        Player(2, "Niebieski", this->pawns, this->board->getTileById(11)),
+        Player(3, "Zielony", this->pawns, this->board->getTileById(21)),
+        Player(4, "Zolty", this->pawns, this->board->getTileById(31))
     };
     this->players = players;
 }

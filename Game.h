@@ -11,17 +11,18 @@ using namespace std;
 class Game
 {
     RenderWindow* window;
+    Board* board;
+    Pawn* pawns[16];
+    Player* players;
     void pollEvents();
     void renderPawns();
-    Board* board = nullptr;
-    Pawn* pawns[16];
-    Player* players = nullptr;
 public:
     Game();
     void update();
     void render();
-    void create();
+    void createTeams();
     bool isRunning();
-
+    
+    //
     void testMove();
 };
