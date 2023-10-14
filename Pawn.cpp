@@ -38,7 +38,6 @@ bool Pawn::move(Tile* tile)
 
 bool Pawn::handleClick(int tiles, Board* board)
 {
-	cout << "tile: " << this->id << endl;
 	if (this->isAtBase){
 		if (tiles == 1 || tiles == 6) {
 			this->deploy();
@@ -46,7 +45,7 @@ bool Pawn::handleClick(int tiles, Board* board)
 		}
 		return false;
 	}
-	if (this->currentTile->getId()+tiles <= this->team->getStartingTile()->getId() + 53) {
+	if (this->canMoveFurther(tiles)) {
 		int nextId = this->currentTile->getId();
 		for (int i = 0; i < tiles; i++) {
 			nextId = this->getNextTileId(nextId);
@@ -90,15 +89,16 @@ int Pawn::getNextTileId(int currentId) {
 	int nextId = currentId;
 	if (currentId == this->team->getStartingTile()->getId()-1 || (this->team->getStartingTile()->getId() == 1 && currentId == 40)) {
 		nextId = this->team->getStartingTile()->getId() + 50;
-		cout << "GO to base\n";
 	}
 	else if (currentId == 40) {
 		nextId = 1;
-		cout << "start gone through\n";
 	}
 	else if(currentId!=this->team->getStartingTile()->getId()+53){
 		nextId++;
-		cout << "next tile\n";
 	}
 	return nextId;
+}
+
+bool Pawn::canMoveFurther(int tiles) {
+	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + 53;
 }

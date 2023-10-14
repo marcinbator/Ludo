@@ -22,6 +22,7 @@ class Pawn
 
 	void deploy();
 	int getNextTileId(int currentId);
+	bool canMoveFurther(int tiles);
 
 public:
 	Pawn() = delete;
