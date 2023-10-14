@@ -4,30 +4,33 @@
 
 using namespace sf;
 using namespace std;
-
 class Pawn;
 
 class Tile
 {
     int id;
-    int height;
     int width;
+    int height;
     Texture texture;
     Sprite sprite;
     Pawn* currentPawn;
+
 public:
     Tile();
     Tile(int x, int y, int rotateDeg, string texturePath);
+
+    void drawTile(RenderWindow* window);
+    void handleClick();
+
     void setId(int id);
+    void setCurrentPawn(Pawn* pawn);
+
+    int getId();
+    int getWidth();
+    int getHeight();
     int getPositionX();
     int getPositionY();
-    int getHeight();
-    int getWidth();
-    int getId();
     Pawn* getCurrentPawn();
-    void setCurrentPawn(Pawn* pawn);
     Sprite getSprite() const;
     bool isClicked(Event event) const;
-    void handleClick();
-    void drawTile(RenderWindow* window);
 };

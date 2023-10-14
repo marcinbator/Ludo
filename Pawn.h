@@ -1,37 +1,34 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 using namespace sf;
 using namespace std;
-
 class Tile;
 class Team;
 
 class Pawn
 {
 	int id;
-	Sprite sprite;
-	Texture texture;
 	Team* team;
 	Tile* currentTile;
+	Texture texture;
+	Sprite sprite;
 	RenderWindow* window;
+
 	bool isAtBase;
 	bool isAtTarget;
+
 public:
 	Pawn() = delete;
 	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile);
-	void move(int tiles);
-	void deploy();
-	void setTeam(Team* team);
+
+	void draw(Tile* tile);
+	bool move(Tile* tile);
+	void handleClick();
+
 	Team* getTeam();
-	void setInBase();
-	int getId();
-	bool place(Tile* tile);
 	Tile* getCurrentTile();
 	bool isClicked(Event event);
-	void handleClick();
-	void draw(Tile* tile);
 };
 

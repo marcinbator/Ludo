@@ -8,7 +8,6 @@ Team::Team(int id, string name,  Tile* startingTile, string texturePath)
     this->startingTile = startingTile;
 }
 
-
 void Team::setPawns(Pawn* pawns[4])
 {
     this->pawns = *pawns;

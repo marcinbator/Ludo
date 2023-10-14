@@ -5,14 +5,14 @@
 Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
 {
 	this->id = id;
-	this->currentTile = currentTile;
-	this->isAtBase = true;
-	this->isAtTarget = false;
 	this->team = team;
+	this->currentTile = currentTile;
 	this->texture.loadFromFile(this->team->getTexturePath());
 	this->sprite.setTexture(this->texture);
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 	this->window = window;
+	this->isAtBase = true;
+	this->isAtTarget = false;
 }
 
 void Pawn::draw(Tile* tile)
@@ -21,6 +21,33 @@ void Pawn::draw(Tile* tile)
 	this->window->draw(this->sprite);
 	this->currentTile = tile;
 	this->currentTile->setCurrentPawn(this);
+}
+
+bool Pawn::move(Tile* tile)
+{
+	if (tile->getCurrentPawn() != nullptr) {
+		if (tile->getCurrentPawn()->team == this->team) {
+			return false;
+		}
+	}
+	this->draw(tile);
+	return true;
+}
+
+void Pawn::handleClick()
+{
+	cout << "Pawn: " << this->id << endl;
+	this->move(this->team->getStartingTile());
+}
+
+Tile* Pawn::getCurrentTile()
+{
+	return this->currentTile;
+}
+
+Team* Pawn::getTeam()
+{
+	return nullptr;
 }
 
 bool Pawn::isClicked(Event event) 
@@ -33,55 +60,3 @@ bool Pawn::isClicked(Event event)
 	}
 	return false;
 }
-
-void Pawn::handleClick()
-{
-	cout << "Pawn: " << this->id << endl;
-	this->place(this->team->getStartingTile());
-}
-
-void Pawn::move(int tiles)
-{
-	
-}
-
-void Pawn::deploy()
-{
-	
-}
-
-void Pawn::setTeam(Team* team)
-{
-}
-
-Team* Pawn::getTeam()
-{
-	return nullptr;
-}
-
-void Pawn::setInBase()
-{
-
-}
-
-int Pawn::getId()
-{
-	return this->id;
-}
-
-bool Pawn::place(Tile* tile)
-{
-	if (tile->getCurrentPawn() != nullptr) {
-		if (tile->getCurrentPawn()->team == this->team) {
-			return false;
-		}
-	}
-	this->draw(tile);
-	return true;
-}
-
-Tile* Pawn::getCurrentTile()
-{
-	return this->currentTile;
-}
-

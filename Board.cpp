@@ -10,10 +10,20 @@ Board::Board(RenderWindow* window)
     this->initBoard();
 }
 
+Board::~Board()
+{
+    delete[] *this->tiles;
+}
+
+void Board::drawBoard(RenderWindow* window) {
+    for (int i = 0; i < 72; i++) {
+        this->tiles[i]->drawTile(window);
+    }
+}
+
 Tile** Board::getTiles() {
     return this->tiles;
 }
-
 
 Tile* Board::getTileById(int counter)
 {
@@ -25,11 +35,7 @@ Tile* Board::getTileById(int counter)
     return nullptr;
 }
 
-void Board::drawBoard(RenderWindow* window) {
-    for (int i = 0; i < 72; i++) {
-        this->tiles[i]->drawTile(window);
-    }
-}
+//private
 
 void Board::initBoard()
 {

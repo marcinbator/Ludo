@@ -14,15 +14,16 @@ class Game
     Board* board;
     Pawn* pawns[16];
     Team* teams[4];
-    void pollEvents();
     void renderPawns();
+    void createTeams();
+    void pollEvents();
+
 public:
     Game();
+    ~Game();
+
     void update();
     void render();
-    void createTeams();
-    bool isRunning();
 
-    //
-    void testMove();
+    bool isRunning();
 };
