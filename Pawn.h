@@ -22,7 +22,7 @@ class Pawn
 	void draw(Tile* tile);
 public:
 	Pawn() = delete;
-	Pawn(int id, Team* team, RenderWindow* window);
+	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile);
 	void move(int tiles);
 	void deploy();
 	void setTeam(Team* team);

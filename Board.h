@@ -2,14 +2,15 @@
 #include "Tile.h"
 class Board
 {
-	Tile tiles[72];
+	Tile* tiles[72];
 	int centerX;
 	int centerY;
+	void initBoard();
 	void setIds();
-	void drawBoard(RenderWindow* window);
 public:
 	Board() = delete;
 	Board(RenderWindow* window);
 	Tile* getTileById(int id);
-	Tile* getTiles();
+	Tile** getTiles();
+	void drawBoard(RenderWindow* window);
 };

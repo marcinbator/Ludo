@@ -1,18 +1,25 @@
 #include "Tile.h"
 #include "Pawn.h"
 
-Tile::Tile() {
+Tile::Tile()
+{
     this->id = 0;
-    this->texture.loadFromFile("images/tile.png");
-    this->sprite.setTexture(this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->width = this->sprite.getGlobalBounds().getSize().x;
-    this->height = this->sprite.getGlobalBounds().getSize().y;
+    this->width = 40;
+    this->height = 40;
     this->currentPawn = nullptr;
 }
 
-void Tile::setPosition(int x, int y) {
+Tile::Tile( int x, int y, int rotateDeg, string texturePath) {
+    this->id = 0;
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
     this->sprite.setPosition(x, y);
+    this->sprite.rotate(rotateDeg);
+    this->width = this->sprite.getGlobalBounds().getSize().x;
+    this->height = this->sprite.getGlobalBounds().getSize().y;
+    this->currentPawn = nullptr;
 }
 
 void Tile::setId(int id)
@@ -23,6 +30,16 @@ void Tile::setId(int id)
 int Tile::getId()
 {
     return this->id;
+}
+
+Pawn* Tile::getCurrentPawn()
+{
+    return this->currentPawn;
+}
+
+void Tile::setCurrentPawn(Pawn* pawn)
+{
+    this->currentPawn = pawn;
 }
 
 int Tile::getHeight()
@@ -61,47 +78,13 @@ bool Tile::isClicked(Event event) const
     return false;
 }
 
-void Tile::handleClick() const{
+void Tile::handleClick(){
     cout << this->id <<" "<< endl;
 }
 
-void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window)
+void Tile::drawTile( RenderWindow* window)
 {
-    this->texture.loadFromFile(texturePath);
-    this->sprite.setTexture(this->texture);
-    this->setPosition(x, y);
-    this->setId(id);
-    window->draw(this->getSprite());
-}
-
-
-void Tile::setCurrentPawn(Pawn* pawn)
-{
-    this->currentPawn = pawn;
-}
-
-Pawn* Tile::getCurrentPawn()
-{
-    return this->currentPawn;
-}
-
-void Tile::drawTile(string texturePath,int rotateDeg, int x, int y, RenderWindow* window)
-{
-    this->texture.loadFromFile(texturePath);
-    this->sprite.setTexture(this->texture);
-    this->sprite.setRotation(rotateDeg);
-    this->setPosition(x, y);
-    this->setId(id);
-    window->draw(this->getSprite());
-}
-
-void Tile::drawTile(string texturePath, int x, int y, RenderWindow* window, int& id) {
-    this->texture.loadFromFile(texturePath);
-    this->sprite.setTexture(this->texture);
-    this->setPosition(x , y);
-    this->setId(id);
-    id++;
-    window->draw(this->getSprite());
+    window->draw(this->sprite);
 }
 
 Tile* getTileById(int id, Tile* tiles)

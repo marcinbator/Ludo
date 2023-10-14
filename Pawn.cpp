@@ -2,10 +2,10 @@
 #include "Tile.h"
 #include "Team.h"
 
-Pawn::Pawn(int id, Team* team, RenderWindow* window)
+Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
 {
 	this->id = id;
-	this->currentTile = nullptr;
+	this->currentTile = currentTile;
 	this->isAtBase = true;
 	this->isAtTarget = false;
 	this->team = team;
@@ -37,6 +37,7 @@ bool Pawn::isClicked(Event event)
 void Pawn::handleClick()
 {
 	cout << "Pawn: " << this->id << endl;
+	this->place(this->team->getStartingTile());
 }
 
 void Pawn::move(int tiles)
