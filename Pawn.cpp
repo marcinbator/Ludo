@@ -71,13 +71,12 @@ int Pawn::getId()
 
 bool Pawn::place(Tile* tile)
 {
-	/*if (tile->getCurrentPawn() != nullptr) {
+	if (tile->getCurrentPawn() != nullptr) {
 		if (tile->getCurrentPawn()->team == this->team) {
 			return false;
 		}
-	}*/
+	}
 	this->draw(tile);
-	cout << "placed: " << tile->getId()<<endl;
 	return true;
 }
 

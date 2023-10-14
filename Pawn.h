@@ -19,7 +19,6 @@ class Pawn
 	RenderWindow* window;
 	bool isAtBase;
 	bool isAtTarget;
-	void draw(Tile* tile);
 public:
 	Pawn() = delete;
 	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile);
@@ -33,5 +32,6 @@ public:
 	Tile* getCurrentTile();
 	bool isClicked(Event event);
 	void handleClick();
+	void draw(Tile* tile);
 };
 

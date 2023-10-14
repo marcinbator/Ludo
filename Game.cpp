@@ -45,9 +45,8 @@ void Game::pollEvents()
 
 void Game::renderPawns() {
     for (int i = 0; i < 16; i++) {
-        this->pawns[i]->place(this->pawns[i]->getCurrentTile());
+        this->pawns[i]->draw(this->pawns[i]->getCurrentTile());
     }
-
 }
 
 void Game::render()
