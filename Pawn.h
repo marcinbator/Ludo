@@ -6,6 +6,7 @@ using namespace sf;
 using namespace std;
 class Tile;
 class Team;
+class Board;
 
 class Pawn
 {
@@ -19,13 +20,16 @@ class Pawn
 	bool isAtBase;
 	bool isAtTarget;
 
+	void deploy();
+	int getNextTileId(int currentId);
+
 public:
 	Pawn() = delete;
 	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile);
 
 	void draw(Tile* tile);
 	bool move(Tile* tile);
-	void handleClick();
+	bool handleClick(int tiles, Board* board);
 
 	Team* getTeam();
 	Tile* getCurrentTile();

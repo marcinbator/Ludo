@@ -1,6 +1,7 @@
 #include "Pawn.h"
 #include "Tile.h"
 #include "Team.h"
+#include "Board.h"
 
 Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
 {
@@ -17,6 +18,7 @@ Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
 
 void Pawn::draw(Tile* tile)
 {
+	this->currentTile->setCurrentPawn(nullptr);
 	this->sprite.setPosition(tile->getPositionX(), tile->getPositionY());
 	this->window->draw(this->sprite);
 	this->currentTile = tile;
@@ -34,10 +36,25 @@ bool Pawn::move(Tile* tile)
 	return true;
 }
 
-void Pawn::handleClick()
+bool Pawn::handleClick(int tiles, Board* board)
 {
-	cout << "Pawn: " << this->id << endl;
-	this->move(this->team->getStartingTile());
+	cout << "tile: " << this->id << endl;
+	if (this->isAtBase){
+		if (tiles == 1 || tiles == 6) {
+			this->deploy();
+			return true;
+		}
+		return false;
+	}
+	if (this->currentTile->getId()+tiles <= this->team->getStartingTile()->getId() + 53) {
+		int nextId = this->currentTile->getId();
+		for (int i = 0; i < tiles; i++) {
+			nextId = this->getNextTileId(nextId);
+		}
+		this->move(board->getTileById(nextId));
+		return true;
+	}
+	return false;
 }
 
 Tile* Pawn::getCurrentTile()
@@ -59,4 +76,29 @@ bool Pawn::isClicked(Event event)
 		return true;
 	}
 	return false;
+}
+
+//private
+
+void Pawn::deploy()
+{
+	this->move(this->team->getStartingTile());
+	this->isAtBase = false;
+}
+
+int Pawn::getNextTileId(int currentId) {
+	int nextId = currentId;
+	if (currentId == this->team->getStartingTile()->getId()-1 || (this->team->getStartingTile()->getId() == 1 && currentId == 40)) {
+		nextId = this->team->getStartingTile()->getId() + 50;
+		cout << "GO to base\n";
+	}
+	else if (currentId == 40) {
+		nextId = 1;
+		cout << "start gone through\n";
+	}
+	else if(currentId!=this->team->getStartingTile()->getId()+53){
+		nextId++;
+		cout << "next tile\n";
+	}
+	return nextId;
 }

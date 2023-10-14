@@ -86,7 +86,7 @@ void Game::pollEvents()
             }
             for (int i = 0; i < 16; i++) {
                 if (pawns[i]->isClicked(event)) {
-                    this->pawns[i]->handleClick();
+                    this->pawns[i]->handleClick(6, this->board);
                 }
             }
         }
