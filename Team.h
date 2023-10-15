@@ -24,5 +24,4 @@ public:
 	string getName();
 	Tile* getStartingTile();
 	string getTexturePath();
-	bool isAllAtBase();
 };

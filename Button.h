@@ -13,6 +13,8 @@ class Button
 	Texture texture;
 	Sprite sprite;
 
+	void initSprite(int x, int y);
+	void initText(std::string& text);
 	int random(int min, int max);
 
 public:
@@ -25,7 +27,5 @@ public:
 	void draw(RenderWindow* window);
 
 	const bool isClicked(Event event);
-	void setCanToss(bool canToss);
-	const bool isCanToss();
 };
 

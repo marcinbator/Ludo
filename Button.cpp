@@ -3,18 +3,8 @@
 Button::Button(string text,  int x, int y)
 {
     this->canToss = true;
-    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
-    this->text.setFont(this->font);
-    this->text.setCharacterSize(16);
-    this->text.setFillColor(sf::Color::Black);
-    this->text.setString(text);
-    this->texture.loadFromFile("images/button1.png");
-    this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(x, y);
-    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->sprite.setScale(1.5, 1);
-    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
-    this->text.setPosition(this->sprite.getPosition().x, this->sprite.getPosition().y-3);
+    initSprite(x, y);
+    initText(text);
 }
 
 void Button::draw(RenderWindow* window) {
@@ -42,6 +32,26 @@ const bool Button::isClicked(Event event)
 }
 
 //private
+
+void Button::initSprite(int x, int y)
+{
+    this->texture.loadFromFile("images/button1.png");
+    this->sprite.setTexture(this->texture);
+    this->sprite.setPosition(x, y);
+    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
+    this->sprite.setScale(1.5, 1);
+}
+
+void Button::initText(std::string& text)
+{
+    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+    this->text.setFont(this->font);
+    this->text.setCharacterSize(16);
+    this->text.setFillColor(sf::Color::Black);
+    this->text.setString(text);
+    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
+    this->text.setPosition(this->sprite.getPosition().x, this->sprite.getPosition().y - 3);
+}
 
 int Button::random(int min, int max)
 {

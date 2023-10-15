@@ -5,7 +5,7 @@ Game::Game()
     this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
     this->board = new Board(window);
     this->board->drawBoard(window);
-    this->button = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() + 40 * 9);
+    this->tossButton = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() + 40 * 9);
     this->dial = new Dial("Witaj w grze!", this->board->getCenterX(), this->board->getCenterY() + 40 * 7);
     this->createTeams();
     this->dice = 0;
@@ -15,7 +15,7 @@ Game::~Game()
 {
     delete this->window;
     delete this->board;
-    delete this->button;
+    delete this->tossButton;
     delete this->dial;
     delete[] *this->pawns;
     delete[] *this->teams;
@@ -30,11 +30,11 @@ void Game::render()
 {
     this->window->clear();
     this->board->drawBoard(this->window);
-    if (this->button->canToss) {
-        this->button->draw(this->window);
-    }
     this->dial->draw(this->window);
     this->renderPawns();
+    if (this->tossButton->canToss) {
+        this->tossButton->draw(this->window);
+    }
     this->window->display();
 }
 
@@ -74,6 +74,13 @@ void Game::createTeams()
     }
 }
 
+void Game::handleTossClick() {
+    this->tossButton->handleClick(this->dice);
+    string text = to_string(this->dice);
+    this->dial->setText("Kostka: " + text);
+    this->tossButton->canToss = false;
+}
+
 void Game::pollEvents()
 {
     Event event;
@@ -95,14 +102,11 @@ void Game::pollEvents()
             }
             for (int i = 0; i < 16; i++) {
                 if (pawns[i]->isClicked(event)) {
-                    this->pawns[i]->handleClick(this->dice, this->button->canToss);
+                    this->pawns[i]->handleClick(this->dice, this->tossButton->canToss);
                 }
             }
-            if (this->button->isClicked(event) && this->button->canToss) {
-                this->button->handleClick(this->dice);
-                string text = to_string(this->dice);
-                this->dial->setText("Kostka: " + text);
-                this->button->canToss = false;
+            if (this->tossButton->isClicked(event) && this->tossButton->canToss) {
+                this->handleTossClick();
             }
         }
     }

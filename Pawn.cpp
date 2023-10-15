@@ -28,11 +28,11 @@ void Pawn::draw(Tile* tile)
 
 bool Pawn::move(Tile* tile)
 {
-	if (tile->getCurrentPawn() != nullptr) {
-		if (tile->getCurrentPawn()->team == this->team) {
+	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
+		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
 			return false;
 		}
-		tile->getCurrentPawn()->setAtBase();
+		tile->getCurrentPawn()->setAtBase(); //strike
 	}
 	this->draw(tile);
 	return true;
@@ -40,44 +40,44 @@ bool Pawn::move(Tile* tile)
 
 void Pawn::setAtBase()
 {
-	int tileId = this->team->getStartingTile()->getId() + 100;
+	int tileId = this->team->getStartingTile()->getId() + 100; //first base tile id
 	Tile* tile = this->board->getTileById(tileId);
 	for (int i = 0; i < 4; i++) {
-		if (this->move(tile)) {
+		if (this->move(tile)) { //desired base tile is free
 			break;
 		}
-		tileId++;
+		tileId++; //get next base tile
 		tile = this->board->getTileById(tileId);
 	}
 	this->isAtBase = true;
 }
 
-bool Pawn::handleClick(int& tiles, bool& canToss)
+void Pawn::handleClick(int& dice, bool& canToss)
 {
-	if (this->isAtBase){
-		if (tiles == 1 || tiles == 6) {
-			if (this->move(this->team->getStartingTile())) {
-				tiles = 0;
+	if (this->isAtBase){ //deploy desired
+		if (dice == 1 || dice == 6) { //deploy condition 
+			if (this->move(this->team->getStartingTile())) { //deploy possible
+				dice = 0;
 				canToss = true;
 				this->isAtBase = false;
-				return true;
+				return;
 			}
 		}
-		canToss = true; //check if all in team blocked - todo
-		return false;
+		canToss = true; //deploy not possible
+		return;
 	}
-	if (this->canMoveFurther(tiles)) {
+	if (this->canMoveFurther(dice)) { //pawn move not exceeding its route
 		int nextId = this->currentTile->getId();
-		for (int i = 0; i < tiles; i++) {
+		for (int i = 0; i < dice; i++) { //get desired tile
 			nextId = this->getNextTileId(nextId);
 		}
-		if (this->move(this->board->getTileById(nextId))) {
-			tiles = 0;
+		if (this->move(this->board->getTileById(nextId))) { //move possible
+			dice = 0;
 			canToss = true;
-			return true;
+			return;
 		}
 	}
-	return false;
+	return;
 }
 
 Tile* Pawn::getCurrentTile()
@@ -110,18 +110,18 @@ bool Pawn::getIsAtBase()
 
 int Pawn::getNextTileId(int currentId) {
 	int nextId = currentId;
-	if (currentId == this->team->getStartingTile()->getId()-1 || (this->team->getStartingTile()->getId() == 1 && currentId == 40)) {
+	if (currentId == this->team->getStartingTile()->getId()-1 || (this->team->getStartingTile()->getId() == 1 && currentId == 40)) { //pawn at target-turning tile
 		nextId = this->team->getStartingTile()->getId() + 50;
 	}
-	else if (currentId == 40) {
+	else if (currentId == 40) { //pawn at end of board
 		nextId = 1;
 	}
-	else if(currentId!=this->team->getStartingTile()->getId()+53){
+	else if(currentId != this->team->getStartingTile()->getId() + 53){ //pawn not at the end of its route
 		nextId++;
 	}
 	return nextId;
 }
 
 bool Pawn::canMoveFurther(int tiles) {
-	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + 53;
+	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + 53; //if pawn next move not exceed its route
 }

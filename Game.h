@@ -14,13 +14,14 @@ class Game
 {
     RenderWindow* window;
     Board* board;
-    Button* button;
+    Button* tossButton;
     Dial* dial;
     int dice;
     Pawn* pawns[16];
     Team* teams[4];
     void renderPawns();
     void createTeams();
+    void handleTossClick();
     void pollEvents();
 
 public:
