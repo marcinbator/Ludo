@@ -26,7 +26,6 @@ void Button::handleClick(int& dice)
 {
     if (this->canToss) {
         dice = this->random(1, 6);
-        this->canToss = false;
     }
     cout << "Button clicked" << dice << endl;
 }

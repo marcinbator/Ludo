@@ -5,7 +5,8 @@ Game::Game()
     this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
     this->board = new Board(window);
     this->board->drawBoard(window);
-    this->button = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() - 40 * 7);
+    this->button = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() + 40 * 9);
+    this->dial = new Dial("Witaj w grze!", this->board->getCenterX(), this->board->getCenterY() + 40 * 7);
     this->createTeams();
     this->dice = 0;
 }
@@ -15,6 +16,7 @@ Game::~Game()
     delete this->window;
     delete this->board;
     delete this->button;
+    delete this->dial;
     delete[] *this->pawns;
     delete[] *this->teams;
 }
@@ -31,6 +33,7 @@ void Game::render()
     if (this->button->canToss) {
         this->button->draw(this->window);
     }
+    this->dial->draw(this->window);
     this->renderPawns();
     this->window->display();
 }
@@ -65,7 +68,7 @@ void Game::createTeams()
             int teamIndex = j;
             int tileId = 101 + j * 10 + i;
             Tile* tile = this->board->getTileById(tileId);
-            Pawn* pawn = new Pawn(index, this->teams[teamIndex], this->window, tile);
+            Pawn* pawn = new Pawn(index, this->teams[teamIndex], this->window, tile, this->board);
             this->pawns[index] = pawn;
         }
     }
@@ -92,11 +95,14 @@ void Game::pollEvents()
             }
             for (int i = 0; i < 16; i++) {
                 if (pawns[i]->isClicked(event)) {
-                    this->pawns[i]->handleClick(this->dice, this->board, this->button->canToss);
+                    this->pawns[i]->handleClick(this->dice, this->button->canToss);
                 }
             }
             if (this->button->isClicked(event) && this->button->canToss) {
                 this->button->handleClick(this->dice);
+                string text = to_string(this->dice);
+                this->dial->setText("Kostka: " + text);
+                this->button->canToss = false;
             }
         }
     }

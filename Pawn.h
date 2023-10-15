@@ -16,6 +16,7 @@ class Pawn
 	Texture texture;
 	Sprite sprite;
 	RenderWindow* window;
+	Board* board;
 
 	bool isAtBase;
 	bool isAtTarget;
@@ -26,11 +27,12 @@ class Pawn
 
 public:
 	Pawn() = delete;
-	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile);
+	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* board);
 
 	void draw(Tile* tile);
 	bool move(Tile* tile);
-	bool handleClick(int& tiles, Board* board, bool& canToss);
+	void setAtBase();
+	bool handleClick(int& tiles, bool& canToss);
 
 	Team* getTeam();
 	Tile* getCurrentTile();

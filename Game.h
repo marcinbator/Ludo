@@ -5,6 +5,7 @@
 #include "Team.h"
 #include "Pawn.h"
 #include "Button.h"
+#include "Dial.h"
 
 using namespace sf;
 using namespace std;
@@ -14,6 +15,7 @@ class Game
     RenderWindow* window;
     Board* board;
     Button* button;
+    Dial* dial;
     int dice;
     Pawn* pawns[16];
     Team* teams[4];

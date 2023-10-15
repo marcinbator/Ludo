@@ -3,7 +3,7 @@
 #include "Team.h"
 #include "Board.h"
 
-Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
+Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* board)
 {
 	this->id = id;
 	this->team = team;
@@ -14,6 +14,7 @@ Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile)
 	this->window = window;
 	this->isAtBase = true;
 	this->isAtTarget = false;
+	this->board = board;
 }
 
 void Pawn::draw(Tile* tile)
@@ -31,12 +32,27 @@ bool Pawn::move(Tile* tile)
 		if (tile->getCurrentPawn()->team == this->team) {
 			return false;
 		}
+		cout << "Bijemy " <<endl;
+		tile->getCurrentPawn()->setAtBase();
 	}
 	this->draw(tile);
 	return true;
 }
 
-bool Pawn::handleClick(int& tiles, Board* board, bool& canToss)
+void Pawn::setAtBase()
+{
+	int tileId = this->team->getStartingTile()->getId() + 100;
+	Tile* tile = this->board->getTileById(tileId);
+	for (int i = 0; i < 4; i++) {
+		if (this->move(tile)) {
+			break;
+		}
+		tileId++;
+		tile = this->board->getTileById(tileId);
+	}
+}
+
+bool Pawn::handleClick(int& tiles, bool& canToss)
 {
 	if (this->isAtBase){
 		if (tiles == 1 || tiles == 6) {
@@ -53,7 +69,7 @@ bool Pawn::handleClick(int& tiles, Board* board, bool& canToss)
 		for (int i = 0; i < tiles; i++) {
 			nextId = this->getNextTileId(nextId);
 		}
-		this->move(board->getTileById(nextId));
+		this->move(this->board->getTileById(nextId));
 		tiles = 0;
 		canToss = true;
 		return true;
