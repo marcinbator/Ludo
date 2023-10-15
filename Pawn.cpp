@@ -32,7 +32,6 @@ bool Pawn::move(Tile* tile)
 		if (tile->getCurrentPawn()->team == this->team) {
 			return false;
 		}
-		cout << "Bijemy " <<endl;
 		tile->getCurrentPawn()->setAtBase();
 	}
 	this->draw(tile);
@@ -50,16 +49,19 @@ void Pawn::setAtBase()
 		tileId++;
 		tile = this->board->getTileById(tileId);
 	}
+	this->isAtBase = true;
 }
 
 bool Pawn::handleClick(int& tiles, bool& canToss)
 {
 	if (this->isAtBase){
 		if (tiles == 1 || tiles == 6) {
-			this->deploy();
-			tiles = 0;
-			canToss = true;
-			return true;
+			if (this->move(this->team->getStartingTile())) {
+				tiles = 0;
+				canToss = true;
+				this->isAtBase = false;
+				return true;
+			}
 		}
 		canToss = true; //check if all in team blocked - todo
 		return false;
@@ -69,10 +71,11 @@ bool Pawn::handleClick(int& tiles, bool& canToss)
 		for (int i = 0; i < tiles; i++) {
 			nextId = this->getNextTileId(nextId);
 		}
-		this->move(this->board->getTileById(nextId));
-		tiles = 0;
-		canToss = true;
-		return true;
+		if (this->move(this->board->getTileById(nextId))) {
+			tiles = 0;
+			canToss = true;
+			return true;
+		}
 	}
 	return false;
 }
@@ -104,12 +107,6 @@ bool Pawn::getIsAtBase()
 }
 
 //private
-
-void Pawn::deploy()
-{
-	this->move(this->team->getStartingTile());
-	this->isAtBase = false;
-}
 
 int Pawn::getNextTileId(int currentId) {
 	int nextId = currentId;
