@@ -28,7 +28,9 @@ void Game::render()
 {
     this->window->clear();
     this->board->drawBoard(this->window);
-    this->button->draw(this->window);
+    if (this->button->canToss) {
+        this->button->draw(this->window);
+    }
     this->renderPawns();
     this->window->display();
 }
@@ -93,7 +95,7 @@ void Game::pollEvents()
                     this->pawns[i]->handleClick(this->dice, this->board, this->button->canToss);
                 }
             }
-            if (this->button->isClicked(event)) {
+            if (this->button->isClicked(event) && this->button->canToss) {
                 this->button->handleClick(this->dice);
             }
         }

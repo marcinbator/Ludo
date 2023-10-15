@@ -42,9 +42,10 @@ bool Pawn::handleClick(int& tiles, Board* board, bool& canToss)
 		if (tiles == 1 || tiles == 6) {
 			this->deploy();
 			tiles = 0;
+			canToss = true;
 			return true;
 		}
-		canToss = true;
+		canToss = true; //check if all in team blocked - todo
 		return false;
 	}
 	if (this->canMoveFurther(tiles)) {
@@ -79,6 +80,11 @@ bool Pawn::isClicked(Event event)
 		return true;
 	}
 	return false;
+}
+
+bool Pawn::getIsAtBase()
+{
+	return this->isAtBase;
 }
 
 //private

@@ -35,5 +35,6 @@ public:
 	Team* getTeam();
 	Tile* getCurrentTile();
 	bool isClicked(Event event);
+	bool getIsAtBase();
 };
 

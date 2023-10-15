@@ -8,6 +8,7 @@ using namespace std;
 class Team
 {
 	int id;
+	bool allAtBase;
 	string name;
 	string texturePath;
 	Tile* startingTile;
@@ -23,4 +24,5 @@ public:
 	string getName();
 	Tile* getStartingTile();
 	string getTexturePath();
+	bool isAllAtBase();
 };
