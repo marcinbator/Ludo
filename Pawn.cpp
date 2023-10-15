@@ -36,13 +36,15 @@ bool Pawn::move(Tile* tile)
 	return true;
 }
 
-bool Pawn::handleClick(int tiles, Board* board)
+bool Pawn::handleClick(int& tiles, Board* board, bool& canToss)
 {
 	if (this->isAtBase){
 		if (tiles == 1 || tiles == 6) {
 			this->deploy();
+			tiles = 0;
 			return true;
 		}
+		canToss = true;
 		return false;
 	}
 	if (this->canMoveFurther(tiles)) {
@@ -51,6 +53,8 @@ bool Pawn::handleClick(int tiles, Board* board)
 			nextId = this->getNextTileId(nextId);
 		}
 		this->move(board->getTileById(nextId));
+		tiles = 0;
+		canToss = true;
 		return true;
 	}
 	return false;

@@ -17,4 +17,6 @@ public:
 
 	Tile** getTiles();
 	Tile* getTileById(int id);
+	int getCenterX();
+	int getCenterY();
 };

@@ -5,13 +5,16 @@ Game::Game()
     this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
     this->board = new Board(window);
     this->board->drawBoard(window);
+    this->button = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() - 40 * 7);
     this->createTeams();
+    this->dice = 0;
 }
 
 Game::~Game()
 {
     delete this->window;
     delete this->board;
+    delete this->button;
     delete[] *this->pawns;
     delete[] *this->teams;
 }
@@ -25,6 +28,7 @@ void Game::render()
 {
     this->window->clear();
     this->board->drawBoard(this->window);
+    this->button->draw(this->window);
     this->renderPawns();
     this->window->display();
 }
@@ -86,8 +90,11 @@ void Game::pollEvents()
             }
             for (int i = 0; i < 16; i++) {
                 if (pawns[i]->isClicked(event)) {
-                    this->pawns[i]->handleClick(6, this->board);
+                    this->pawns[i]->handleClick(this->dice, this->board, this->button->canToss);
                 }
+            }
+            if (this->button->isClicked(event)) {
+                this->button->handleClick(this->dice);
             }
         }
     }

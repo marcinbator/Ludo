@@ -33,6 +33,9 @@
     <ClCompile Include="Team.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -50,10 +53,17 @@
     <ClInclude Include="Team.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
-    <None Include="images\tile.xcf" />
+    <None Include="images\tile.xcf">
+      <Filter>Resource files</Filter>
+    </None>
+    <None Include=".gitignore">
+      <Filter>Source files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\Barrow.png">
@@ -95,5 +105,10 @@
     <Image Include="images\Ypawn.png">
       <Filter>Resource files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\YoungSerif-Regular.ttf">
+      <Filter>Resource files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Team.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Team.h" />
     <ClInclude Include="Tile.h" />
@@ -51,6 +53,9 @@
     <Image Include="images\tileYellow.png" />
     <Image Include="images\Yarrow.png" />
     <Image Include="images\Ypawn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\YoungSerif-Regular.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

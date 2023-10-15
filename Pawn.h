@@ -30,7 +30,7 @@ public:
 
 	void draw(Tile* tile);
 	bool move(Tile* tile);
-	bool handleClick(int tiles, Board* board);
+	bool handleClick(int& tiles, Board* board, bool& canToss);
 
 	Team* getTeam();
 	Tile* getCurrentTile();

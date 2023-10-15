@@ -35,6 +35,16 @@ Tile* Board::getTileById(int counter)
     return nullptr;
 }
 
+int Board::getCenterX()
+{
+    return this->centerX;
+}
+
+int Board::getCenterY()
+{
+    return this->centerY;
+}
+
 //private
 
 void Board::initBoard()
