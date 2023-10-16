@@ -6,7 +6,7 @@
 using namespace std;
 using namespace sf;
 
-class Button
+class TossButton
 {
 	Text text;
 	Font font;
@@ -17,15 +17,14 @@ class Button
 	void initText(std::string& text);
 
 public:
-	Button() = delete;
-	Button(string text, int x, int y);
+	TossButton() = delete;
+	TossButton(string text, int x, int y);
 
 	bool canToss;
 
 	void handleClick(int& dice);
-	int random(int min, int max);
 	void draw(RenderWindow* window);
-
+	int random(int min, int max);
 	const bool isClicked(Event event);
 };
 

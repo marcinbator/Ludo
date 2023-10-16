@@ -11,15 +11,10 @@ Tile::Tile()
 
 Tile::Tile( int x, int y, int rotateDeg, string texturePath) {
     this->id = 0;
-    this->width = this->sprite.getGlobalBounds().getSize().x;
-    this->height = this->sprite.getGlobalBounds().getSize().y;
-    this->texture.loadFromFile(texturePath);
-    this->sprite.setTexture(this->texture);
-    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->sprite.setPosition(x, y);
-    this->sprite.rotate(rotateDeg);
+    initSprite(texturePath, x, y, rotateDeg);
     this->currentPawn = nullptr;
 }
+
 void Tile::drawTile( RenderWindow* window)
 {
     window->draw(this->sprite);
@@ -83,4 +78,17 @@ bool Tile::isClicked(Event event) const
         return true;
     }
     return false;
+}
+
+//private
+
+void Tile::initSprite(std::string& texturePath, int x, int y, int rotateDeg)
+{
+    this->width = this->sprite.getGlobalBounds().getSize().x;
+    this->height = this->sprite.getGlobalBounds().getSize().y;
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
+    this->sprite.setPosition(x, y);
+    this->sprite.rotate(rotateDeg);
 }

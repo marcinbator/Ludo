@@ -8,13 +8,11 @@ Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* b
 	this->id = id;
 	this->team = team;
 	this->currentTile = currentTile;
-	this->texture.loadFromFile(this->team->getTexturePath());
-	this->sprite.setTexture(this->texture);
-	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 	this->window = window;
+	this->board = board;
 	this->isAtBase = true;
 	this->isAtTarget = false;
-	this->board = board;
+	initSprite();
 }
 
 void Pawn::draw(Tile* tile)
@@ -41,9 +39,9 @@ bool Pawn::move(Tile* tile)
 
 void Pawn::setAtBase()
 {
-	int tileId = this->team->getStartingTile()->getId() + 100; //first base tile id
+	int tileId = this->team->getStartingTile()->getId() + Board::BASE_FIRST_ID; //first base tile id
 	Tile* tile = this->board->getTileById(tileId);
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < Board::BASE_SIZE; i++) {
 		if (this->move(tile)) { //desired base tile is free
 			break;
 		}
@@ -56,16 +54,7 @@ void Pawn::setAtBase()
 bool Pawn::handleClick(int& dice, bool& canToss)
 {
 	if (this->isAtBase){ //deploy desired
-		if (dice == 1 || dice == 6) { //deploy condition 
-			if (this->move(this->team->getStartingTile())) { //deploy possible
-				dice = 0;
-				canToss = true;
-				this->isAtBase = false;
-				return true;
-			}
-		}
-		canToss = true; //deploy not possible
-		return false;
+		return deploy(dice, canToss);
 	}
 	if (this->canMoveFurther(dice)) { //pawn move not exceeding its route
 		int nextId = this->currentTile->getId();
@@ -112,30 +101,52 @@ bool Pawn::getIsAtTarget()
 	return this->isAtTarget;
 }
 
-
 //private
+
+bool Pawn::deploy(int& dice, bool& canToss)
+{
+	if (dice == 1 || dice == 6) { //deploy condition 
+		if (this->move(this->team->getStartingTile())) { //deploy possible
+			dice = 0;
+			canToss = true;
+			this->isAtBase = false;
+			return true;
+		}
+	}
+	//canToss = true; //deploy not possible
+	return false;
+}
 
 int Pawn::getNextTileId(int currentId) {
 	int nextId = currentId;
-	if (currentId == this->team->getStartingTile()->getId()-1 || (this->team->getStartingTile()->getId() == 1 && currentId == 40)) { //pawn at target-turning tile
-		nextId = this->team->getStartingTile()->getId() + 50;
+	if (currentId == this->team->getStartingTile()->getId() - 1 || (this->team->getStartingTile()->getId() == 1 && currentId == Board::LAST_TILE)) { //pawn at target-turning tile
+		nextId = this->team->getStartingTile()->getId() + Board::BASE_DISTANCE;
 	}
-	else if (currentId == 40) { //pawn at end of board
+	else if (currentId == Board::LAST_TILE) { //pawn at end of board
 		nextId = 1;
 	}
-	else if(currentId != this->team->getStartingTile()->getId() + 53){ //pawn not at the end of its route
+	else if(currentId != this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END){ //pawn not at the end of its route
 		nextId++;
 	}
 	return nextId;
 }
 
 bool Pawn::canMoveFurther(int tiles) {
-	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + 53; //if pawn next move not exceed its route
+	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END; //if pawn next move not exceed its route
 }
 
 void Pawn::checkIsAtTarget()
 {
-	if (this->currentTile->getId() > this->team->getStartingTile()->getId() + 50 && this->currentTile->getId() < this->team->getStartingTile()->getId() + 54) {
+	if (this->currentTile->getId() > this->team->getStartingTile()->getId() + Board::BASE_DISTANCE
+		&& this->currentTile->getId() < this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END+1) 
+	{
 		this->isAtTarget = true;
 	}
+}
+
+void Pawn::initSprite()
+{
+	this->texture.loadFromFile(this->team->getTexturePath());
+	this->sprite.setTexture(this->texture);
+	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }

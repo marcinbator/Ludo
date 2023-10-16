@@ -33,7 +33,7 @@
     <ClCompile Include="Team.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
+    <ClCompile Include="TossButton.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="Dial.cpp">
@@ -56,7 +56,7 @@
     <ClInclude Include="Team.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
+    <ClInclude Include="TossButton.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="Dial.h">

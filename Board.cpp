@@ -2,11 +2,8 @@
 
 Board::Board(RenderWindow* window)
 {
-    this->centerX = window->getSize().x / 2;
-    this->centerY = window->getSize().y / 2;
-    for (int i = 0; i < 72; i++) {
-        this->tiles[i] = new Tile();
-    }
+    this->setCenter(window);
+    this->initTiles();
     this->initBoard();
 }
 
@@ -16,7 +13,7 @@ Board::~Board()
 }
 
 void Board::drawBoard(RenderWindow* window) {
-    for (int i = 0; i < 72; i++) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
         this->tiles[i]->drawTile(window);
     }
 }
@@ -27,7 +24,7 @@ Tile** Board::getTiles() {
 
 Tile* Board::getTileById(int counter)
 {
-    for (int i = 0; i < 72; i++) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
         if (this->tiles[i]->getId() == counter) {
             return this->tiles[i];
         }
@@ -46,6 +43,19 @@ int Board::getCenterY()
 }
 
 //private
+
+void Board::setCenter(sf::RenderWindow* window)
+{
+    this->centerX = window->getSize().x / 2;
+    this->centerY = window->getSize().y / 2;
+}
+
+void Board::initTiles()
+{
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        this->tiles[i] = new Tile();
+    }
+}
 
 void Board::initBoard()
 {

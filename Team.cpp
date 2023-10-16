@@ -53,10 +53,7 @@ bool Team::areAllObstructed(int dice)
             obstructed++;
         }
     }
-    if (obstructed == 4){
-        return true;
-    }
-    return false;
+    return obstructed == 4;
 }
 
 bool Team::isWin()

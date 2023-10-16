@@ -23,8 +23,11 @@ class Pawn
 
 	int getNextTileId(int currentId);
 	void checkIsAtTarget();
+	void initSprite();
+	bool deploy(int& dice, bool& canToss);
 
 public:
+
 	Pawn() = delete;
 	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* board);
 

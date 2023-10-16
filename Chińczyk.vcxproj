@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="TossButton.cpp" />
     <ClCompile Include="Dial.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Team.cpp" />
@@ -30,7 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Button.h" />
+    <ClInclude Include="TossButton.h" />
     <ClInclude Include="Dial.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Team.h" />

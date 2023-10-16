@@ -10,12 +10,13 @@ class Dial
 	Text text;
 	Font font;
 
+	void initText(std::string& text, int x, int y);
+
 public:
 	Dial() = delete;
 	Dial(string text, int x, int y);
 
 	void draw(RenderWindow* window);
-
 	void setText(string text);
 };
 
