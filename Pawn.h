@@ -22,7 +22,7 @@ class Pawn
 	bool isAtTarget;
 
 	int getNextTileId(int currentId);
-	bool canMoveFurther(int tiles);
+	void checkIsAtTarget();
 
 public:
 	Pawn() = delete;
@@ -31,11 +31,13 @@ public:
 	void draw(Tile* tile);
 	bool move(Tile* tile);
 	void setAtBase();
-	void handleClick(int& dice, bool& canToss);
+	bool handleClick(int& dice, bool& canToss);
 
 	Team* getTeam();
 	Tile* getCurrentTile();
 	bool isClicked(Event event);
 	bool getIsAtBase();
+	bool getIsAtTarget();
+	bool canMoveFurther(int tiles);
 };
 

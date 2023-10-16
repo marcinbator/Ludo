@@ -19,9 +19,12 @@ class Game
     int dice;
     Pawn* pawns[16];
     Team* teams[4];
+    int currentTeamId;
+
     void renderPawns();
     void createTeams();
     void handleTossClick();
+    int getNextTeamId();
     void pollEvents();
 
 public:

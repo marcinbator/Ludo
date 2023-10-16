@@ -6,9 +6,10 @@ Game::Game()
     this->board = new Board(window);
     this->board->drawBoard(window);
     this->tossButton = new Button("RZUT", this->board->getCenterX(), this->board->getCenterY() + 40 * 9);
-    this->dial = new Dial("Witaj w grze!", this->board->getCenterX(), this->board->getCenterY() + 40 * 7);
     this->createTeams();
     this->dice = 0;
+    this->currentTeamId = this->tossButton->random(0, 3);
+    this->dial = new Dial("Witaj w grze!\nZaczyna gracz: "+this->teams[this->currentTeamId]->getName(), this->board->getCenterX(), this->board->getCenterY() + 40 * 7);
 }
 
 Game::~Game()
@@ -72,13 +73,30 @@ void Game::createTeams()
             this->pawns[index] = pawn;
         }
     }
+    for (int i = 0; i < 4; i++) {
+        Pawn* subpawns[] = { this->pawns[i * 4], this->pawns[i * 4 + 1], this->pawns[i * 4 + 2], this->pawns[i * 4 + 3] };
+        this->teams[i]->setPawns(subpawns);
+    }
 }
 
 void Game::handleTossClick() {
     this->tossButton->handleClick(this->dice);
-    string text = to_string(this->dice);
-    this->dial->setText("Kostka: " + text);
+    this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRuch gracza: " + this->teams[this->currentTeamId]->getName());
     this->tossButton->canToss = false;
+    if (this->dice != 1 && this->dice != 6 && this->teams[currentTeamId]->areAllObstructed(this->dice)) {
+        this->currentTeamId = getNextTeamId();
+        this->tossButton->canToss = true;
+        this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRzuca gracz " + this->teams[this->currentTeamId]->getName());
+    }
+}
+
+int Game::getNextTeamId()
+{
+    int id = 1 + this->currentTeamId;
+    if (id > 3) {
+        id = 0;
+    }
+    return id;
 }
 
 void Game::pollEvents()
@@ -102,7 +120,20 @@ void Game::pollEvents()
             }
             for (int i = 0; i < 16; i++) {
                 if (pawns[i]->isClicked(event)) {
-                    this->pawns[i]->handleClick(this->dice, this->tossButton->canToss);
+                    if (this->pawns[i]->getTeam()->getId() == 1+this->currentTeamId) {
+                        if (this->pawns[i]->handleClick(this->dice, this->tossButton->canToss)) {
+                            this->currentTeamId = this->getNextTeamId();
+                            cout << currentTeamId<<endl;
+                            this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+                            if (this->teams[this->currentTeamId]->isWin()) {
+                                this->dial->setText("Zwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
+                                this->tossButton->canToss = false;
+                            }
+                        }
+                    }
+                    else {
+                        this->dial->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
+                    }
                 }
             }
             if (this->tossButton->isClicked(event) && this->tossButton->canToss) {

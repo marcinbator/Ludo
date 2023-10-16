@@ -15,7 +15,6 @@ class Button
 
 	void initSprite(int x, int y);
 	void initText(std::string& text);
-	int random(int min, int max);
 
 public:
 	Button() = delete;
@@ -24,6 +23,7 @@ public:
 	bool canToss;
 
 	void handleClick(int& dice);
+	int random(int min, int max);
 	void draw(RenderWindow* window);
 
 	const bool isClicked(Event event);

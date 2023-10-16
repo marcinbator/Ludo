@@ -24,6 +24,7 @@ void Pawn::draw(Tile* tile)
 	this->window->draw(this->sprite);
 	this->currentTile = tile;
 	this->currentTile->setCurrentPawn(this);
+	this->checkIsAtTarget();
 }
 
 bool Pawn::move(Tile* tile)
@@ -52,7 +53,7 @@ void Pawn::setAtBase()
 	this->isAtBase = true;
 }
 
-void Pawn::handleClick(int& dice, bool& canToss)
+bool Pawn::handleClick(int& dice, bool& canToss)
 {
 	if (this->isAtBase){ //deploy desired
 		if (dice == 1 || dice == 6) { //deploy condition 
@@ -60,11 +61,11 @@ void Pawn::handleClick(int& dice, bool& canToss)
 				dice = 0;
 				canToss = true;
 				this->isAtBase = false;
-				return;
+				return true;
 			}
 		}
 		canToss = true; //deploy not possible
-		return;
+		return false;
 	}
 	if (this->canMoveFurther(dice)) { //pawn move not exceeding its route
 		int nextId = this->currentTile->getId();
@@ -74,10 +75,10 @@ void Pawn::handleClick(int& dice, bool& canToss)
 		if (this->move(this->board->getTileById(nextId))) { //move possible
 			dice = 0;
 			canToss = true;
-			return;
+			return true;
 		}
 	}
-	return;
+	return false;
 }
 
 Tile* Pawn::getCurrentTile()
@@ -87,7 +88,7 @@ Tile* Pawn::getCurrentTile()
 
 Team* Pawn::getTeam()
 {
-	return nullptr;
+	return this->team;
 }
 
 bool Pawn::isClicked(Event event) 
@@ -105,6 +106,12 @@ bool Pawn::getIsAtBase()
 {
 	return this->isAtBase;
 }
+
+bool Pawn::getIsAtTarget()
+{
+	return this->isAtTarget;
+}
+
 
 //private
 
@@ -124,4 +131,11 @@ int Pawn::getNextTileId(int currentId) {
 
 bool Pawn::canMoveFurther(int tiles) {
 	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + 53; //if pawn next move not exceed its route
+}
+
+void Pawn::checkIsAtTarget()
+{
+	if (this->currentTile->getId() > this->team->getStartingTile()->getId() + 50 && this->currentTile->getId() < this->team->getStartingTile()->getId() + 54) {
+		this->isAtTarget = true;
+	}
 }

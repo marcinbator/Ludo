@@ -8,20 +8,23 @@ using namespace std;
 class Team
 {
 	int id;
-	bool allAtBase;
 	string name;
 	string texturePath;
 	Tile* startingTile;
-	Pawn* pawns;
+	Pawn* pawns[4];
 
 public:
 	Team() = delete;
 	Team(int id, string name, Tile* startingTile, string texturePath);
+	~Team();
 
 	void setPawns(Pawn* pawns[4]);
 
-	Pawn* getPawns();
+	Pawn** getPawns();
 	string getName();
+	int getId();
 	Tile* getStartingTile();
 	string getTexturePath();
+	bool areAllObstructed(int dice);
+	bool isWin();
 };
