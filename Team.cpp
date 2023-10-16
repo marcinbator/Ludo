@@ -6,6 +6,7 @@ Team::Team(int id, string name,  Tile* startingTile, string texturePath)
     this->name = name;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
+    cout << "Team " + this->name << " created successfully.\n";
 }
 
 Team::~Team()

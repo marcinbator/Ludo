@@ -3,6 +3,7 @@
 Dial::Dial(string text, int x, int y)
 {
     initText(text, x, y);
+    cout << "Dial window initialized successfully.\n";
 }
 
 void Dial::draw(RenderWindow* window)

@@ -5,6 +5,7 @@ TossButton::TossButton(string text,  int x, int y)
     this->canToss = true;
     initSprite(x, y);
     initText(text);
+    cout << "Toss button initialized successfully.\n";
 }
 
 void TossButton::draw(RenderWindow* window) {
@@ -17,7 +18,7 @@ void TossButton::handleClick(int& dice)
     if (this->canToss) {
         dice = this->random(1, 6);
     }
-    cout << "Button clicked" << dice << endl;
+    cout << "Toss button clicked. Value: " << dice << endl;
 }
 
 const bool TossButton::isClicked(Event event)

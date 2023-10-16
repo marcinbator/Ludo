@@ -2,13 +2,15 @@
 
 Game::Game()
 {
-    this->window = new RenderWindow(VideoMode(900, 900), "Ludo");
+    this->window = new RenderWindow(VideoMode(900, 900), "Ludo", Style::Titlebar | Style::Close);
     this->board = new Board(window);
     this->board->drawBoard(window);
     this->createTeams();
     this->dice = 0;
     this->currentTeamId = this->tossButton->random(0, 3);
     this->initControls();
+    cout << "Game loaded successfully.\n";
+    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
 }
 
 Game::~Game()
@@ -94,9 +96,7 @@ void Game::handleTossClick() {
         this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRzuca gracz " + this->teams[this->currentTeamId]->getName());
         return;
     }
-    this->tossButton->handleClick(this->dice);
-    this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRuch gracza: " + this->teams[this->currentTeamId]->getName());
-    this->tossButton->canToss = false;
+    cout << "Current player: " << this->teams[this->currentTeamId]->getName()<<endl;
 }
 
 void Game::handlePawnClick(int pawnId) {

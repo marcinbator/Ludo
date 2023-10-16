@@ -13,6 +13,7 @@ Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* b
 	this->isAtBase = true;
 	this->isAtTarget = false;
 	initSprite();
+	cout << "Pawn " + to_string(this->id) + " initialized successfully.\n";
 }
 
 void Pawn::draw(Tile* tile)
@@ -29,8 +30,10 @@ bool Pawn::move(Tile* tile)
 {
 	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
 		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
+			cout << "Pawn " + to_string(this->id) + "cannot be placed on tile" + to_string(tile->getId()) << ": occupied by team mate.\n";
 			return false;
 		}
+		cout << "Pawn " + to_string(this->id) + " stroke pawn" + to_string(tile->getCurrentPawn()->getId()) << endl;
 		tile->getCurrentPawn()->setAtBase(); //strike
 	}
 	this->draw(tile);
@@ -49,6 +52,7 @@ void Pawn::setAtBase()
 		tile = this->board->getTileById(tileId);
 	}
 	this->isAtBase = true;
+	cout << "Pawn " + to_string(this->id) + " returned to base.\n";
 }
 
 bool Pawn::handleClick(int& dice, bool& canToss)
@@ -73,6 +77,11 @@ bool Pawn::handleClick(int& dice, bool& canToss)
 Tile* Pawn::getCurrentTile()
 {
 	return this->currentTile;
+}
+
+int Pawn::getId()
+{
+	return this->id;
 }
 
 Team* Pawn::getTeam()
@@ -110,6 +119,7 @@ bool Pawn::deploy(int& dice, bool& canToss)
 			dice = 0;
 			canToss = true;
 			this->isAtBase = false;
+			cout << "Pawn " + to_string(this->id) + " deployed to game.\n";
 			return true;
 		}
 	}
@@ -137,11 +147,8 @@ bool Pawn::canMoveFurther(int tiles) {
 
 void Pawn::checkIsAtTarget()
 {
-	if (this->currentTile->getId() > this->team->getStartingTile()->getId() + Board::BASE_DISTANCE
-		&& this->currentTile->getId() < this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END+1) 
-	{
-		this->isAtTarget = true;
-	}
+	this->isAtTarget = this->currentTile->getId() > this->team->getStartingTile()->getId() + Board::BASE_DISTANCE
+		&& this->currentTile->getId() < this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END + 1;
 }
 
 void Pawn::initSprite()

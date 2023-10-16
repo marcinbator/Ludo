@@ -36,6 +36,7 @@ public:
 	void setAtBase();
 	bool handleClick(int& dice, bool& canToss);
 
+	int getId();
 	Team* getTeam();
 	Tile* getCurrentTile();
 	bool isClicked(Event event);

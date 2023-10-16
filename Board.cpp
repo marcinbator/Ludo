@@ -5,6 +5,7 @@ Board::Board(RenderWindow* window)
     this->setCenter(window);
     this->initTiles();
     this->initBoard();
+    cout << "Board initialized successfully.\n";
 }
 
 Board::~Board()

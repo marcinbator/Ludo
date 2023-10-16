@@ -21,7 +21,7 @@ void Tile::drawTile( RenderWindow* window)
 }
 
 void Tile::handleClick() {
-    cout << this->id << " " << endl;
+    cout <<"Tile " << this->id << " clicked.\n";
 }
 
 void Tile::setId(int id)
