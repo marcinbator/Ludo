@@ -17,6 +17,7 @@ void Board::drawBoard(RenderWindow* window) {
     for (int i = 0; i < BOARD_SIZE; i++) {
         this->tiles[i]->drawTile(window);
     }
+    drawLogo(window);
 }
 
 Tile** Board::getTiles() {
@@ -56,6 +57,17 @@ void Board::initTiles()
     for (int i = 0; i < BOARD_SIZE; i++) {
         this->tiles[i] = new Tile();
     }
+}
+
+void Board::drawLogo(sf::RenderWindow* window)
+{
+    Texture texture;
+    texture.loadFromFile("images/logo.png");
+    Sprite sprite(texture);
+    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setPosition(this->getCenterX(), this->getCenterY() - 40 * 9);
+    sprite.setScale(0.3, 0.3);
+    window->draw(sprite);
 }
 
 void Board::initBoard()

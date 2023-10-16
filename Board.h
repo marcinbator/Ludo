@@ -7,6 +7,7 @@ class Board
 	Tile* tiles[72];
 	void initBoard();
 	void setIds();
+	void drawLogo(sf::RenderWindow* window);
 
 public:
 	const static int BOARD_SIZE = 72;

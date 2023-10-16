@@ -21,6 +21,7 @@ class Game
     Team* teams[4];
     int currentTeamId;
 
+    void initWindow();
     void initControls();
     void renderPawns();
     void createTeams();
@@ -28,7 +29,6 @@ class Game
     void handlePawnClick(int pawnId);
     int getNextTeamId();
     void pollEvents();
-
 public:
     Game();
     ~Game();

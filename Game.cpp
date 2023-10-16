@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-    this->window = new RenderWindow(VideoMode(900, 900), "Ludo", Style::Titlebar | Style::Close);
+    this->initWindow();
     this->board = new Board(window);
     this->board->drawBoard(window);
     this->createTeams();
@@ -46,6 +46,13 @@ bool Game::isRunning()
 }
 
 //private
+
+void Game::initWindow() {
+    this->window = new RenderWindow(VideoMode(900, 900), "Ludo", Style::Titlebar | Style::Close);
+    Image icon;
+    icon.loadFromFile("images/logo.png");
+    this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+}
 
 void Game::initControls()
 {
