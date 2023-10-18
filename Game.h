@@ -17,6 +17,9 @@ class Game
     TossButton* tossButton;
     Dial* dial;
     int dice;
+    int players;
+    int si;
+    int playersAndSi;
     Pawn* pawns[16];
     Team* teams[4];
     int currentTeamId;
@@ -30,7 +33,8 @@ class Game
     int getNextTeamId();
     void pollEvents();
 public:
-    Game();
+    Game() = delete;
+    Game(int players, int si);
     ~Game();
 
     void update();
