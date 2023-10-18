@@ -16,6 +16,7 @@ Pawn::Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* b
 	cout << "Pawn " + to_string(this->id) + " initialized successfully.\n";
 }
 
+//just draw pawn (at the beginning of game or with move possibility assertion)
 void Pawn::draw(Tile* tile)
 {
 	this->currentTile->setCurrentPawn(nullptr);
@@ -25,28 +26,13 @@ void Pawn::draw(Tile* tile)
 	this->currentTile->setCurrentPawn(this);
 }
 
-bool Pawn::move(Tile* tile, Board* board)
-{
-	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
-		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
-			cout << "Pawn " + to_string(this->id) + "cannot be placed on tile" + to_string(tile->getId()) << ": occupied by team mate.\n";
-			return false;
-		}
-		cout << "Pawn " + to_string(this->id) + " stroke pawn" + to_string(tile->getCurrentPawn()->getId()) << endl;
-		tile->getCurrentPawn()->setAtBase(board); //strike
-	}
-	this->draw(tile);
-	this->checkIsAtTarget();
-	cout << "Pawn " + to_string(this->id) + " placed on tile " + to_string(tile->getId())<<endl;
-	return true;
-}
-
-void Pawn::setAtBase(Board* board)
+//return current tile to base
+void Pawn::setAtBase()
 {
 	int tileId = this->team->getStartingTile()->getId() + Board::BASE_FIRST_ID; //first base tile id
 	Tile* tile = this->board->getTileById(tileId);
 	for (int i = 0; i < Board::BASE_SIZE; i++) {
-		if (this->move(tile, board)) { //desired base tile is free
+		if (this->move(tile)) { //desired base tile is free
 			break;
 		}
 		tileId++; //get next base tile
@@ -56,11 +42,13 @@ void Pawn::setAtBase(Board* board)
 	cout << "Pawn " + to_string(this->id) + " returned to base.\n";
 }
 
+//only for debug - setting on custom fields at the beginning
 void Pawn::setIsAtBase(bool isAtBase)
 {
 	this->isAtBase = isAtBase;
 }
 
+//standard move
 bool Pawn::handleClick(int& dice, bool& canToss, Board* board)
 {
 	if (this->isAtBase){ //deploy desired
@@ -71,7 +59,7 @@ bool Pawn::handleClick(int& dice, bool& canToss, Board* board)
 		for (int i = 0; i < dice; i++) { //get desired tile
 			nextId = this->getNextTileId(nextId);
 		}
-		if (this->move(this->board->getTileById(nextId), board)) { //move possible
+		if (this->move(this->board->getTileById(nextId))) { //move possible
 			dice = 0;
 			canToss = true;
 			return true;
@@ -121,7 +109,7 @@ bool Pawn::getIsAtTarget()
 bool Pawn::deploy(int& dice, bool& canToss, Board* board)
 {
 	if (dice == 1 || dice == 6) { //deploy condition 
-		if (this->move(this->team->getStartingTile(), board)) { //deploy possible
+		if (this->move(this->team->getStartingTile())) { //deploy possible
 			dice = 0;
 			canToss = true;
 			this->isAtBase = false;
@@ -153,11 +141,10 @@ bool Pawn::canMoveFurther(int tiles, Board* board) {
 	for (int i = 0; i < tiles; i++) { //get desired tile
 		nextId = this->getNextTileId(nextId);
 	}
-	if (nextId <= this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END) //if pawn next move not exceed its route
+	if (nextId <= this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END) //pawn next move not exceed its route
 	{
-		cout << "not exceed\n";
 		Tile* tile = board->getTileById(nextId);
-		if (tile != nullptr && tile->getCurrentPawn() != nullptr && tile->getCurrentPawn()->team == this->team) {
+		if (tile != nullptr && tile->getCurrentPawn() != nullptr && tile->getCurrentPawn()->team == this->team) { //pawn tries to move into its team mate
 			return false;
 		}
 		return true;
@@ -179,4 +166,21 @@ void Pawn::initSprite()
 	this->texture.loadFromFile(this->team->getTexturePath());
 	this->sprite.setTexture(this->texture);
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
+}
+
+//move with checking possibility on desired tile (private)
+bool Pawn::move(Tile* tile)
+{
+	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
+		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
+			cout << "Pawn " + to_string(this->id) + "cannot be placed on tile" + to_string(tile->getId()) << ": occupied by team mate.\n";
+			return false;
+		}
+		cout << "Pawn " + to_string(this->id) + " stroke pawn" + to_string(tile->getCurrentPawn()->getId()) << endl;
+		tile->getCurrentPawn()->setAtBase(); //strike
+	}
+	this->draw(tile);
+	this->checkIsAtTarget();
+	cout << "Pawn " + to_string(this->id) + " placed on tile " + to_string(tile->getId()) << endl;
+	return true;
 }
