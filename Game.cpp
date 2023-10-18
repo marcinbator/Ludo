@@ -90,6 +90,9 @@ void Game::createTeams()
     for (int i = 0; i < 4; i++) {
         Pawn* subpawns[] = { this->pawns[i * 4], this->pawns[i * 4 + 1], this->pawns[i * 4 + 2], this->pawns[i * 4 + 3] };
         this->teams[i]->setPawns(subpawns);
+        //
+        this->pawns[i]->draw(this->board->getTileById(40 - i));
+        this->pawns[i]->setIsAtBase(false);
     }
 }
 
@@ -97,7 +100,7 @@ void Game::handleTossClick() {
     this->tossButton->handleClick(this->dice);
     this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRuch gracza: " + this->teams[this->currentTeamId]->getName());
     this->tossButton->canToss = false;
-    if (this->dice != 1 && this->dice != 6 && this->teams[currentTeamId]->areAllObstructed(this->dice)) {
+    if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) {
         this->currentTeamId = getNextTeamId();
         this->tossButton->canToss = true;
         this->dial->setText("Kostka: " + to_string(this->dice) + ".\nRzuca gracz " + this->teams[this->currentTeamId]->getName());
@@ -108,14 +111,14 @@ void Game::handleTossClick() {
 
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) {
-        if (this->pawns[pawnId]->handleClick(this->dice, this->tossButton->canToss)) {
-            this->currentTeamId = this->getNextTeamId();
-            cout << currentTeamId << endl;
-            this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+        if (this->pawns[pawnId]->handleClick(this->dice, this->tossButton->canToss, this->board)) {
             if (this->teams[this->currentTeamId]->isWin()) {
                 this->dial->setText("Zwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
                 this->tossButton->canToss = false;
+                return;
             }
+            this->currentTeamId = this->getNextTeamId();
+            this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
         }
     }
     else {

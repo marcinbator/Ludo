@@ -23,10 +23,9 @@ void Pawn::draw(Tile* tile)
 	this->window->draw(this->sprite);
 	this->currentTile = tile;
 	this->currentTile->setCurrentPawn(this);
-	this->checkIsAtTarget();
 }
 
-bool Pawn::move(Tile* tile)
+bool Pawn::move(Tile* tile, Board* board)
 {
 	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
 		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
@@ -34,18 +33,20 @@ bool Pawn::move(Tile* tile)
 			return false;
 		}
 		cout << "Pawn " + to_string(this->id) + " stroke pawn" + to_string(tile->getCurrentPawn()->getId()) << endl;
-		tile->getCurrentPawn()->setAtBase(); //strike
+		tile->getCurrentPawn()->setAtBase(board); //strike
 	}
 	this->draw(tile);
+	this->checkIsAtTarget();
+	cout << "Pawn " + to_string(this->id) + " placed on tile " + to_string(tile->getId())<<endl;
 	return true;
 }
 
-void Pawn::setAtBase()
+void Pawn::setAtBase(Board* board)
 {
 	int tileId = this->team->getStartingTile()->getId() + Board::BASE_FIRST_ID; //first base tile id
 	Tile* tile = this->board->getTileById(tileId);
 	for (int i = 0; i < Board::BASE_SIZE; i++) {
-		if (this->move(tile)) { //desired base tile is free
+		if (this->move(tile, board)) { //desired base tile is free
 			break;
 		}
 		tileId++; //get next base tile
@@ -55,17 +56,22 @@ void Pawn::setAtBase()
 	cout << "Pawn " + to_string(this->id) + " returned to base.\n";
 }
 
-bool Pawn::handleClick(int& dice, bool& canToss)
+void Pawn::setIsAtBase(bool isAtBase)
+{
+	this->isAtBase = isAtBase;
+}
+
+bool Pawn::handleClick(int& dice, bool& canToss, Board* board)
 {
 	if (this->isAtBase){ //deploy desired
-		return deploy(dice, canToss);
+		return deploy(dice, canToss, board);
 	}
-	if (this->canMoveFurther(dice)) { //pawn move not exceeding its route
+	if (this->canMoveFurther(dice, board)) { //pawn move not exceeding its route
 		int nextId = this->currentTile->getId();
 		for (int i = 0; i < dice; i++) { //get desired tile
 			nextId = this->getNextTileId(nextId);
 		}
-		if (this->move(this->board->getTileById(nextId))) { //move possible
+		if (this->move(this->board->getTileById(nextId), board)) { //move possible
 			dice = 0;
 			canToss = true;
 			return true;
@@ -112,10 +118,10 @@ bool Pawn::getIsAtTarget()
 
 //private
 
-bool Pawn::deploy(int& dice, bool& canToss)
+bool Pawn::deploy(int& dice, bool& canToss, Board* board)
 {
 	if (dice == 1 || dice == 6) { //deploy condition 
-		if (this->move(this->team->getStartingTile())) { //deploy possible
+		if (this->move(this->team->getStartingTile(), board)) { //deploy possible
 			dice = 0;
 			canToss = true;
 			this->isAtBase = false;
@@ -135,20 +141,37 @@ int Pawn::getNextTileId(int currentId) {
 	else if (currentId == Board::LAST_TILE) { //pawn at end of board
 		nextId = 1;
 	}
-	else if(currentId != this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END){ //pawn not at the end of its route
+	else// if(currentId != this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END) //pawn not at the end of its route
+	{
 		nextId++;
 	}
 	return nextId;
 }
 
-bool Pawn::canMoveFurther(int tiles) {
-	return this->currentTile->getId() + tiles <= this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END; //if pawn next move not exceed its route
+bool Pawn::canMoveFurther(int tiles, Board* board) {
+	int nextId = this->currentTile->getId();
+	for (int i = 0; i < tiles; i++) { //get desired tile
+		nextId = this->getNextTileId(nextId);
+	}
+	if (nextId <= this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END) //if pawn next move not exceed its route
+	{
+		cout << "not exceed\n";
+		Tile* tile = board->getTileById(nextId);
+		if (tile != nullptr && tile->getCurrentPawn() != nullptr && tile->getCurrentPawn()->team == this->team) {
+			return false;
+		}
+		return true;
+	}
+	return false;
 }
 
 void Pawn::checkIsAtTarget()
 {
-	this->isAtTarget = this->currentTile->getId() > this->team->getStartingTile()->getId() + Board::BASE_DISTANCE
+	this->isAtTarget = this->currentTile->getId() > this->team->getStartingTile()->getId() + Board::BASE_DISTANCE - 1
 		&& this->currentTile->getId() < this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END + 1;
+	if (this->isAtTarget == true){
+		cout << this->id << " is at target." << endl;
+	}
 }
 
 void Pawn::initSprite()

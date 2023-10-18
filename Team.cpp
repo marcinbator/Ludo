@@ -1,4 +1,5 @@
 #include "Team.h"
+#include "Board.h"
 
 Team::Team(int id, string name,  Tile* startingTile, string texturePath)
 {
@@ -46,11 +47,12 @@ string Team::getTexturePath()
     return this->texturePath;
 }
 
-bool Team::areAllObstructed(int dice)
+bool Team::areAllObstructed(int dice, Board* board)
 {
     int obstructed = 0;
     for (int i = 0; i < 4; i++) {
-        if (this->pawns[i]->getIsAtBase() || !this->pawns[i]->canMoveFurther(dice)){
+        if ((dice!=1 && dice !=6 && this->pawns[i]->getIsAtBase()) //at base, cannot exit
+            || (this->pawns[i]->getIsAtBase() == false && !this->pawns[i]->canMoveFurther(dice, board))){ //not at base, cannot move
             obstructed++;
         }
     }

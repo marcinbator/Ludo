@@ -4,6 +4,7 @@
 #include "Tile.h"
 
 using namespace std;
+class Board;
 
 class Team
 {
@@ -25,6 +26,6 @@ public:
 	int getId();
 	Tile* getStartingTile();
 	string getTexturePath();
-	bool areAllObstructed(int dice);
+	bool areAllObstructed(int dice, Board* board);
 	bool isWin();
 };
