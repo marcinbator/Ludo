@@ -54,6 +54,7 @@ bool Team::areAllObstructed(int dice, Board* board)
         if ((dice!=1 && dice !=6 && this->pawns[i]->getIsAtBase()) //at base, cannot exit
             || (this->pawns[i]->getIsAtBase() == false && !this->pawns[i]->canMoveFurther(dice, board))){ //not at base, cannot move
             obstructed++;
+            cout << "Pawn " + this->pawns[i]->getId() << " obstructed.\n";
         }
     }
     return obstructed == 4;

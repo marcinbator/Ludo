@@ -1,13 +1,17 @@
 #pragma once
 #include "Tile.h"
+
+using namespace sf;
+
 class Board
 {
 	int centerX;
 	int centerY;
 	Tile* tiles[72];
+
 	void initBoard();
 	void setIds();
-	void drawLogo(sf::RenderWindow* window);
+	void drawLogo(RenderWindow* window);
 
 public:
 	const static int BOARD_SIZE = 72;
@@ -19,9 +23,10 @@ public:
 
 	Board() = delete;
 	Board(RenderWindow* window);
-	void setCenter(sf::RenderWindow* window);
-	void initTiles();
 	~Board();
+
+	void setCenter(RenderWindow* window);
+	void initTiles();
 
 	void drawBoard(RenderWindow* window);
 

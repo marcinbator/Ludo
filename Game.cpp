@@ -2,16 +2,19 @@
 #include <thread>
 #include <chrono>
 
-Game::Game()
+Game::Game(int players, int si)
 {
+    this->players = players;
+    this->si = si;
+    this->playersAndSi = this->players + this->si;
     this->initWindow();
     this->board = new Board(window);
     this->board->drawBoard(window);
     this->createTeams();
     this->dice = 0;
-    this->currentTeamId = this->tossButton->random(0, 3);
+    this->currentTeamId = this->tossButton->random(0, playersAndSi-1);
     this->initControls();
-    cout << "Game loaded successfully.\n";
+    cout << "Game loaded successfully.\nPlayers: " << this->players + this->si << endl;
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
 }
 
@@ -63,7 +66,7 @@ void Game::initControls()
 }
 
 void Game::renderPawns() {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < this->playersAndSi*4; i++) {
         this->pawns[i]->draw(this->pawns[i]->getCurrentTile());
     }
 }
@@ -75,11 +78,11 @@ void Game::createTeams()
     const int startTiles[] = { 1, 11, 21, 31 };
     const int baseTiles[] = { 101, 111 - 4, 121 - 8, 131 - 12 };
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < this->playersAndSi; i++) {
         Team* team = new Team(i + 1, colors[i], this->board->getTileById(startTiles[i]), images[i]);
         this->teams[i] = team;
     }
-    for (int j = 0; j < 4; j++) {
+    for (int j = 0; j < this->playersAndSi; j++) {
         for (int i = 0; i < 4; i++) {
             int index = j * 4 + i;
             int teamIndex = j;
@@ -89,10 +92,16 @@ void Game::createTeams()
             this->pawns[index] = pawn;
         }
     }
-    for (int i = 0; i < 4; i++) {
-        Pawn* subpawns[] = { this->pawns[i * 4], this->pawns[i * 4 + 1], this->pawns[i * 4 + 2], this->pawns[i * 4 + 3] };
+    for (int i = 0; i < this->playersAndSi; i++) {
+        Pawn* subpawns[] = { this->pawns[i * 4], 
+            this->pawns[i * 4 + 1], 
+            this->pawns[i * 4 + 2], 
+            this->pawns[i * 4 + 3] };
         this->teams[i]->setPawns(subpawns);
-        //
+        
+    }
+    //debug
+    for (int i = 0; i < 4; i++) {
         this->pawns[i]->draw(this->board->getTileById(40 - i));
         this->pawns[i]->setIsAtBase(false);
     }
@@ -142,11 +151,20 @@ int Game::getNextTeamId()
 {
     int id = this->currentTeamId;
     int attempts = 0;
+    int won = 0;
+    for (int i = 0; i < this->playersAndSi; i++) {
+        if (this->teams[i]->isWin()) {
+            won++;
+        }
+    }
+    if (won == this->playersAndSi - 1) {
+        return -1;
+    }
     do {
-        id = (id + 1) % 4;
+        id = (id + 1) % this->playersAndSi;
         attempts++;
-    } while (this->teams[id]->isWin() && attempts < 4);
-    if (attempts >= 4) {
+    } while (this->teams[id]->isWin() && attempts < this->playersAndSi);
+    if (attempts >= this->playersAndSi) {
         return -1;
     }
     return id;
@@ -172,7 +190,7 @@ void Game::pollEvents()
                     tile->handleClick();
                 }
             }
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < this->playersAndSi*4; i++) {
                 if (pawns[i]->isClicked(event)) {
                     this->handlePawnClick(i);
                 }
