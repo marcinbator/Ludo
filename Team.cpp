@@ -4,6 +4,7 @@
 Team::Team(int id, string name,  Tile* startingTile, string texturePath)
 {
     this->id = id;
+    this->place = 0;
     this->name = name;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
@@ -20,6 +21,16 @@ void Team::setPawns(Pawn* pawns[4])
     for (int i = 0; i < 4; i++) {
         this->pawns[i] = pawns[i];
     }
+}
+
+void Team::setPlace(int place)
+{
+    this->place = place;
+}
+
+int Team::getPlace()
+{
+    return this->place;
 }
 
 Pawn** Team::getPawns()
@@ -54,7 +65,7 @@ bool Team::areAllObstructed(int dice, Board* board)
         if ((dice!=1 && dice !=6 && this->pawns[i]->getIsAtBase()) //at base, cannot exit
             || (this->pawns[i]->getIsAtBase() == false && !this->pawns[i]->canMoveFurther(dice, board))){ //not at base, cannot move
             obstructed++;
-            cout << "Pawn " + this->pawns[i]->getId() << " obstructed.\n";
+            cout << " Pawn " + to_string(this->pawns[i]->getId()) << " obstructed."<<endl;
         }
     }
     return obstructed == 4;

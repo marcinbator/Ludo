@@ -8,11 +8,6 @@ Board::Board(RenderWindow* window)
     cout << "Board initialized successfully.\n";
 }
 
-Board::~Board()
-{
-    delete[] *this->tiles;
-}
-
 void Board::drawBoard(RenderWindow* window) {
     for (int i = 0; i < BOARD_SIZE; i++) {
         this->tiles[i]->drawTile(window);

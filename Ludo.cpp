@@ -6,10 +6,11 @@ using namespace sf;
 
 int main() {
     Menu menu;
-    Game game(menu.getPlayers(), menu.getSi());
+    Game game(&menu);
     while (game.isRunning()) {
         game.update();
         game.render();
     }
+    system("pause");
     return 0;
 }

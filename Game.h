@@ -9,6 +9,7 @@
 
 using namespace sf;
 using namespace std;
+class Menu;
 
 class Game
 {
@@ -17,11 +18,13 @@ class Game
     TossButton* tossButton;
     Dial* dial;
     int dice;
+    int currentFreePlace;
     int players;
     int si;
     int playersAndSi;
     Pawn* pawns[16];
     Team* teams[4];
+    Menu* menu;
     int currentTeamId;
 
     void initWindow();
@@ -34,7 +37,7 @@ class Game
     void pollEvents();
 public:
     Game() = delete;
-    Game(int players, int si);
+    Game(Menu* menu);
     ~Game();
 
     void update();

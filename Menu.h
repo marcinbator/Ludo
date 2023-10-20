@@ -4,6 +4,7 @@
 
 using namespace sf;
 using namespace std;
+class Team;
 
 class Menu
 {
@@ -13,6 +14,8 @@ class Menu
 
 public:
 	Menu();
+
+	void showWinners(Team** teams, int players);
 
 	int getPlayers();
 	int getSi();

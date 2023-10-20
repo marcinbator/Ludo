@@ -1,11 +1,14 @@
 #include "Game.h"
+#include "Menu.h"
 #include <thread>
 #include <chrono>
 
-Game::Game(int players, int si)
+Game::Game(Menu* menu)
 {
-    this->players = players;
-    this->si = si;
+    this->currentFreePlace = 1;
+    this->menu = menu;
+    this->players = menu->getPlayers();
+    this->si = menu->getSi();
     this->playersAndSi = this->players + this->si;
     this->initWindow();
     this->board = new Board(window);
@@ -24,8 +27,6 @@ Game::~Game()
     delete this->board;
     delete this->tossButton;
     delete this->dial;
-    delete[] *this->pawns;
-    delete[] *this->teams;
 }
 
 void Game::update()
@@ -115,7 +116,7 @@ void Game::handleTossClick() {
         this->dial->setText("\nKostka: " + to_string(this->dice) + ". Gracz zablokowany");
         this->dial->draw(this->window);
         this->window->display();
-        this_thread::sleep_for(std::chrono::seconds(2));
+        this_thread::sleep_for(std::chrono::seconds(1));
         this->currentTeamId = getNextTeamId();
         this->tossButton->canToss = true;
         this->dial->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
@@ -131,12 +132,17 @@ void Game::handlePawnClick(int pawnId) {
                 this->dial->setText("\nZwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
                 this->dial->draw(this->window);
                 this->window->display();
-                this_thread::sleep_for(std::chrono::seconds(2));
+                this->teams[this->currentTeamId]->setPlace(this->currentFreePlace);
+                this->currentFreePlace++;
+                this_thread::sleep_for(std::chrono::seconds(1));
             }
             this->currentTeamId = this->getNextTeamId();
-            if (this->currentTeamId == -1) { //all players won
+            if (this->currentTeamId >= 10) { //all players won
                 this->dial->setText("Koniec gry! ");
                 this->tossButton->canToss = false;
+                //this_thread::sleep_for(std::chrono::seconds(2));
+                this->menu->showWinners(this->teams, this->playersAndSi);
+                this->window->close();
                 return;
             }
             this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
@@ -158,14 +164,14 @@ int Game::getNextTeamId()
         }
     }
     if (won == this->playersAndSi - 1) {
-        return -1;
+        return id+10;
     }
     do {
         id = (id + 1) % this->playersAndSi;
         attempts++;
     } while (this->teams[id]->isWin() && attempts < this->playersAndSi);
     if (attempts >= this->playersAndSi) {
-        return -1;
+        return id+10;
     }
     return id;
 }

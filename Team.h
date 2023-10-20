@@ -9,6 +9,7 @@ class Board;
 class Team
 {
 	int id;
+	int place;
 	string name;
 	string texturePath;
 	Tile* startingTile;
@@ -20,6 +21,8 @@ public:
 	~Team();
 
 	void setPawns(Pawn* pawns[4]);
+	void setPlace(int place);
+	int getPlace();
 
 	Pawn** getPawns();
 	string getName();

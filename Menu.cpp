@@ -1,10 +1,28 @@
 #include "Menu.h"
+#include "Team.h"
 
 Menu::Menu()
 {
 	this->players = 0;
 	this->si = 0;
 	this->initMenu();
+}
+
+void Menu::showWinners(Team** teams, int players)
+{
+    system("cls");
+    Team* leaderboard[4];
+    for (int i = 0; i < players; i++) {
+        if (teams[i]->getPlace() != 0) {
+            leaderboard[teams[i]->getPlace()-1] = teams[i];
+        }
+        else {
+            leaderboard[players-1] = teams[i];
+        }
+    }
+    for (int i = 0; i < players; i++) {
+        cout << "\tMiejsce " + to_string(i+1) << ": " << leaderboard[i]->getName() << endl;
+    }
 }
 
 int Menu::getPlayers()

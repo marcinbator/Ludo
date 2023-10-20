@@ -23,7 +23,6 @@ public:
 
 	Board() = delete;
 	Board(RenderWindow* window);
-	~Board();
 
 	void setCenter(RenderWindow* window);
 	void initTiles();
