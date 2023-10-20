@@ -9,23 +9,23 @@ class Board
 	int centerY;
 	Tile* tiles[72];
 
+	void setCenter(RenderWindow* window);
+	void initTiles();
+	void drawLogo(RenderWindow* window);
 	void initBoard();
 	void setIds();
-	void drawLogo(RenderWindow* window);
 
 public:
-	const static int BOARD_SIZE = 72;
+	const static int TILES_AMOUNT = 72;
 	const static int BASE_FIRST_ID = 100;
 	const static int BASE_SIZE = 4;
 	const static int LAST_TILE = 40;
-	const static int BASE_DISTANCE = 50;
-	const static int BASE_DISTANCE_END = 53;
+	const static int TARGET_FIRST_ID = 50;
+	const static int TARGET_LAST_ID = 53;
 
 	Board() = delete;
 	Board(RenderWindow* window);
-
-	void setCenter(RenderWindow* window);
-	void initTiles();
+	~Board();
 
 	void drawBoard(RenderWindow* window);
 

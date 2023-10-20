@@ -19,7 +19,7 @@ void Dial::setText(string text)
 
 //private
 
-void Dial::initText(std::string& text, int x, int y)
+void Dial::initText(string text, int x, int y)
 {
     this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
     this->text.setFont(this->font);

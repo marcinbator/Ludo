@@ -15,7 +15,7 @@ class Tile
     Sprite sprite;
     Pawn* currentPawn;
 
-    void initSprite(std::string& texturePath, int x, int y, int rotateDeg);
+    void initSprite(string texturePath, int x, int y, int rotateDeg);
 
 public:
     Tile();

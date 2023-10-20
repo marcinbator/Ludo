@@ -15,34 +15,32 @@ class Pawn
 	Tile* currentTile;
 	Texture texture;
 	Sprite sprite;
-	RenderWindow* window;
-	Board* board;
 
 	bool isAtBase;
 	bool isAtTarget;
 
+	void initSprite();
+	bool move(Tile* tile, RenderWindow* window, Board* board);
+	bool deploy(int& dice, bool& canToss, RenderWindow* window, Board* board);
 	int getNextTileId(int currentId);
 	void checkIsAtTarget();
-	void initSprite();
-	bool deploy(int& dice, bool& canToss, Board* board);
-	bool move(Tile* tile);
 
 public:
 
 	Pawn() = delete;
-	Pawn(int id, Team* team, RenderWindow* window, Tile* currentTile, Board* board);
+	Pawn(int id, Team* team, Tile* currentTile);
 
-	void draw(Tile* tile);
-	void setAtBase();
+	void draw(Tile* tile, RenderWindow* window);
+	bool handleClick(int& dice, bool& canToss, RenderWindow* window, Board* board);
+	void setAtBase(RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
-	bool handleClick(int& dice, bool& canToss, Board* board);
 
 	int getId();
 	Team* getTeam();
 	Tile* getCurrentTile();
-	bool isClicked(Event event);
 	bool getIsAtBase();
 	bool getIsAtTarget();
+	bool isClicked(Event event);
 	bool canMoveFurther(int tiles, Board* board);
 };
 

@@ -8,16 +8,16 @@ class Team;
 
 class Menu
 {
-	int players;
-	int si;
+	int playersAmount;
+	int aiPlayersAmount;
 	void initMenu();
 
 public:
 	Menu();
 
-	void showWinners(Team** teams, int players);
+	void showWinners(Team** teams, int playersAmount);
 
-	int getPlayers();
-	int getSi();
+	int getPlayersAmount();
+	int getAiPlayersAmount();
 };
 

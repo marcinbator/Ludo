@@ -3,36 +3,36 @@
 
 Menu::Menu()
 {
-	this->players = 0;
-	this->si = 0;
+	this->playersAmount = 0;
+	this->aiPlayersAmount = 0;
 	this->initMenu();
 }
 
-void Menu::showWinners(Team** teams, int players)
+void Menu::showWinners(Team** teams, int playersAmount)
 {
     system("cls");
     Team* leaderboard[4];
-    for (int i = 0; i < players; i++) {
-        if (teams[i]->getPlace() != 0) {
-            leaderboard[teams[i]->getPlace()-1] = teams[i];
+    for (int i = 0; i < playersAmount; i++) {
+        if (teams[i]->getStanding() != 0) {
+            leaderboard[teams[i]->getStanding()-1] = teams[i];
         }
         else {
-            leaderboard[players-1] = teams[i];
+            leaderboard[playersAmount-1] = teams[i];
         }
     }
-    for (int i = 0; i < players; i++) {
+    for (int i = 0; i < playersAmount; i++) {
         cout << "\tMiejsce " + to_string(i+1) << ": " << leaderboard[i]->getName() << endl;
     }
 }
 
-int Menu::getPlayers()
+int Menu::getPlayersAmount()
 {
-	return this->players;
+	return this->playersAmount;
 }
 
-int Menu::getSi()
+int Menu::getAiPlayersAmount()
 {
-	return this->si;
+	return this->aiPlayersAmount;
 }
 
 //private
@@ -41,10 +41,10 @@ void Menu::initMenu()
 {
     do {
         cout << "Witaj w grze. Podaj liczbe zywych graczy: ";
-        cin >> this->players;
+        cin >> this->playersAmount;
         cout << "Podaj liczbe graczy SI: ";
-        cin >> this->si;
-        if (this->players >= 1 && this->players <= 4 && this->si >= 0 && this->si <= 4 && this->players + this->si <= 4) {
+        cin >> this->aiPlayersAmount;
+        if (this->playersAmount >= 1 && this->playersAmount <= 4 && this->aiPlayersAmount >= 0 && this->aiPlayersAmount <= 4 && this->playersAmount + this->aiPlayersAmount <= 4) { //todo >1
             cout << "Uruchamianie...";
             break;
         }

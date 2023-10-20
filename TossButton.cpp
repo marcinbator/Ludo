@@ -1,4 +1,5 @@
 #include "TossButton.h"
+#include "Random.h"
 
 TossButton::TossButton(string text,  int x, int y)
 {
@@ -16,7 +17,7 @@ void TossButton::draw(RenderWindow* window) {
 void TossButton::handleClick(int& dice)
 {
     if (this->canToss) {
-        dice = this->random(1, 6);
+        dice = random(1, 6);
     }
     cout << "Toss button clicked. Value: " << dice << endl;
 }
@@ -32,17 +33,6 @@ const bool TossButton::isClicked(Event event)
     return false;
 }
 
-int TossButton::random(int min, int max)
-{
-    static bool first = true;
-    if (first)
-    {
-        srand(time(NULL));
-        first = false;
-    }
-    return min + rand() % ((max + 1) - min);
-}
-
 //private
 
 void TossButton::initSprite(int x, int y)
@@ -54,7 +44,7 @@ void TossButton::initSprite(int x, int y)
     this->sprite.setScale(1.5, 1);
 }
 
-void TossButton::initText(std::string& text)
+void TossButton::initText(string text)
 {
     this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
     this->text.setFont(this->font);

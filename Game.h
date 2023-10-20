@@ -13,19 +13,19 @@ class Menu;
 
 class Game
 {
+    int dice;
+    int currentFreePodiumPlace;
+    int playersAmount;
+    int aiPlayersAmount;
+    int playersTotalAmount;
+    int currentTeamId;
     RenderWindow* window;
     Board* board;
+    Team* teams[4];
+    Pawn* pawns[16];
     TossButton* tossButton;
     Dial* dial;
-    int dice;
-    int currentFreePlace;
-    int players;
-    int si;
-    int playersAndSi;
-    Pawn* pawns[16];
-    Team* teams[4];
     Menu* menu;
-    int currentTeamId;
 
     void initWindow();
     void initControls();
@@ -33,8 +33,12 @@ class Game
     void createTeams();
     void handleTossClick();
     void handlePawnClick(int pawnId);
+    void handleAllObstructed();
+    void handleSingleWin();
+    void handleGameEnd();
     int getNextTeamId();
     void pollEvents();
+
 public:
     Game() = delete;
     Game(Menu* menu);

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="TossButton.cpp" />
     <ClCompile Include="Dial.cpp" />
     <ClCompile Include="Pawn.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="TossButton.h" />
     <ClInclude Include="Dial.h" />
     <ClInclude Include="Pawn.h" />

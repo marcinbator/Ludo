@@ -82,7 +82,7 @@ bool Tile::isClicked(Event event) const
 
 //private
 
-void Tile::initSprite(std::string& texturePath, int x, int y, int rotateDeg)
+void Tile::initSprite(string texturePath, int x, int y, int rotateDeg)
 {
     this->width = this->sprite.getGlobalBounds().getSize().x;
     this->height = this->sprite.getGlobalBounds().getSize().y;

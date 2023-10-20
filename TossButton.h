@@ -14,7 +14,7 @@ class TossButton
 	Sprite sprite;
 
 	void initSprite(int x, int y);
-	void initText(std::string& text);
+	void initText(string text);
 
 public:
 	TossButton() = delete;
@@ -22,9 +22,9 @@ public:
 
 	bool canToss;
 
-	void handleClick(int& dice);
 	void draw(RenderWindow* window);
-	int random(int min, int max);
+	void handleClick(int& dice);
+
 	const bool isClicked(Event event);
 };
 

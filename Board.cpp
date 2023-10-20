@@ -8,8 +8,15 @@ Board::Board(RenderWindow* window)
     cout << "Board initialized successfully.\n";
 }
 
+Board::~Board()
+{
+    for (int i = 0; i < TILES_AMOUNT; i++) {
+        delete this->tiles[i];
+    }
+}
+
 void Board::drawBoard(RenderWindow* window) {
-    for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
     drawLogo(window);
@@ -21,7 +28,7 @@ Tile** Board::getTiles() {
 
 Tile* Board::getTileById(int counter)
 {
-    for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = 0; i < TILES_AMOUNT; i++) {
         if (this->tiles[i]->getId() == counter) {
             return this->tiles[i];
         }
@@ -49,7 +56,7 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
-    for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i] = new Tile();
     }
 }

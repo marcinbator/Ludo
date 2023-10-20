@@ -10,7 +10,7 @@ class Dial
 	Text text;
 	Font font;
 
-	void initText(std::string& text, int x, int y);
+	void initText(string text, int x, int y);
 
 public:
 	Dial() = delete;

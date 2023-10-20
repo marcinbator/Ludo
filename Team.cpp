@@ -4,16 +4,11 @@
 Team::Team(int id, string name,  Tile* startingTile, string texturePath)
 {
     this->id = id;
-    this->place = 0;
+    this->standing = 0;
     this->name = name;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
     cout << "Team " + this->name << " created successfully.\n";
-}
-
-Team::~Team()
-{
-    delete[] this->pawns;
 }
 
 void Team::setPawns(Pawn* pawns[4])
@@ -23,19 +18,14 @@ void Team::setPawns(Pawn* pawns[4])
     }
 }
 
-void Team::setPlace(int place)
+void Team::setStanding(int standing)
 {
-    this->place = place;
+    this->standing = standing;
 }
 
-int Team::getPlace()
+int Team::getId()
 {
-    return this->place;
-}
-
-Pawn** Team::getPawns()
-{
-    return this->pawns;
+    return this->id;
 }
 
 string Team::getName()
@@ -43,9 +33,14 @@ string Team::getName()
     return this->name;
 }
 
-int Team::getId()
+Pawn** Team::getPawns()
 {
-    return this->id;
+    return this->pawns;
+}
+
+int Team::getStanding()
+{
+    return this->standing;
 }
 
 Tile* Team::getStartingTile()
@@ -56,6 +51,17 @@ Tile* Team::getStartingTile()
 string Team::getTexturePath()
 {
     return this->texturePath;
+}
+
+bool Team::isWin()
+{
+    int atTarget = 0;
+    for (int i = 0; i < 4; i++) {
+        if (this->pawns[i]->getIsAtTarget()) {
+            atTarget++;
+        }
+    }
+    return atTarget == 4;
 }
 
 bool Team::areAllObstructed(int dice, Board* board)
@@ -69,15 +75,4 @@ bool Team::areAllObstructed(int dice, Board* board)
         }
     }
     return obstructed == 4;
-}
-
-bool Team::isWin()
-{
-    int atTarget = 0;
-    for (int i = 0; i < 4; i++) {
-        if (this->pawns[i]->getIsAtTarget()) {
-            atTarget++;
-        }
-    }
-    return atTarget == 4;
 }

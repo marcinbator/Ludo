@@ -9,8 +9,8 @@ class Board;
 class Team
 {
 	int id;
-	int place;
 	string name;
+	int standing;
 	string texturePath;
 	Tile* startingTile;
 	Pawn* pawns[4];
@@ -18,17 +18,16 @@ class Team
 public:
 	Team() = delete;
 	Team(int id, string name, Tile* startingTile, string texturePath);
-	~Team();
 
 	void setPawns(Pawn* pawns[4]);
-	void setPlace(int place);
-	int getPlace();
+	void setStanding(int standing);
 
-	Pawn** getPawns();
-	string getName();
 	int getId();
+	string getName();
+	Pawn** getPawns();
+	int getStanding();
 	Tile* getStartingTile();
 	string getTexturePath();
-	bool areAllObstructed(int dice, Board* board);
 	bool isWin();
+	bool areAllObstructed(int dice, Board* board);
 };

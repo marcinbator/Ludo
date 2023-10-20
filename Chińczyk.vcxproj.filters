@@ -42,6 +42,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -66,6 +69,9 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
