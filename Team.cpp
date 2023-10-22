@@ -1,11 +1,12 @@
 #include "Team.h"
 #include "Board.h"
 
-Team::Team(int id, string name,  Tile* startingTile, string texturePath)
+Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath)
 {
     this->id = id;
-    this->standing = 0;
     this->name = name;
+    this->isAi = isAi;
+    this->standing = 0;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
     cout << "Team " + this->name << " created successfully.\n";
@@ -31,6 +32,11 @@ int Team::getId()
 string Team::getName()
 {
     return this->name;
+}
+
+bool Team::getIsAi()
+{
+    return this->isAi;
 }
 
 Pawn** Team::getPawns()

@@ -25,10 +25,10 @@ void Pawn::draw(Tile* tile, RenderWindow* window)
 }
 
 //standard move
-bool Pawn::handleClick(int& dice, bool& canToss, RenderWindow* window, Board* board)
+bool Pawn::handleClick(int dice, RenderWindow* window, Board* board)
 {
 	if (this->isAtBase){ //deploy desired
-		return deploy(dice, canToss, window, board);
+		return deploy(dice, window, board);
 	}
 	if (this->canMoveFurther(dice, board)) { //pawn move not exceeding its route
 		int nextId = this->currentTile->getId();
@@ -36,8 +36,6 @@ bool Pawn::handleClick(int& dice, bool& canToss, RenderWindow* window, Board* bo
 			nextId = this->getNextTileId(nextId);
 		}
 		if (this->move(board->getTileById(nextId), window, board)) { //move possible
-			dice = 0;
-			canToss = true;
 			return true;
 		}
 	}
@@ -144,12 +142,10 @@ bool Pawn::move(Tile* tile, RenderWindow* window, Board* board)
 	return true;
 }
 
-bool Pawn::deploy(int& dice, bool& canToss, RenderWindow* window, Board* board)
+bool Pawn::deploy(int dice, RenderWindow* window, Board* board)
 {
 	if (dice == 1 || dice == 6) { //deploy condition 
 		if (this->move(this->team->getStartingTile(), window, board)) { //deploy possible
-			dice = 0;
-			canToss = true;
 			this->isAtBase = false;
 			cout << "Pawn " + to_string(this->id) + " deployed to game.\n";
 			return true;
