@@ -4,22 +4,21 @@
 #include <thread>
 #include <chrono>
 
-Game::Game(Menu* menu)
+Game::Game()
 {
     this->currentFreePodiumPlace = 1;
-    this->menu = menu;
-    this->playersAmount = menu->getPlayersAmount();
-    this->aiPlayersAmount = menu->getAiPlayersAmount();
-    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
     this->initWindow();
     this->board = new Board(window);
-    this->board->drawBoard(window);
+    this->menu = new Menu(this->board->getCenterX(), this->board->getCenterY());
     this->createTeams();
     this->dice = 0;
+    /*this->playersAmount = menu->getPlayersAmount();
+    this->aiPlayersAmount = menu->getAiPlayersAmount();
+    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
     this->currentTeamId = random(0, playersTotalAmount-1);
-    this->initControls();
-    cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
-    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
+    this->initControls();*/
+    /*cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
+    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;*/
 }
 
 Game::~Game()
@@ -39,31 +38,52 @@ Game::~Game()
 
 void Game::update()
 {
-    this->pollEvents();
-    if (this->teams[this->currentTeamId]->getIsAi()) {
-        this->tossButton->canToss = false;
-        this->dice = random(1, 6);
-        this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
-        if (this->teams[this->currentTeamId]->isWin()) { //check win
-            this->handleSingleWin();
-        }
-        this_thread::sleep_for(chrono::milliseconds(300));
-        this->dice = 0;
-        this->tossButton->canToss = true;
-        this->getNextTeamId();
+    this->window->setFramerateLimit(60);
+    if (this->menu->getIsDisplayed()) {
+        this->pollMenuEvents();
     }
+    else {
+        this->pollEvents();
+        if (this->teams[this->currentTeamId]->getIsAi()) {
+            this->tossButton->canToss = false;
+            this->dice = random(1, 6);
+            this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
+            if (this->teams[this->currentTeamId]->isWin()) { //check win
+                this->handleSingleWin();
+            }
+            this_thread::sleep_for(chrono::milliseconds(300));
+            this->dice = 0;
+            this->tossButton->canToss = true;
+            this->getNextTeamId();
+        }
+    }    
 }
 
 void Game::render()
 {
-    this->window->clear();
-    this->board->drawBoard(this->window);
-    this->dial->draw(this->window);
-    this->renderPawns();
-    if (this->tossButton->canToss) {
-        this->tossButton->draw(this->window);
+    if (this->menu->getIsDisplayed()) {
+        this->window->clear();
+        this->menu->draw(this->window);
+        this->window->display();
     }
-    this->window->display();
+    else {
+        this->playersAmount = menu->getPlayersAmount();
+        this->aiPlayersAmount = menu->getAiPlayersAmount();
+        this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
+        this->currentTeamId = random(0, playersTotalAmount - 1);
+        this->initControls();
+        cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
+        cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl; 
+            //
+        this->window->clear();
+        this->board->drawBoard(this->window);
+        this->dial->draw(this->window);
+        this->renderPawns();
+        if (this->tossButton->canToss) {
+            this->tossButton->draw(this->window);
+        }
+        this->window->display();
+    }
 }
 
 bool Game::isRunning()
@@ -126,10 +146,10 @@ void Game::createTeams()
         
     }
     //debug
-    for (int i = 0; i < 4; i++) {
+    /*for (int i = 0; i < 4; i++) {
         this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
         this->pawns[i]->setIsAtBase(false);
-    }
+    }*/
 }
 
 void Game::handleTossClick() {
@@ -214,10 +234,25 @@ void Game::handleGameEnd()
     this->window->close();
 }
 
+void Game::pollMenuEvents()
+{
+    Event event;
+    while (this->window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
+        {
+            this->window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            this->menu->handleClick(event);
+        }
+    }
+}
+
 void Game::pollEvents()
 {
     Event event;
-    this->window->setFramerateLimit(60);
     while (this->window->pollEvent(event))
     {
         if (event.type == Event::Closed)

@@ -129,6 +129,12 @@
     <Image Include="images\Ypawn.png">
       <Filter>Resource files</Filter>
     </Image>
+    <Image Include="images\button1.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\logo.png">
+      <Filter>Resource files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\YoungSerif-Regular.ttf">

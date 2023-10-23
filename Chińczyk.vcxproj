@@ -50,8 +50,10 @@
   <ItemGroup>
     <Image Include="images\Barrow.png" />
     <Image Include="images\Bpawn.png" />
+    <Image Include="images\button1.png" />
     <Image Include="images\Garrow.png" />
     <Image Include="images\Gpawn.png" />
+    <Image Include="images\logo.png" />
     <Image Include="images\Rarrow.png" />
     <Image Include="images\Rpawn.png" />
     <Image Include="images\tile.png" />

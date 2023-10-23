@@ -1,11 +1,47 @@
 #include "Menu.h"
 #include "Team.h"
+#include "TossButton.h"
 
-Menu::Menu()
+Menu::Menu(int centerX, int centerY)
 {
-	this->playersAmount = 0;
-	this->aiPlayersAmount = 0;
-	this->initMenu();
+    this->isDisplayed = true;
+    this->playersAmount = 0;
+    this->aiPlayersAmount = 0;
+    this->button = new TossButton("Zatwierdz", centerX, centerY + 270);
+    this->initMenu(centerX, centerY);
+
+    string textures[] = {"tileRed.png", "tileBlue.png", "tileGreen.png", "tileYellow.png"};
+    for (int i = 0; i < 4; i++) {
+        buttonTextures[i].loadFromFile("images/" + textures[i]);
+        this->playersButtons[i].setTexture(buttonTextures[i]);
+        this->aiPlayersButtons[i].setTexture(buttonTextures[i]);
+    }
+    this->setButtonPositions(centerX, centerY);
+}
+
+void Menu::draw(RenderWindow* window)
+{
+    window->draw(this->title);
+    window->draw(this->text1);
+    window->draw(this->text2);
+
+    for (int i = 0; i < 4; i++) {
+        window->draw(this->playersButtons[i]);
+        window->draw(this->aiPlayersButtons[i]);
+    }
+
+    this->button->draw(window);
+}
+
+void Menu::handleClick(Event event)
+{
+    for (int i = 0; i < 4; i++) {
+        if (this->aiPlayersButtons[i]
+            .getGlobalBounds()
+            .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+            cout << this->aiPlayersButtons[i].getPosition().x;
+            }
+    }
 }
 
 void Menu::showWinners(Team** teams, int playersAmount)
@@ -14,42 +50,64 @@ void Menu::showWinners(Team** teams, int playersAmount)
     Team* leaderboard[4];
     for (int i = 0; i < playersAmount; i++) {
         if (teams[i]->getStanding() != 0) {
-            leaderboard[teams[i]->getStanding()-1] = teams[i];
+            leaderboard[teams[i]->getStanding() - 1] = teams[i];
         }
         else {
-            leaderboard[playersAmount-1] = teams[i];
+            leaderboard[playersAmount - 1] = teams[i];
         }
     }
     for (int i = 0; i < playersAmount; i++) {
-        cout << "\tMiejsce " + to_string(i+1) << ": " << leaderboard[i]->getName() << endl;
+        cout << "\tMiejsce " + to_string(i + 1) << ": " << leaderboard[i]->getName() << endl;
     }
+}
+
+bool Menu::getIsDisplayed()
+{
+    return this->isDisplayed;
 }
 
 int Menu::getPlayersAmount()
 {
-	return this->playersAmount;
+    return this->playersAmount;
 }
 
 int Menu::getAiPlayersAmount()
 {
-	return this->aiPlayersAmount;
+    return this->aiPlayersAmount;
 }
 
 //private
 
-void Menu::initMenu()
+void Menu::initMenu(int centerX, int centerY)
 {
-    do {
-        cout << "Witaj w grze. Podaj liczbe zywych graczy: ";
-        cin >> this->playersAmount;
-        cout << "Podaj liczbe graczy SI: ";
-        cin >> this->aiPlayersAmount;
-        if (this->playersAmount >= 1 && this->playersAmount <= 4 && this->aiPlayersAmount >= 0 && this->aiPlayersAmount <= 4 && this->playersAmount + this->aiPlayersAmount <= 4) { //todo >1
-            cout << "Uruchamianie...";
-            break;
-        }
-        else {
-            cout << "Blad! Sprawdz warunki - laczna liczba graczy musi byc mniejsza rowna 4, a liczba zywych graczy oraz graczy SI musi byc w zakresie od 1 do 4.\n";
-        }
-    } while (true);
+    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+
+    //title
+    this->title = Text("Menu", this->font, 30);
+    this->title.setFillColor(sf::Color::White);
+    this->title.setOrigin(this->title.getGlobalBounds().width / 2, this->title.getGlobalBounds().height / 2);
+    this->title.setPosition(centerX, centerY - 130);
+
+    //text1
+    this->text1 = Text("Wybierz graczy", this->font, 20);
+    this->text1.setFillColor(sf::Color::White);
+    this->text1.setOrigin(this->text1.getGlobalBounds().width / 2, this->text1.getGlobalBounds().height / 2);
+    this->text1.setPosition(centerX, centerY);
+
+    //text2
+    this->text2 = Text("Wybierz graczy SI", this->font, 20);
+    this->text2.setFillColor(sf::Color::White);
+    this->text2.setOrigin(this->text2.getGlobalBounds().width / 2, this->text2.getGlobalBounds().height / 2);
+    this->text2.setPosition(centerX, centerY + 100);
+}
+
+void Menu::setButtonPositions(int centerX, int centerY)
+{
+
+    for (int i = 0; i < 4; i++) {
+        this->playersButtons[i].setOrigin(this->playersButtons[i].getGlobalBounds().width / 2, this->playersButtons[i].getGlobalBounds().height / 2);
+        this->playersButtons[i].setPosition(centerX - 180 + i * 120, centerY + 50);
+        this->aiPlayersButtons[i].setOrigin(this->aiPlayersButtons[i].getGlobalBounds().width / 2, this->aiPlayersButtons[i].getGlobalBounds().height / 2);
+        this->aiPlayersButtons[i].setPosition(centerX - 180 + i * 120, centerY + 150);
+    }
 }

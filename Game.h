@@ -40,10 +40,10 @@ class Game
     void handleGameEnd();
     void getNextTeamId();
     void pollEvents();
+    void pollMenuEvents();
 
 public:
-    Game() = delete;
-    Game(Menu* menu);
+    Game();
     ~Game();
 
     void update();
