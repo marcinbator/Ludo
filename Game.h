@@ -32,7 +32,6 @@ class Game
     void initWindow();
     void initControls();
     void renderPawns();
-    void createTeams();
     void handleTossClick();
     void handlePawnClick(int pawnId);
     void handleAllObstructed();
@@ -48,6 +47,7 @@ public:
 
     void update();
     void render();
+    void createTeams();
 
     bool isRunning();
 };

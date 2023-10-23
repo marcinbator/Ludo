@@ -1,13 +1,17 @@
 #include "Menu.h"
 #include "Team.h"
 #include "TossButton.h"
+#include "MenuConfirmButton.h"
+#include "Dial.h"
+#include "Game.h"
 
 Menu::Menu(int centerX, int centerY)
 {
     this->isDisplayed = true;
-    this->playersAmount = 0;
-    this->aiPlayersAmount = 0;
-    this->button = new TossButton("Zatwierdz", centerX, centerY + 270);
+    this->playersAmount = 1;
+    this->aiPlayersAmount = 3;
+    this->dial = new Dial("Witaj w grze!", centerX, centerY - 80);
+    this->button = new MenuConfirmButton("Zatwierdz", centerX, centerY + 270);
     this->initMenu(centerX, centerY);
 
     string textures[] = {"tileRed.png", "tileBlue.png", "tileGreen.png", "tileYellow.png"};
@@ -21,6 +25,7 @@ Menu::Menu(int centerX, int centerY)
 
 void Menu::draw(RenderWindow* window)
 {
+    this->dial->draw(window);
     window->draw(this->title);
     window->draw(this->text1);
     window->draw(this->text2);
@@ -33,14 +38,13 @@ void Menu::draw(RenderWindow* window)
     this->button->draw(window);
 }
 
-void Menu::handleClick(Event event)
+void Menu::handleClick(Event event, Game* game)
 {
-    for (int i = 0; i < 4; i++) {
-        if (this->aiPlayersButtons[i]
-            .getGlobalBounds()
-            .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-            cout << this->aiPlayersButtons[i].getPosition().x;
-            }
+    if (this->button->isClicked(event)) {
+        if (this->button->handleClick(this, this->dial)) {
+            game->createTeams();
+            this->isDisplayed = false;
+        }
     }
 }
 

@@ -48,6 +48,12 @@
     <ClCompile Include="Ai.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuConfirmButton.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -78,6 +84,12 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="Ai.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuConfirmButton.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>

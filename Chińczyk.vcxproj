@@ -21,7 +21,9 @@
   <ItemGroup>
     <ClCompile Include="Ai.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuConfirmButton.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="TossButton.cpp" />
     <ClCompile Include="Dial.cpp" />
@@ -34,7 +36,9 @@
   <ItemGroup>
     <ClInclude Include="Ai.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuConfirmButton.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="TossButton.h" />
     <ClInclude Include="Dial.h" />

@@ -6,25 +6,24 @@
 using namespace std;
 using namespace sf;
 
-class TossButton //todo inherit from button
+class Button
 {
-	Text text;
+protected:
 	Font font;
+	Text text;
 	Texture texture;
 	Sprite sprite;
 
 	void initSprite(int x, int y);
-	void initText(string text);
+	void initText(string text, int x, int y);
 
 public:
-	TossButton() = delete;
-	TossButton(string text, int x, int y);
-
-	bool canToss;
+	Button() = delete;
+	Button(string text, int x, int y);
 
 	void draw(RenderWindow* window);
-	void handleClick(int& dice);
+	void handleClick();
 
+	const Sprite getSprite();
 	const bool isClicked(Event event);
 };
-

@@ -10,15 +10,7 @@ Game::Game()
     this->initWindow();
     this->board = new Board(window);
     this->menu = new Menu(this->board->getCenterX(), this->board->getCenterY());
-    this->createTeams();
     this->dice = 0;
-    /*this->playersAmount = menu->getPlayersAmount();
-    this->aiPlayersAmount = menu->getAiPlayersAmount();
-    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
-    this->currentTeamId = random(0, playersTotalAmount-1);
-    this->initControls();*/
-    /*cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
-    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;*/
 }
 
 Game::~Game()
@@ -67,13 +59,6 @@ void Game::render()
         this->window->display();
     }
     else {
-        this->playersAmount = menu->getPlayersAmount();
-        this->aiPlayersAmount = menu->getAiPlayersAmount();
-        this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
-        this->currentTeamId = random(0, playersTotalAmount - 1);
-        this->initControls();
-        cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
-        cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl; 
             //
         this->window->clear();
         this->board->drawBoard(this->window);
@@ -114,6 +99,11 @@ void Game::renderPawns() {
 
 void Game::createTeams()
 {
+    this->playersAmount = menu->getPlayersAmount();
+    this->aiPlayersAmount = menu->getAiPlayersAmount();
+    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
+    this->currentTeamId = random(0, playersTotalAmount - 1);
+
     const string colors[] = { "Czerwony", "Niebieski", "Zielony", "Zolty" };
     const string images[] = { "images/Rpawn.png", "images/Bpawn.png", "images/Gpawn.png", "images/Ypawn.png" };
     const int startTiles[] = { 1, 11, 21, 31 };
@@ -145,6 +135,9 @@ void Game::createTeams()
         this->teams[i]->setPawns(subpawns);
         
     }
+    this->initControls();
+    cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
+    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
     //debug
     /*for (int i = 0; i < 4; i++) {
         this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
@@ -245,7 +238,7 @@ void Game::pollMenuEvents()
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
-            this->menu->handleClick(event);
+            this->menu->handleClick(event, this);
         }
     }
 }

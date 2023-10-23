@@ -18,5 +18,6 @@ public:
 
 	void draw(RenderWindow* window);
 	void setText(string text);
+	void setText(string text, Color color);
 };
 
