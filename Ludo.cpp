@@ -5,8 +5,7 @@
 using namespace sf;
 
 int main() {
-    Menu menu;
-    Game game(&menu);
+    Game game;
     while (game.isRunning()) {
         game.update();
         game.render();

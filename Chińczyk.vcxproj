@@ -19,8 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ai.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ColorSelectButton.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuConfirmButton.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="TossButton.cpp" />
     <ClCompile Include="Dial.cpp" />
@@ -31,8 +35,12 @@
     <ClCompile Include="Ludo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ai.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ColorSelectButton.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuConfirmButton.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="TossButton.h" />
     <ClInclude Include="Dial.h" />
@@ -48,8 +56,10 @@
   <ItemGroup>
     <Image Include="images\Barrow.png" />
     <Image Include="images\Bpawn.png" />
+    <Image Include="images\button1.png" />
     <Image Include="images\Garrow.png" />
     <Image Include="images\Gpawn.png" />
+    <Image Include="images\logo.png" />
     <Image Include="images\Rarrow.png" />
     <Image Include="images\Rpawn.png" />
     <Image Include="images\tile.png" />

@@ -21,7 +21,7 @@ class Pawn
 
 	void initSprite();
 	bool move(Tile* tile, RenderWindow* window, Board* board);
-	bool deploy(int& dice, bool& canToss, RenderWindow* window, Board* board);
+	bool deploy(int dice, RenderWindow* window, Board* board);
 	int getNextTileId(int currentId);
 	void checkIsAtTarget();
 
@@ -31,7 +31,7 @@ public:
 	Pawn(int id, Team* team, Tile* currentTile);
 
 	void draw(Tile* tile, RenderWindow* window);
-	bool handleClick(int& dice, bool& canToss, RenderWindow* window, Board* board);
+	bool handleClick(int dice, RenderWindow* window, Board* board);
 	void setAtBase(RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
 

@@ -4,22 +4,13 @@
 #include <thread>
 #include <chrono>
 
-Game::Game(Menu* menu)
+Game::Game()
 {
     this->currentFreePodiumPlace = 1;
-    this->menu = menu;
-    this->playersAmount = menu->getPlayersAmount();
-    this->aiPlayersAmount = menu->getAiPlayersAmount();
-    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
     this->initWindow();
     this->board = new Board(window);
-    this->board->drawBoard(window);
-    this->createTeams();
+    this->menu = new Menu(this->board->getCenterX(), this->board->getCenterY());
     this->dice = 0;
-    this->currentTeamId = random(0, playersTotalAmount-1);
-    this->initControls();
-    cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
-    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
 }
 
 Game::~Game()
@@ -39,19 +30,45 @@ Game::~Game()
 
 void Game::update()
 {
-    this->pollEvents();
+    this->window->setFramerateLimit(60);
+    if (this->menu->getIsDisplayed()) {
+        this->pollMenuEvents();
+    }
+    else {
+        this->pollEvents();
+        if (this->teams[this->currentTeamId]->getIsAi()) {
+            this->tossButton->canToss = false;
+            this->dice = random(1, 6);
+            this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
+            if (this->teams[this->currentTeamId]->isWin()) { //check win
+                this->handleSingleWin();
+            }
+            this_thread::sleep_for(chrono::milliseconds(300));
+            this->dice = 0;
+            this->tossButton->canToss = true;
+            this->getNextTeamId();
+        }
+    }    
 }
 
 void Game::render()
 {
-    this->window->clear();
-    this->board->drawBoard(this->window);
-    this->dial->draw(this->window);
-    this->renderPawns();
-    if (this->tossButton->canToss) {
-        this->tossButton->draw(this->window);
+    if (this->menu->getIsDisplayed()) {
+        this->window->clear();
+        this->menu->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
+        this->window->display();
     }
-    this->window->display();
+    else {
+            //
+        this->window->clear();
+        this->board->drawBoard(this->window);
+        this->dial->draw(this->window);
+        this->renderPawns();
+        if (this->tossButton->canToss) {
+            this->tossButton->draw(this->window);
+        }
+        this->window->display();
+    }
 }
 
 bool Game::isRunning()
@@ -82,33 +99,66 @@ void Game::renderPawns() {
 
 void Game::createTeams()
 {
-    const string colors[] = { "Czerwony", "Niebieski", "Zielony", "Zolty" };
+    this->playersAmount = menu->getPlayersAmount();
+    this->aiPlayersAmount = menu->getAiPlayersAmount();
+    this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
+    this->currentTeamId = random(0, playersTotalAmount - 1);
+
+    const string names[] = { "Czerwony", "Niebiski", "Zielony", "Zolty" };
     const string images[] = { "images/Rpawn.png", "images/Bpawn.png", "images/Gpawn.png", "images/Ypawn.png" };
     const int startTiles[] = { 1, 11, 21, 31 };
-    const int baseTiles[] = { 101, 111 - 4, 121 - 8, 131 - 12 };
+    const int baseTiles[] = { 101, 111, 121, 131 };
 
-    for (int i = 0; i < this->playersTotalAmount; i++) {
-        Team* team = new Team(i + 1, colors[i], this->board->getTileById(startTiles[i]), images[i]);
-        this->teams[i] = team;
-    }
-    for (int j = 0; j < this->playersTotalAmount; j++) {
-        for (int i = 0; i < 4; i++) {
-            int index = j * 4 + i;
-            int teamIndex = j;
-            int tileId = 101 + j * 10 + i;
-            Tile* tile = this->board->getTileById(tileId);
-            Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
-            this->pawns[index] = pawn;
+    int menuPlayersIndex = 0; //create players
+    for (int i = 0; i < this->playersAmount; i++) {
+        for (int j = menuPlayersIndex; j < 4; j++) {
+            if (this->menu->getPlayersColors()[j] != "") {
+                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                this->teams[i] = team;
+                menuPlayersIndex = j+1;
+                for (int k = 0; k < 4; k++) {
+                    int index = i * 4 + k;
+                    int teamIndex = i;
+                    int tileId = baseTiles[j] + k;
+                    Tile* tile = this->board->getTileById(tileId);
+                    Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
+                    this->pawns[index] = pawn;
+                }
+                break;
+            }
         }
     }
-    for (int i = 0; i < this->playersTotalAmount; i++) {
-        Pawn* subpawns[] = { this->pawns[i * 4], 
-            this->pawns[i * 4 + 1], 
-            this->pawns[i * 4 + 2], 
+    int menuAiPlayersIndex = 0; //create ai players
+    for (int i = this->playersAmount; i < this->playersTotalAmount; i++) {
+        for (int j = menuAiPlayersIndex; j < 4; j++) {
+            if (this->menu->getAiPlayersColors()[j] != "") {
+                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                this->teams[i] = team;
+                menuAiPlayersIndex = j + 1;
+
+                for (int k = 0; k < 4; k++) {
+                    int index = i * 4 + k;
+                    int teamIndex = i;
+                    int tileId = baseTiles[j] + k;
+                    Tile* tile = this->board->getTileById(tileId);
+                    Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
+                    this->pawns[index] = pawn;
+                }
+                break;
+            }
+        }
+    }
+    for (int i = 0; i < this->playersTotalAmount; i++) { //assign pawns to teams
+        Pawn* subpawns[] = { this->pawns[i * 4],
+            this->pawns[i * 4 + 1],
+            this->pawns[i * 4 + 2],
             this->pawns[i * 4 + 3] };
         this->teams[i]->setPawns(subpawns);
-        
     }
+
+    this->initControls();
+    std::cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
+    std::cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
     //debug
     for (int i = 0; i < 4; i++) {
         this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
@@ -129,16 +179,13 @@ void Game::handleTossClick() {
 
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
-        if (this->pawns[pawnId]->handleClick(this->dice, this->tossButton->canToss, this->window,this->board)) { //if move is possible -> move itself
+        if (this->pawns[pawnId]->handleClick(this->dice, this->window,this->board)) { //if move is possible -> move itself
+            this->dice = 0;
+            this->tossButton->canToss = true;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
-            this->currentTeamId = this->getNextTeamId(); //get next or detect game end (current + 10)
-            if (this->currentTeamId >= 10) { //all players won
-                this->handleGameEnd();
-                return;
-            }
-            this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+            this->getNextTeamId(); //get next or detect game ends
         }
     }
     else {
@@ -146,7 +193,7 @@ void Game::handlePawnClick(int pawnId) {
     }
 }
 
-int Game::getNextTeamId()
+void Game::getNextTeamId()
 {
     int id = this->currentTeamId;
     int attempts = 0;
@@ -157,16 +204,19 @@ int Game::getNextTeamId()
         }
     }
     if (won == this->playersTotalAmount - 1) { //end of the game - one player left
-        return id+10;
+        this->handleGameEnd();
+        return;
     }
     do {
         id = (id + 1) % this->playersTotalAmount;
         attempts++;
     } while (this->teams[id]->isWin() && attempts < this->playersTotalAmount);
     if (attempts >= this->playersTotalAmount) { //no valid player found
-        return id+10;
+        this->currentTeamId = id+10;
+        return;
     }
-    return id;
+    this->currentTeamId = id;
+    this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleAllObstructed()
@@ -175,7 +225,7 @@ void Game::handleAllObstructed()
     this->dial->draw(this->window);
     this->window->display();
     this_thread::sleep_for(std::chrono::seconds(1));
-    this->currentTeamId = getNextTeamId();
+    this->getNextTeamId();
     this->tossButton->canToss = true;
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
 }
@@ -198,10 +248,25 @@ void Game::handleGameEnd()
     this->window->close();
 }
 
+void Game::pollMenuEvents()
+{
+    Event event;
+    while (this->window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
+        {
+            this->window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            this->menu->handleClick(event, this);
+        }
+    }
+}
+
 void Game::pollEvents()
 {
     Event event;
-    this->window->setFramerateLimit(60);
     while (this->window->pollEvent(event))
     {
         if (event.type == Event::Closed)

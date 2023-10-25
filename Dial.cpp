@@ -14,6 +14,13 @@ void Dial::draw(RenderWindow* window)
 
 void Dial::setText(string text)
 {
+    this->text.setFillColor(Color::White);
+    this->text.setString(text);
+}
+
+void Dial::setText(string text, Color color)
+{
+    this->text.setFillColor(color);
     this->text.setString(text);
 }
 
@@ -24,7 +31,7 @@ void Dial::initText(string text, int x, int y)
     this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
     this->text.setFont(this->font);
     this->text.setCharacterSize(20);
-    this->text.setFillColor(sf::Color::White);
+    this->text.setFillColor(Color::White);
     this->text.setString(text);
     this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
     this->text.setPosition(x, y);

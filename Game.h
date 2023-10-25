@@ -6,6 +6,7 @@
 #include "Pawn.h"
 #include "TossButton.h"
 #include "Dial.h"
+#include "Ai.h"
 
 using namespace sf;
 using namespace std;
@@ -26,26 +27,27 @@ class Game
     TossButton* tossButton;
     Dial* dial;
     Menu* menu;
+    Ai ai;
 
     void initWindow();
     void initControls();
     void renderPawns();
-    void createTeams();
     void handleTossClick();
     void handlePawnClick(int pawnId);
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
-    int getNextTeamId();
+    void getNextTeamId();
     void pollEvents();
+    void pollMenuEvents();
 
 public:
-    Game() = delete;
-    Game(Menu* menu);
+    Game();
     ~Game();
 
     void update();
     void render();
+    void createTeams();
 
     bool isRunning();
 };

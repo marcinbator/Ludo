@@ -1,17 +1,12 @@
 #include "TossButton.h"
 #include "Random.h"
 
-TossButton::TossButton(string text,  int x, int y)
+TossButton::TossButton(string text,  int x, int y) 
+    : Button(text, "images/button1.png",  x, y)
 {
     this->canToss = true;
-    initSprite(x, y);
     initText(text);
     cout << "Toss button initialized successfully.\n";
-}
-
-void TossButton::draw(RenderWindow* window) {
-    window->draw(this->sprite);
-    window->draw(this->text);
 }
 
 void TossButton::handleClick(int& dice)
@@ -22,27 +17,7 @@ void TossButton::handleClick(int& dice)
     cout << "Toss button clicked. Value: " << dice << endl;
 }
 
-const bool TossButton::isClicked(Event event)
-{
-    if (this->sprite
-        .getGlobalBounds()
-        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
-    {
-        return true;
-    }
-    return false;
-}
-
 //private
-
-void TossButton::initSprite(int x, int y)
-{
-    this->texture.loadFromFile("images/button1.png");
-    this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(x, y);
-    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->sprite.setScale(1.5, 1);
-}
 
 void TossButton::initText(string text)
 {
