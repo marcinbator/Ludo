@@ -18,6 +18,7 @@ Board::~Board()
 
 void Board::drawBoard(RenderWindow* window) {
     this->warp->draw(window);
+    this->rematch->draw(window);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
@@ -53,6 +54,11 @@ Button* Board::getWarp()
     return this->warp;
 }
 
+Button* Board::getRematch()
+{
+    return this->rematch;
+}
+
 //private
 
 void Board::setCenter(sf::RenderWindow* window)
@@ -64,6 +70,7 @@ void Board::setCenter(sf::RenderWindow* window)
 void Board::initTiles()
 {
     this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
+    this->rematch = new Button("", "images/rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i] = new Tile();
     }

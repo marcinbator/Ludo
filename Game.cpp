@@ -5,8 +5,9 @@
 #include <thread>
 #include <chrono>
 
-Game::Game()
+Game::Game(bool& restart): restart(restart)
 {
+    this->restart = restart;
     this->currentFreePodiumPlace = 1;
     this->delayTime = 1000;
     this->isWarp = false;
@@ -33,15 +34,14 @@ Game::~Game()
     }
 }
 
-
-void Game::update(bool& restart)
+void Game::update()
 {
     this->window->setFramerateLimit(60);
     if (this->menu->getIsDisplayed()) {
         this->pollMenuEvents();
     }
     else if (this->leaderBoard->getIsDisplayed()) {
-        this->pollLeaderboardEvents(restart);
+        this->pollLeaderboardEvents();
     }
     else {
         this->pollEvents();
@@ -307,7 +307,7 @@ void Game::pollMenuEvents()
     }
 }
 
-void Game::pollLeaderboardEvents(bool& restart)
+void Game::pollLeaderboardEvents()
 {
     Event event;
     while (this->window->pollEvent(event))
@@ -318,7 +318,7 @@ void Game::pollLeaderboardEvents(bool& restart)
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
-            this->leaderBoard->handleClick(event, this, this->window, restart);
+            this->leaderBoard->handleClick(event, this, this->window, this->restart);
         }
     }
 }
@@ -330,6 +330,7 @@ void Game::pollEvents()
     {
         if (event.type == Event::Closed)
         {
+            this->restart = false;
             this->window->close();
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
@@ -354,6 +355,10 @@ void Game::pollEvents()
                 string texture = this->isWarp ? "images/unwarp.png": "images/warp.png";
                 this->delayTime = this->isWarp ? 100 : 800;
                 this->board->getWarp()->setTexture(texture);
+            }
+            if (this->board->getRematch()->isClicked(event)) {
+                this->restart = true;
+                window->close();
             }
         }
     }

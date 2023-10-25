@@ -9,6 +9,7 @@ class Board
 	int centerX;
 	int centerY;
 	Button* warp;
+	Button* rematch;
 	Tile* tiles[72];
 
 	void setCenter(RenderWindow* window);
@@ -36,4 +37,5 @@ public:
 	int getCenterX();
 	int getCenterY();
 	Button* getWarp();
+	Button* getRematch();
 };

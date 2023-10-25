@@ -18,6 +18,7 @@ class Game
 
     int dice;
     bool isWarp;
+    bool& restart;
     int currentFreePodiumPlace;
     int playersAmount;
     int aiPlayersAmount;
@@ -46,13 +47,13 @@ class Game
     void getNextTeamId();
     void pollEvents();
     void pollMenuEvents();
-    void pollLeaderboardEvents(bool& restart);
+    void pollLeaderboardEvents();
 
 public:
-    Game();
+    Game(bool& restart);
     ~Game();
 
-    void update(bool& restart);
+    void update();
     void render();
     void createTeams();
 

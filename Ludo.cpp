@@ -7,9 +7,9 @@ using namespace sf;
 int main() {
     bool restart = false;
     do{
-        Game game;
+        Game game(restart);
         while (game.isRunning()) {
-            game.update(restart);
+            game.update();
             game.render();
         }
     } while (restart == true);
