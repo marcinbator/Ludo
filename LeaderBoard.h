@@ -14,8 +14,8 @@ class LeaderBoard : public Menu
 	Button* exitButton;
 
 	void initTitle(int centerX, int centerY);
-	void handleRematchButtonClick(Game* game);
-	void handleExitButtonClick(Game* game);
+	void handleRematchButtonClick(Game* game, RenderWindow* window, bool& restart);
+	void handleExitButtonClick(RenderWindow* window);
 
 public:
 
@@ -24,7 +24,7 @@ public:
 
 	void showWinners(Team** teams, int playersAmount);
 	void draw(RenderWindow* window, int centerX, int centerY);
-	void handleClick(Event event, Game* game);
+	void handleClick(Event event, Game* game, RenderWindow* window, bool& restart);
 
 	void setIsDisplayed(bool isDisplayed);
 };

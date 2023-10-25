@@ -32,14 +32,14 @@ Game::~Game()
 }
 
 
-void Game::update()
+void Game::update(bool& restart)
 {
     this->window->setFramerateLimit(60);
     if (this->menu->getIsDisplayed()) {
         this->pollMenuEvents();
     }
     else if (this->leaderBoard->getIsDisplayed()) {
-        this->pollLeaderboardEvents();
+        this->pollLeaderboardEvents(restart);
     }
     else {
         this->pollEvents();
@@ -275,7 +275,7 @@ void Game::pollMenuEvents()
     }
 }
 
-void Game::pollLeaderboardEvents()
+void Game::pollLeaderboardEvents(bool& restart)
 {
     Event event;
     while (this->window->pollEvent(event))
@@ -286,7 +286,7 @@ void Game::pollLeaderboardEvents()
         }
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
-            this->leaderBoard->handleClick(event, this);
+            this->leaderBoard->handleClick(event, this, this->window, restart);
         }
     }
 }

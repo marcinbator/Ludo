@@ -42,13 +42,13 @@ class Game
     void getNextTeamId();
     void pollEvents();
     void pollMenuEvents();
-    void pollLeaderboardEvents();
+    void pollLeaderboardEvents(bool& restart);
 
 public:
     Game();
     ~Game();
 
-    void update();
+    void update(bool& restart);
     void render();
     void createTeams();
 

@@ -1,6 +1,7 @@
 #include "LeaderBoard.h"
 #include "Dial.h"
 #include "Team.h"
+#include "Game.h"
 
 void LeaderBoard::initTitle(int centerX, int centerY)
 {
@@ -10,12 +11,17 @@ void LeaderBoard::initTitle(int centerX, int centerY)
 }
 
 
-void LeaderBoard::handleRematchButtonClick(Game* game)
+void LeaderBoard::handleRematchButtonClick(Game* game, RenderWindow* window, bool& restart)
 {
+    cout << "Rematch\n";
+    restart = true;
+    window->close();
 }
 
-void LeaderBoard::handleExitButtonClick(Game* game)
+void LeaderBoard::handleExitButtonClick(RenderWindow* window)
 {
+    cout << "Exit\n";
+    window->close();
 }
 
 LeaderBoard::LeaderBoard(int centerX, int centerY)
@@ -60,13 +66,13 @@ void LeaderBoard::draw(RenderWindow* window, int centerX, int centerY)
     this->exitButton->draw(window);
 }
 
-void LeaderBoard::handleClick(Event event, Game* game)
+void LeaderBoard::handleClick(Event event, Game* game, RenderWindow* window, bool& restart)
 {
     if (this->rematchButton->isClicked(event)) {
-        this->handleRematchButtonClick(game);
+        this->handleRematchButtonClick(game, window, restart);
     }
     if (this->exitButton->isClicked(event)) {
-        this->handleExitButtonClick(game);
+        this->handleExitButtonClick(window);
     }
 }
 
