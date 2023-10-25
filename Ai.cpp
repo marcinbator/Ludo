@@ -12,7 +12,7 @@ Ai::Ai(int level)
 	cout << "level:"<< level << endl;
 }
 
-void Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
+bool Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
 {
 	int i = 0;
 	Pawn* pawn = team->getPawns()[this->pawnToMoveId];
@@ -20,7 +20,11 @@ void Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
 		this->setPawnToMoveId();
 		pawn = team->getPawns()[this->pawnToMoveId];
 		i++;
-	} while (!pawn->handleClick(dice, window, board) && i<4);
+		if (pawn->handleClick(dice, window, board)) {
+			return true;
+		}
+	} while (i<4);
+	return false;
 }
 
 void Ai::setPawnToMoveId()

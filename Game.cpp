@@ -54,7 +54,14 @@ void Game::update()
                 this->render();
                 this->pollEvents();
             }
-            this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
+            if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) {
+                this->dial->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+                this->delayClock.restart();
+                while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
+                    this->render();
+                    this->pollEvents();
+                }
+            }
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
@@ -99,9 +106,8 @@ bool Game::isRunning()
 }
 
 //private
-
 void Game::initWindow() {
-    this->window = new RenderWindow(VideoMode(900, 900), "Ludo", Style::Titlebar | Style::Close);
+    this->window = new RenderWindow(VideoMode(1200, 920), "Ludo", Style::Titlebar | Style::Close);
     Image icon;
     icon.loadFromFile("images/logo.png");
     this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -129,6 +135,7 @@ void Game::createTeams()
 
     const string names[] = { "Czerwony", "Niebiski", "Zielony", "Zolty" };
     const string images[] = { "images/Rpawn.png", "images/Bpawn.png", "images/Gpawn.png", "images/Ypawn.png" };
+    const string aiImages[] = { "images/RpawnAI.png", "images/BpawnAI.png", "images/GpawnAI.png", "images/YpawnAI.png" };
     const int startTiles[] = { 1, 11, 21, 31 };
     const int baseTiles[] = { 101, 111, 121, 131 };
 
@@ -155,7 +162,7 @@ void Game::createTeams()
     for (int i = this->playersAmount; i < this->playersTotalAmount; i++) {
         for (int j = menuAiPlayersIndex; j < 4; j++) {
             if (this->menu->getAiPlayersColors()[j] != "") {
-                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j]);
                 this->teams[i] = team;
                 menuAiPlayersIndex = j + 1;
 
@@ -252,9 +259,7 @@ void Game::getNextTeamId()
 
 void Game::handleAllObstructed()
 {
-    this->dial->setText("\nKostka: " + to_string(this->dice) + ". Gracz zablokowany");
-    this->dial->draw(this->window);
-    this->window->display();
+    this->dial->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->delayClock.restart();
     while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
         this->render();
@@ -267,9 +272,7 @@ void Game::handleAllObstructed()
 
 void Game::handleSingleWin()
 {
-    this->dial->setText("\nZwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
-    this->dial->draw(this->window);
-    this->window->display();
+    this->dial->setText("Zwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
     this->currentFreePodiumPlace++;
     this->delayClock.restart();

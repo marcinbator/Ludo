@@ -13,8 +13,6 @@ void InitialMenu::handlePlayerButtonClick(int index)
 {
     this->playersButtons[index]->handleClick(this, this->dial, this->aiPlayersButtons[index]);
     this->playersAmount = 0;
-    this->aiPlayersAmount = 0;
-    this->level = 0;
     for (int i = 0; i < 4; i++) {
         if (this->playersButtons[i]->getIsSelected()) {
             this->playersColors[i] = this->playersButtons[i]->getColor();
@@ -45,6 +43,7 @@ InitialMenu::InitialMenu(int centerX, int centerY) : Menu(centerX, centerY)
 {
     this->playersAmount = 0;
     this->aiPlayersAmount = 0;
+    this->level = 0;
     this->button = new MenuConfirmButton("Zatwierdz", centerX, centerY + 370);
     this->initMenu(centerX, centerY);
     string textures[] = {"Red", "Blue", "Green", "Yellow"};
