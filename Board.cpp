@@ -19,10 +19,17 @@ Board::~Board()
 void Board::drawBoard(RenderWindow* window) {
     this->warp->draw(window);
     this->rematch->draw(window);
+    window->draw(this->dice);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
     drawLogo(window);
+}
+
+void Board::setDiceTexture(string texturePath)
+{
+    this->diceTexture.loadFromFile(texturePath);
+    this->dice.setTexture(this->diceTexture);
 }
 
 Tile** Board::getTiles() {
@@ -69,6 +76,11 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
+    this->diceTexture.loadFromFile("images/0dice.png");
+    this->dice.setTexture(this -> diceTexture);
+    this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
+    this->dice.setPosition(this->centerX + 40 * 9, this->centerY);
+    this->dice.setScale(2, 2);
     this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
     this->rematch = new Button("", "images/rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
     for (int i = 0; i < TILES_AMOUNT; i++) {

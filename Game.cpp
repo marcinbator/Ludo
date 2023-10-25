@@ -46,7 +46,7 @@ void Game::update()
     else {
         this->pollEvents();
         if (this->teams[this->currentTeamId]->getIsAi()) {
-            this->dice = random(1, 6);
+            this->tossButton->handleClick(this->dice, this->board);
             this->delayClock.restart();
             while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime*2) {
                 this->tossButton->canToss = false;
@@ -189,7 +189,7 @@ void Game::createTeams()
 }
 
 void Game::handleTossClick() {
-    this->tossButton->handleClick(this->dice);
+    this->tossButton->handleClick(this->dice, this->board);
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->tossButton->canToss = false;
     if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) { //player is obstructed
