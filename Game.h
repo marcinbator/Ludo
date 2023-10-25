@@ -15,12 +15,16 @@ class LeaderBoard;
 
 class Game
 {
+
     int dice;
+    bool isWarp;
+    bool& restart;
     int currentFreePodiumPlace;
     int playersAmount;
     int aiPlayersAmount;
     int playersTotalAmount;
     int currentTeamId;
+    int delayTime;
     RenderWindow* window;
     Board* board;
     Team* teams[4];
@@ -30,6 +34,7 @@ class Game
     InitialMenu* menu;
     LeaderBoard* leaderBoard;
     Ai ai;
+    Clock delayClock;
 
     void initWindow();
     void initControls();
@@ -42,13 +47,13 @@ class Game
     void getNextTeamId();
     void pollEvents();
     void pollMenuEvents();
-    void pollLeaderboardEvents(bool& restart);
+    void pollLeaderboardEvents();
 
 public:
-    Game();
+    Game(bool& restart);
     ~Game();
 
-    void update(bool& restart);
+    void update();
     void render();
     void createTeams();
 

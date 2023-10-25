@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Button.h"
 
 Board::Board(RenderWindow* window)
 {
@@ -16,10 +17,19 @@ Board::~Board()
 }
 
 void Board::drawBoard(RenderWindow* window) {
+    this->warp->draw(window);
+    this->rematch->draw(window);
+    window->draw(this->dice);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
     drawLogo(window);
+}
+
+void Board::setDiceTexture(string texturePath)
+{
+    this->diceTexture.loadFromFile(texturePath);
+    this->dice.setTexture(this->diceTexture);
 }
 
 Tile** Board::getTiles() {
@@ -46,6 +56,16 @@ int Board::getCenterY()
     return this->centerY;
 }
 
+Button* Board::getWarp()
+{
+    return this->warp;
+}
+
+Button* Board::getRematch()
+{
+    return this->rematch;
+}
+
 //private
 
 void Board::setCenter(sf::RenderWindow* window)
@@ -56,6 +76,13 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
+    this->diceTexture.loadFromFile("images/0dice.png");
+    this->dice.setTexture(this -> diceTexture);
+    this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
+    this->dice.setPosition(this->centerX + 40 * 9, this->centerY);
+    this->dice.setScale(2, 2);
+    this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
+    this->rematch = new Button("", "images/rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i] = new Tile();
     }
@@ -67,7 +94,7 @@ void Board::drawLogo(sf::RenderWindow* window)
     texture.loadFromFile("images/logo.png");
     Sprite sprite(texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-    sprite.setPosition(this->getCenterX(), this->getCenterY() - 40 * 9);
+    sprite.setPosition(this->centerX, this->centerY - 40 * 9);
     sprite.setScale(0.3, 0.3);
     window->draw(sprite);
 }

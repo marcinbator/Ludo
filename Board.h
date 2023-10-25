@@ -2,11 +2,16 @@
 #include "Tile.h"
 
 using namespace sf;
+class Button;
 
 class Board
 {
 	int centerX;
 	int centerY;
+	Button* warp;
+	Button* rematch;
+	Texture diceTexture;
+	Sprite dice;
 	Tile* tiles[72];
 
 	void setCenter(RenderWindow* window);
@@ -29,8 +34,11 @@ public:
 
 	void drawBoard(RenderWindow* window);
 
+	void setDiceTexture(string texturePath);
 	Tile** getTiles();
 	Tile* getTileById(int id);
 	int getCenterX();
 	int getCenterY();
+	Button* getWarp();
+	Button* getRematch();
 };

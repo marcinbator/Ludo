@@ -4,6 +4,8 @@
 #include <SFML/Window.hpp>
 #include "Button.h"
 
+class Board;
+
 class TossButton : public Button
 {
 	void initText(string text);
@@ -13,6 +15,6 @@ public:
 
 	bool canToss;
 
-	void handleClick(int& dice);
+	void handleClick(int& dice, Board* board);
 };
 
