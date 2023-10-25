@@ -54,6 +54,9 @@
     <ClCompile Include="MenuConfirmButton.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="ColorSelectButton.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -90,6 +93,9 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="MenuConfirmButton.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorSelectButton.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>

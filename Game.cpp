@@ -55,7 +55,7 @@ void Game::render()
 {
     if (this->menu->getIsDisplayed()) {
         this->window->clear();
-        this->menu->draw(this->window);
+        this->menu->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
         this->window->display();
     }
     else {
@@ -104,45 +104,66 @@ void Game::createTeams()
     this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
     this->currentTeamId = random(0, playersTotalAmount - 1);
 
-    const string colors[] = { "Czerwony", "Niebieski", "Zielony", "Zolty" };
+    const string names[] = { "Czerwony", "Niebiski", "Zielony", "Zolty" };
     const string images[] = { "images/Rpawn.png", "images/Bpawn.png", "images/Gpawn.png", "images/Ypawn.png" };
     const int startTiles[] = { 1, 11, 21, 31 };
-    const int baseTiles[] = { 101, 111 - 4, 121 - 8, 131 - 12 };
+    const int baseTiles[] = { 101, 111, 121, 131 };
 
+    int menuPlayersIndex = 0; //create players
     for (int i = 0; i < this->playersAmount; i++) {
-        Team* team = new Team(i + 1, false, colors[i], this->board->getTileById(startTiles[i]), images[i]);
-        this->teams[i] = team;
-    }
-    for (int i = this->playersAmount; i < this->playersTotalAmount; i++) {
-        Team* team = new Team(i + 1, true, colors[i], this->board->getTileById(startTiles[i]), images[i]);
-        this->teams[i] = team;
-    }
-    for (int j = 0; j < this->playersTotalAmount; j++) {
-        for (int i = 0; i < 4; i++) {
-            int index = j * 4 + i;
-            int teamIndex = j;
-            int tileId = 101 + j * 10 + i;
-            Tile* tile = this->board->getTileById(tileId);
-            Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
-            this->pawns[index] = pawn;
+        for (int j = menuPlayersIndex; j < 4; j++) {
+            if (this->menu->getPlayersColors()[j] != "") {
+                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                this->teams[i] = team;
+                menuPlayersIndex = j+1;
+                for (int k = 0; k < 4; k++) {
+                    int index = i * 4 + k;
+                    int teamIndex = i;
+                    int tileId = baseTiles[j] + k;
+                    Tile* tile = this->board->getTileById(tileId);
+                    Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
+                    this->pawns[index] = pawn;
+                }
+                break;
+            }
         }
     }
-    for (int i = 0; i < this->playersTotalAmount; i++) {
-        Pawn* subpawns[] = { this->pawns[i * 4], 
-            this->pawns[i * 4 + 1], 
-            this->pawns[i * 4 + 2], 
+    int menuAiPlayersIndex = 0; //create ai players
+    for (int i = this->playersAmount; i < this->playersTotalAmount; i++) {
+        for (int j = menuAiPlayersIndex; j < 4; j++) {
+            if (this->menu->getAiPlayersColors()[j] != "") {
+                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                this->teams[i] = team;
+                menuAiPlayersIndex = j + 1;
+
+                for (int k = 0; k < 4; k++) {
+                    int index = i * 4 + k;
+                    int teamIndex = i;
+                    int tileId = baseTiles[j] + k;
+                    Tile* tile = this->board->getTileById(tileId);
+                    Pawn* pawn = new Pawn(index, this->teams[teamIndex], tile);
+                    this->pawns[index] = pawn;
+                }
+                break;
+            }
+        }
+    }
+    for (int i = 0; i < this->playersTotalAmount; i++) { //assign pawns to teams
+        Pawn* subpawns[] = { this->pawns[i * 4],
+            this->pawns[i * 4 + 1],
+            this->pawns[i * 4 + 2],
             this->pawns[i * 4 + 3] };
         this->teams[i]->setPawns(subpawns);
-        
     }
+
     this->initControls();
-    cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
-    cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
+    std::cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
+    std::cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
     //debug
-    /*for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
         this->pawns[i]->setIsAtBase(false);
-    }*/
+    }
 }
 
 void Game::handleTossClick() {

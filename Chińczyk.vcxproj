@@ -22,6 +22,7 @@
     <ClCompile Include="Ai.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ColorSelectButton.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuConfirmButton.cpp" />
     <ClCompile Include="Random.cpp" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Ai.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ColorSelectButton.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuConfirmButton.h" />
     <ClInclude Include="Random.h" />

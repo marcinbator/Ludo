@@ -5,37 +5,65 @@
 #include "Dial.h"
 #include "Game.h"
 
+void Menu::handlePlayerButtonClick(int index)
+{
+    this->playersButtons[index]->handleClick(this, this->dial, this->aiPlayersButtons[index]);
+    this->playersAmount = 0;
+    for (int i = 0; i < 4; i++) {
+        if (this->playersButtons[i]->getIsSelected()) {
+            this->playersColors[i] = this->playersButtons[i]->getColor();
+            this->playersAmount++;
+        }
+        else {
+            this->playersColors[i] = "";
+        }
+    }
+}
+
+void Menu::handleAiPlayerButtonClick(int index)
+{
+    this->aiPlayersButtons[index]->handleClick(this, this->dial, this->playersButtons[index]);
+    this->aiPlayersAmount = 0;
+    for (int i = 0; i < 4; i++) {
+        if (this->aiPlayersButtons[i]->getIsSelected()) {
+            this->aiPlayersColors[i] = this->aiPlayersButtons[i]->getColor();
+            this->aiPlayersAmount++;
+        }
+        else {
+            this->aiPlayersColors[i] = "";
+        }
+    }
+}
+
 Menu::Menu(int centerX, int centerY)
 {
     this->isDisplayed = true;
-    this->playersAmount = 1;
-    this->aiPlayersAmount = 3;
+    this->playersAmount = 0;
+    this->aiPlayersAmount = 0;
     this->dial = new Dial("Witaj w grze!", centerX, centerY - 80);
     this->button = new MenuConfirmButton("Zatwierdz", centerX, centerY + 270);
     this->initMenu(centerX, centerY);
-
-    string textures[] = {"tileRed.png", "tileBlue.png", "tileGreen.png", "tileYellow.png"};
+    string textures[] = {"Red", "Blue", "Green", "Yellow"};
     for (int i = 0; i < 4; i++) {
-        buttonTextures[i].loadFromFile("images/" + textures[i]);
-        this->playersButtons[i].setTexture(buttonTextures[i]);
-        this->aiPlayersButtons[i].setTexture(buttonTextures[i]);
+        this->playersButtons[i] = new ColorSelectButton(i, textures[i], centerX - 180 + i * 120, centerY + 50);
+        this->aiPlayersButtons[i] = new ColorSelectButton(i, textures[i], centerX - 180 + i * 120, centerY + 150);
+        this->playersColors[i] = "";
+        this->aiPlayersColors[i] = "";
     }
-    this->setButtonPositions(centerX, centerY);
 }
 
-void Menu::draw(RenderWindow* window)
+void Menu::draw(RenderWindow* window, int centerX, int centerY)
 {
     this->dial->draw(window);
     window->draw(this->title);
     window->draw(this->text1);
     window->draw(this->text2);
-
     for (int i = 0; i < 4; i++) {
-        window->draw(this->playersButtons[i]);
-        window->draw(this->aiPlayersButtons[i]);
+        this->playersButtons[i]->draw(window);
+        this->aiPlayersButtons[i]->draw(window);
     }
-
     this->button->draw(window);
+    this->drawLogo(window, centerX, centerY);
 }
 
 void Menu::handleClick(Event event, Game* game)
@@ -44,6 +72,14 @@ void Menu::handleClick(Event event, Game* game)
         if (this->button->handleClick(this, this->dial)) {
             game->createTeams();
             this->isDisplayed = false;
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        if (this->playersButtons[i]->isClicked(event)) {
+            this->handlePlayerButtonClick(i);
+        }
+        if (this->aiPlayersButtons[i]->isClicked(event)) {
+            this->handleAiPlayerButtonClick(i);
         }
     }
 }
@@ -80,6 +116,16 @@ int Menu::getAiPlayersAmount()
     return this->aiPlayersAmount;
 }
 
+string* Menu::getPlayersColors()
+{
+    return this->playersColors;
+}
+
+string* Menu::getAiPlayersColors()
+{
+    return this->aiPlayersColors;
+}
+
 //private
 
 void Menu::initMenu(int centerX, int centerY)
@@ -105,13 +151,13 @@ void Menu::initMenu(int centerX, int centerY)
     this->text2.setPosition(centerX, centerY + 100);
 }
 
-void Menu::setButtonPositions(int centerX, int centerY)
+void Menu::drawLogo(RenderWindow* window, int centerX, int centerY)
 {
-
-    for (int i = 0; i < 4; i++) {
-        this->playersButtons[i].setOrigin(this->playersButtons[i].getGlobalBounds().width / 2, this->playersButtons[i].getGlobalBounds().height / 2);
-        this->playersButtons[i].setPosition(centerX - 180 + i * 120, centerY + 50);
-        this->aiPlayersButtons[i].setOrigin(this->aiPlayersButtons[i].getGlobalBounds().width / 2, this->aiPlayersButtons[i].getGlobalBounds().height / 2);
-        this->aiPlayersButtons[i].setPosition(centerX - 180 + i * 120, centerY + 150);
-    }
+    Texture texture;
+    texture.loadFromFile("images/logo.png");
+    Sprite sprite(texture);
+    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setPosition(centerX, centerY - 40 * 9);
+    sprite.setScale(0.3, 0.3);
+    window->draw(sprite);
 }

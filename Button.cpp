@@ -1,8 +1,8 @@
 #include "Button.h"
 
-void Button::initSprite(int x, int y)
+void Button::initSprite(string texturePath, int x, int y)
 {
-    this->texture.loadFromFile("images/button1.png");
+    this->texture.loadFromFile(texturePath);
     this->sprite.setTexture(this->texture);
     this->sprite.setPosition(x, y);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
@@ -17,10 +17,10 @@ void Button::initText(string text, int x, int y)
     this->text.setPosition(x, y+10);
 }
 
-Button::Button(string text, int x, int y)
+Button::Button(string text, string texturePath, int x, int y)
 {
     this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
-    this->initSprite(x, y);
+    this->initSprite(texturePath, x, y);
     this->initText(text, x, y);
 }
 
