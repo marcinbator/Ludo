@@ -8,6 +8,7 @@
 Game::Game()
 {
     this->currentFreePodiumPlace = 1;
+    this->delayTime = 1.0;
     this->initWindow();
     this->board = new Board(window);
     this->leaderBoard = new LeaderBoard(this->board->getCenterX(), this->board->getCenterY());
@@ -44,16 +45,23 @@ void Game::update(bool& restart)
     else {
         this->pollEvents();
         if (this->teams[this->currentTeamId]->getIsAi()) {
-            this->tossButton->canToss = false;
             this->dice = random(1, 6);
+            this->delayClock.restart();
+            while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime + 1.0) {
+                this->tossButton->canToss = false;
+                this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+                this->render();
+            }
             this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
-            this_thread::sleep_for(chrono::milliseconds(300));
             this->dice = 0;
-            this->tossButton->canToss = true;
             this->getNextTeamId();
+            this->delayClock.restart();
+            while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+                this->render();
+            }
         }
     }    
 }
@@ -192,11 +200,15 @@ void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
         if (this->pawns[pawnId]->handleClick(this->dice, this->window,this->board)) { //if move is possible -> move itself
             this->dice = 0;
-            this->tossButton->canToss = true;
+            this->tossButton->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
             this->getNextTeamId(); //get next or detect game ends
+        }
+        this->delayClock.restart();
+        while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+            this->render();
         }
     }
     else {
@@ -227,6 +239,9 @@ void Game::getNextTeamId()
         return;
     }
     this->currentTeamId = id;
+    if (!this->teams[this->currentTeamId]->getIsAi()) {
+        this->tossButton->canToss = true;
+    }
     this->dial->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
 }
 
@@ -235,7 +250,10 @@ void Game::handleAllObstructed()
     this->dial->setText("\nKostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->dial->draw(this->window);
     this->window->display();
-    this_thread::sleep_for(chrono::seconds(1));
+    this->delayClock.restart();
+    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+        this->render();
+    }
     this->getNextTeamId();
     this->tossButton->canToss = true;
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
@@ -248,13 +266,20 @@ void Game::handleSingleWin()
     this->window->display();
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
     this->currentFreePodiumPlace++;
-    this_thread::sleep_for(chrono::seconds(1));
+    this->delayClock.restart();
+    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+        this->render();
+    }
 }
 
 void Game::handleGameEnd()
 {
     this->dial->setText("Koniec gry! ");
     this->tossButton->canToss = false;
+    this->delayClock.restart();
+    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+        this->render();
+    }
     this->leaderBoard->setIsDisplayed(true);
     this->leaderBoard->showWinners(this->teams, this->playersTotalAmount);
 }

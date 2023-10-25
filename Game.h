@@ -15,12 +15,14 @@ class LeaderBoard;
 
 class Game
 {
+
     int dice;
     int currentFreePodiumPlace;
     int playersAmount;
     int aiPlayersAmount;
     int playersTotalAmount;
     int currentTeamId;
+    int delayTime;
     RenderWindow* window;
     Board* board;
     Team* teams[4];
@@ -30,6 +32,7 @@ class Game
     InitialMenu* menu;
     LeaderBoard* leaderBoard;
     Ai ai;
+    Clock delayClock;
 
     void initWindow();
     void initControls();
