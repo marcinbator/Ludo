@@ -1,34 +1,31 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "Menu.h"
 
 using namespace sf;
 using namespace std;
 class Button;
 class Game;
 
-class LeaderBoard
+class LeaderBoard : public Menu
 {
-	bool isDisplayed;
-
-	Font font;
 	Text leaderboard;
 
 	Button* rematchButton;
 	Button* exitButton;
 
-	void initMenu(int centerX, int centerY);
-	void drawLogo(RenderWindow* window, int centerX, int centerY);
-	void handlePlayerButtonClick(int index);
-	void handleAiPlayerButtonClick(int index);
+	void initTitle(int centerX, int centerY);
+	void handleRematchButtonClick(Game* game);
+	void handleExitButtonClick(Game* game);
 
 public:
+
 	LeaderBoard(int centerX, int centerY);
 	~LeaderBoard();
 
+	void showWinners(Team** teams, int playersAmount);
 	void draw(RenderWindow* window, int centerX, int centerY);
 	void handleClick(Event event, Game* game);
 
-	bool getIsDisplayed();
+	void setIsDisplayed(bool isDisplayed);
 };
 

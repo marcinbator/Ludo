@@ -11,6 +11,7 @@
 using namespace sf;
 using namespace std;
 class InitialMenu;
+class LeaderBoard;
 
 class Game
 {
@@ -27,6 +28,7 @@ class Game
     TossButton* tossButton;
     Dial* dial;
     InitialMenu* menu;
+    LeaderBoard* leaderBoard;
     Ai ai;
 
     void initWindow();
@@ -40,6 +42,7 @@ class Game
     void getNextTeamId();
     void pollEvents();
     void pollMenuEvents();
+    void pollLeaderboardEvents();
 
 public:
     Game();

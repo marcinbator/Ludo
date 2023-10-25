@@ -11,10 +11,10 @@ void Button::initSprite(string texturePath, int x, int y)
 
 void Button::initText(string text, int x, int y)
 {
-    this->text = Text(text, this->font, 30);
-    this->text.setFillColor(sf::Color::White);
+    this->text = Text(text, this->font, 20);
+    this->text.setFillColor(sf::Color::Black);
     this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
-    this->text.setPosition(x, y+10);
+    this->text.setPosition(x, y-5);
 }
 
 Button::Button(string text, string texturePath, int x, int y)
