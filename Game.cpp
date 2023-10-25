@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Menu.h"
+#include "InitialMenu.h"
 #include "Random.h"
 #include <thread>
 #include <chrono>
@@ -9,7 +9,7 @@ Game::Game()
     this->currentFreePodiumPlace = 1;
     this->initWindow();
     this->board = new Board(window);
-    this->menu = new Menu(this->board->getCenterX(), this->board->getCenterY());
+    this->menu = new InitialMenu(this->board->getCenterX(), this->board->getCenterY());
     this->dice = 0;
 }
 

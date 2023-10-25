@@ -1,7 +1,7 @@
 #pragma once
 #include "Button.h"
 
-class Menu;
+class InitialMenu;
 class Dial;
 
 class ColorSelectButton : public Button
@@ -17,7 +17,7 @@ public:
 	ColorSelectButton(int id, string texturePath, int x, int y);
 
 	void draw(RenderWindow* window);
-	void handleClick(Menu* menu, Dial* dial, ColorSelectButton* parallelButton);
+	void handleClick(InitialMenu* menu, Dial* dial, ColorSelectButton* parallelButton);
 
 	void setIsAvailable(bool isAvailable);
 	string getColor();

@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-#include "Menu.h"
+#include "InitialMenu.h"
 
 using namespace sf;
 

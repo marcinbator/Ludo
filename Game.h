@@ -10,7 +10,7 @@
 
 using namespace sf;
 using namespace std;
-class Menu;
+class InitialMenu;
 
 class Game
 {
@@ -26,7 +26,7 @@ class Game
     Pawn* pawns[16];
     TossButton* tossButton;
     Dial* dial;
-    Menu* menu;
+    InitialMenu* menu;
     Ai ai;
 
     void initWindow();
