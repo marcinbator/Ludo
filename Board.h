@@ -2,11 +2,13 @@
 #include "Tile.h"
 
 using namespace sf;
+class Button;
 
 class Board
 {
 	int centerX;
 	int centerY;
+	Button* warp;
 	Tile* tiles[72];
 
 	void setCenter(RenderWindow* window);
@@ -33,4 +35,5 @@ public:
 	Tile* getTileById(int id);
 	int getCenterX();
 	int getCenterY();
+	Button* getWarp();
 };

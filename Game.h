@@ -17,6 +17,7 @@ class Game
 {
 
     int dice;
+    bool isWarp;
     int currentFreePodiumPlace;
     int playersAmount;
     int aiPlayersAmount;

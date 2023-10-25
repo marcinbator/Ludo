@@ -35,6 +35,13 @@ void Button::handleClick()
     cout << "Button clicked.\n";
 }
 
+void Button::setTexture(string texturePath)
+{
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(texture);
+    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
+}
+
 const Sprite Button::getSprite()
 {
     return this->sprite;

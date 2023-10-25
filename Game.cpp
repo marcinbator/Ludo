@@ -8,7 +8,8 @@
 Game::Game()
 {
     this->currentFreePodiumPlace = 1;
-    this->delayTime = 1.0;
+    this->delayTime = 1000;
+    this->isWarp = false;
     this->initWindow();
     this->board = new Board(window);
     this->leaderBoard = new LeaderBoard(this->board->getCenterX(), this->board->getCenterY());
@@ -47,10 +48,11 @@ void Game::update(bool& restart)
         if (this->teams[this->currentTeamId]->getIsAi()) {
             this->dice = random(1, 6);
             this->delayClock.restart();
-            while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime + 1.0) {
+            while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime*2) {
                 this->tossButton->canToss = false;
                 this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
                 this->render();
+                this->pollEvents();
             }
             this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
             if (this->teams[this->currentTeamId]->isWin()) { //check win
@@ -59,8 +61,9 @@ void Game::update(bool& restart)
             this->dice = 0;
             this->getNextTeamId();
             this->delayClock.restart();
-            while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+            while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
                 this->render();
+                this->pollEvents();
             }
         }
     }    
@@ -207,8 +210,9 @@ void Game::handlePawnClick(int pawnId) {
             this->getNextTeamId(); //get next or detect game ends
         }
         this->delayClock.restart();
-        while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+        while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
             this->render();
+            this->pollEvents();
         }
     }
     else {
@@ -251,8 +255,9 @@ void Game::handleAllObstructed()
     this->dial->draw(this->window);
     this->window->display();
     this->delayClock.restart();
-    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+    while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
         this->render();
+        this->pollEvents();
     }
     this->getNextTeamId();
     this->tossButton->canToss = true;
@@ -267,8 +272,9 @@ void Game::handleSingleWin()
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
     this->currentFreePodiumPlace++;
     this->delayClock.restart();
-    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+    while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
         this->render();
+        this->pollEvents();
     }
 }
 
@@ -277,8 +283,9 @@ void Game::handleGameEnd()
     this->dial->setText("Koniec gry! ");
     this->tossButton->canToss = false;
     this->delayClock.restart();
-    while (this->delayClock.getElapsedTime().asSeconds() < this->delayTime) {
+    while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
         this->render();
+        this->pollEvents();
     }
     this->leaderBoard->setIsDisplayed(true);
     this->leaderBoard->showWinners(this->teams, this->playersTotalAmount);
@@ -341,6 +348,12 @@ void Game::pollEvents()
             }
             if (this->tossButton->isClicked(event) && this->tossButton->canToss) {
                 this->handleTossClick();
+            }
+            if (this->board->getWarp()->isClicked(event)) {
+                this->isWarp = !this->isWarp;
+                string texture = this->isWarp ? "images/unwarp.png": "images/warp.png";
+                this->delayTime = this->isWarp ? 100 : 800;
+                this->board->getWarp()->setTexture(texture);
             }
         }
     }

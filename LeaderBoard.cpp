@@ -7,7 +7,7 @@ void LeaderBoard::initTitle(int centerX, int centerY)
 {
     this->title.setString("Koniec gry");
     this->title.setOrigin(this->title.getGlobalBounds().width / 2, this->title.getGlobalBounds().height / 2);
-    this->title.setPosition(centerX, centerY - 130);
+    this->title.setPosition(centerX, centerY - 200);
 }
 
 

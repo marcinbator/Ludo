@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Button.h"
 
 Board::Board(RenderWindow* window)
 {
@@ -16,6 +17,7 @@ Board::~Board()
 }
 
 void Board::drawBoard(RenderWindow* window) {
+    this->warp->draw(window);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
@@ -46,6 +48,11 @@ int Board::getCenterY()
     return this->centerY;
 }
 
+Button* Board::getWarp()
+{
+    return this->warp;
+}
+
 //private
 
 void Board::setCenter(sf::RenderWindow* window)
@@ -56,6 +63,7 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
+    this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i] = new Tile();
     }
@@ -67,7 +75,7 @@ void Board::drawLogo(sf::RenderWindow* window)
     texture.loadFromFile("images/logo.png");
     Sprite sprite(texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-    sprite.setPosition(this->getCenterX(), this->getCenterY() - 40 * 9);
+    sprite.setPosition(this->centerX, this->centerY - 40 * 9);
     sprite.setScale(0.3, 0.3);
     window->draw(sprite);
 }
