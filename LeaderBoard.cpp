@@ -18,9 +18,10 @@ void LeaderBoard::handleRematchButtonClick(Game* game, RenderWindow* window, boo
     window->close();
 }
 
-void LeaderBoard::handleExitButtonClick(RenderWindow* window)
+void LeaderBoard::handleExitButtonClick(RenderWindow* window, bool& restart)
 {
     cout << "Exit\n";
+    restart = false;
     window->close();
 }
 
@@ -72,7 +73,7 @@ void LeaderBoard::handleClick(Event event, Game* game, RenderWindow* window, boo
         this->handleRematchButtonClick(game, window, restart);
     }
     if (this->exitButton->isClicked(event)) {
-        this->handleExitButtonClick(window);
+        this->handleExitButtonClick(window, restart);
     }
 }
 

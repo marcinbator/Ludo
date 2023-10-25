@@ -54,7 +54,7 @@ void Game::update()
                 this->render();
                 this->pollEvents();
             }
-            this->ai.move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
+            this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board);
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
@@ -121,6 +121,7 @@ void Game::renderPawns() {
 
 void Game::createTeams()
 {
+    this->ai = new Ai(this->menu->getLevel());
     this->playersAmount = menu->getPlayersAmount();
     this->aiPlayersAmount = menu->getAiPlayersAmount();
     this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
@@ -181,11 +182,11 @@ void Game::createTeams()
     this->initControls();
     std::cout << "Game loaded successfully.\nPlayers: " << this->playersAmount + this->aiPlayersAmount << endl;
     std::cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
-    //debug
-    for (int i = 0; i < 4; i++) {
-        this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
-        this->pawns[i]->setIsAtBase(false);
-    }
+    ////debug
+    //for (int i = 0; i < 4; i++) {
+    //    this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
+    //    this->pawns[i]->setIsAtBase(false);
+    //}
 }
 
 void Game::handleTossClick() {

@@ -33,7 +33,7 @@ class Game
     Dial* dial;
     InitialMenu* menu;
     LeaderBoard* leaderBoard;
-    Ai ai;
+    Ai* ai;
     Clock delayClock;
 
     void initWindow();

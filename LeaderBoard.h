@@ -15,7 +15,7 @@ class LeaderBoard : public Menu
 
 	void initTitle(int centerX, int centerY);
 	void handleRematchButtonClick(Game* game, RenderWindow* window, bool& restart);
-	void handleExitButtonClick(RenderWindow* window);
+	void handleExitButtonClick(RenderWindow* window, bool& restart);
 
 public:
 

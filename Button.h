@@ -24,7 +24,9 @@ public:
 	void draw(RenderWindow* window);
 	void handleClick();
 
+	void setText(Text text);
 	void setTexture(string texturePath);
 	const Sprite getSprite();
+	const Text getText();
 	const bool isClicked(Event event);
 };

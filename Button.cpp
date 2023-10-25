@@ -35,16 +35,27 @@ void Button::handleClick()
     cout << "Button clicked.\n";
 }
 
+void Button::setText(Text text)
+{
+    this->text = text;
+    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
+}
+
 void Button::setTexture(string texturePath)
 {
     this->texture.loadFromFile(texturePath);
     this->sprite.setTexture(texture);
-    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
+    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }
 
 const Sprite Button::getSprite()
 {
     return this->sprite;
+}
+
+const Text Button::getText()
+{
+    return this->text;
 }
 
 const bool Button::isClicked(Event event)

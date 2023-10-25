@@ -5,9 +5,11 @@
 
 using namespace sf;
 
-Ai::Ai()
+Ai::Ai(int level)
 {
+	this->level = level;
 	this->pawnToMoveId = 0;
+	cout << "level:"<< level << endl;
 }
 
 void Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
