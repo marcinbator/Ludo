@@ -1,5 +1,5 @@
 #include "ColorSelectButton.h"
-#include "Menu.h"
+#include "InitialMenu.h"
 #include "Dial.h"
 
 void ColorSelectButton::updateTexture(RenderWindow* window)
@@ -29,7 +29,7 @@ void ColorSelectButton::draw(RenderWindow* window)
 	this->updateTexture(window);
 }
 
-void ColorSelectButton::handleClick(Menu* menu, Dial* dial, ColorSelectButton* parallelButton)
+void ColorSelectButton::handleClick(InitialMenu* menu, Dial* dial, ColorSelectButton* parallelButton)
 {
 	if (this->isAvailable) {
 		this->isSelected = !this->isSelected;

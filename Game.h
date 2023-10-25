@@ -10,7 +10,8 @@
 
 using namespace sf;
 using namespace std;
-class Menu;
+class InitialMenu;
+class LeaderBoard;
 
 class Game
 {
@@ -26,7 +27,8 @@ class Game
     Pawn* pawns[16];
     TossButton* tossButton;
     Dial* dial;
-    Menu* menu;
+    InitialMenu* menu;
+    LeaderBoard* leaderBoard;
     Ai ai;
 
     void initWindow();
@@ -40,12 +42,13 @@ class Game
     void getNextTeamId();
     void pollEvents();
     void pollMenuEvents();
+    void pollLeaderboardEvents(bool& restart);
 
 public:
     Game();
     ~Game();
 
-    void update();
+    void update(bool& restart);
     void render();
     void createTeams();
 

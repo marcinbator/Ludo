@@ -1,5 +1,6 @@
 #include "Game.h"
-#include "Menu.h"
+#include "InitialMenu.h"
+#include "LeaderBoard.h"
 #include "Random.h"
 #include <thread>
 #include <chrono>
@@ -9,7 +10,8 @@ Game::Game()
     this->currentFreePodiumPlace = 1;
     this->initWindow();
     this->board = new Board(window);
-    this->menu = new Menu(this->board->getCenterX(), this->board->getCenterY());
+    this->leaderBoard = new LeaderBoard(this->board->getCenterX(), this->board->getCenterY());
+    this->menu = new InitialMenu(this->board->getCenterX(), this->board->getCenterY());
     this->dice = 0;
 }
 
@@ -19,6 +21,8 @@ Game::~Game()
     delete this->board;
     delete this->tossButton;
     delete this->dial;
+    delete this->menu;
+    delete this->leaderBoard;
     for (int i = 0; i < this->playersTotalAmount; i++) {
         delete this->teams[i];
     }
@@ -28,11 +32,14 @@ Game::~Game()
 }
 
 
-void Game::update()
+void Game::update(bool& restart)
 {
     this->window->setFramerateLimit(60);
     if (this->menu->getIsDisplayed()) {
         this->pollMenuEvents();
+    }
+    else if (this->leaderBoard->getIsDisplayed()) {
+        this->pollLeaderboardEvents(restart);
     }
     else {
         this->pollEvents();
@@ -58,8 +65,12 @@ void Game::render()
         this->menu->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
         this->window->display();
     }
+    else if (this->leaderBoard->getIsDisplayed()) {
+        this->window->clear();
+        this->leaderBoard->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
+        this->window->display();
+    }
     else {
-            //
         this->window->clear();
         this->board->drawBoard(this->window);
         this->dial->draw(this->window);
@@ -224,7 +235,7 @@ void Game::handleAllObstructed()
     this->dial->setText("\nKostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->dial->draw(this->window);
     this->window->display();
-    this_thread::sleep_for(std::chrono::seconds(1));
+    this_thread::sleep_for(chrono::seconds(1));
     this->getNextTeamId();
     this->tossButton->canToss = true;
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
@@ -237,15 +248,15 @@ void Game::handleSingleWin()
     this->window->display();
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
     this->currentFreePodiumPlace++;
-    this_thread::sleep_for(std::chrono::seconds(1));
+    this_thread::sleep_for(chrono::seconds(1));
 }
 
 void Game::handleGameEnd()
 {
     this->dial->setText("Koniec gry! ");
     this->tossButton->canToss = false;
-    this->menu->showWinners(this->teams, this->playersTotalAmount);
-    this->window->close();
+    this->leaderBoard->setIsDisplayed(true);
+    this->leaderBoard->showWinners(this->teams, this->playersTotalAmount);
 }
 
 void Game::pollMenuEvents()
@@ -260,6 +271,22 @@ void Game::pollMenuEvents()
         else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
         {
             this->menu->handleClick(event, this);
+        }
+    }
+}
+
+void Game::pollLeaderboardEvents(bool& restart)
+{
+    Event event;
+    while (this->window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
+        {
+            this->window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            this->leaderBoard->handleClick(event, this, this->window, restart);
         }
     }
 }

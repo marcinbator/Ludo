@@ -1,15 +1,18 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-#include "Menu.h"
+#include "InitialMenu.h"
 
 using namespace sf;
 
 int main() {
-    Game game;
-    while (game.isRunning()) {
-        game.update();
-        game.render();
-    }
+    bool restart = false;
+    do{
+        Game game;
+        while (game.isRunning()) {
+            game.update(restart);
+            game.render();
+        }
+    } while (restart == true);
     system("pause");
     return 0;
 }
