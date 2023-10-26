@@ -1,7 +1,10 @@
 #pragma once
-#include "Tile.h"
+#include <SFML/Graphics.hpp>
+#include <string>
 
-using namespace sf;
+using namespace std;
+
+class Tile;
 class Button;
 class Dial;
 class TossButton;
@@ -14,16 +17,9 @@ class Board
 	TossButton* tossButton;
 	Button* warp;
 	Button* rematch;
-	Texture diceTexture;
-	Sprite dice;
 	Tile* tiles[72];
-
-	void setCenter(RenderWindow* window);
-	void initTiles();
-	void drawLogo(RenderWindow* window);
-	void initBoard();
-	void setIds();
-
+	sf::Texture diceTexture;
+	sf::Sprite dice;
 public:
 	const static int TILES_AMOUNT = 72;
 	const static int BASE_FIRST_ID = 100;
@@ -33,18 +29,25 @@ public:
 	const static int TARGET_LAST_ID = 53;
 
 	Board() = delete;
-	Board(RenderWindow* window);
+	Board(sf::RenderWindow* window);
 	~Board();
 
-	void drawBoard(RenderWindow* window);
-
+	void drawBoard(sf::RenderWindow* window);
 	void setDiceTexture(string texturePath);
+
+	int getCenterX() const;
+	int getCenterY() const;
+	Tile* getTileById(int id) const;
+	Button* getWarp() const;
+	Button* getRematch() const;
+	Dial* getDial() const;
+	TossButton* getTossButton() const;
 	Tile** getTiles();
-	Tile* getTileById(int id);
-	int getCenterX();
-	int getCenterY();
-	Button* getWarp();
-	Button* getRematch();
-	Dial* getDial();
-	TossButton* getTossButton();
+private:
+	void setCenter(sf::RenderWindow* window);
+	void drawLogo(sf::RenderWindow* window);
+	void initTiles();
+	void initButtons();
+	void initBoard();
+	void setIds();
 };

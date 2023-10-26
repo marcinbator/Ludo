@@ -35,7 +35,7 @@ class Game
     sf::RenderWindow* window;
     sf::Clock delayClock;
 public:
-    const int PAWNS_TEAM = 4;
+    static const int PAWNS_TEAM = 4;
     Game() = delete;
     Game(bool& restart);
     ~Game();

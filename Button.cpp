@@ -1,22 +1,5 @@
 #include "Button.h"
 
-void Button::initSprite(string texturePath, int x, int y)
-{
-    this->texture.loadFromFile(texturePath);
-    this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(x, y);
-    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->sprite.setScale(1.5, 1);
-}
-
-void Button::initText(string text, int x, int y)
-{
-    this->text = Text(text, this->font, 20);
-    this->text.setFillColor(sf::Color::Black);
-    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
-    this->text.setPosition(x, y-5);
-}
-
 Button::Button(string text, string texturePath, int x, int y)
 {
     this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
@@ -24,18 +7,13 @@ Button::Button(string text, string texturePath, int x, int y)
     this->initText(text, x, y);
 }
 
-void Button::draw(RenderWindow* window)
+void Button::draw(sf::RenderWindow* window)
 {
     window->draw(this->sprite);
     window->draw(this->text);
 }
 
-void Button::handleClick()
-{
-    cout << "Button clicked.\n";
-}
-
-void Button::setText(Text text)
+void Button::setText(sf::Text text)
 {
     this->text = text;
     this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
@@ -48,17 +26,22 @@ void Button::setTexture(string texturePath)
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }
 
-const Sprite Button::getSprite()
+void Button::handleClick()
+{
+    cout << "Button clicked.\n";
+}
+
+const sf::Sprite Button::getSprite() const
 {
     return this->sprite;
 }
 
-const Text Button::getText()
+const sf::Text Button::getText() const
 {
     return this->text;
 }
 
-const bool Button::isClicked(Event event)
+const bool Button::isClicked(sf::Event event) const
 {
     if (this->sprite
         .getGlobalBounds()
@@ -67,4 +50,21 @@ const bool Button::isClicked(Event event)
         return true;
     }
     return false;
+}
+
+void Button::initSprite(string texturePath, int x, int y)
+{
+    this->texture.loadFromFile(texturePath);
+    this->sprite.setTexture(this->texture);
+    this->sprite.setPosition(x, y);
+    this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
+    this->sprite.setScale(1.5, 1);
+}
+
+void Button::initText(string text, int x, int y)
+{
+    this->text = sf::Text(text, this->font, 20);
+    this->text.setFillColor(sf::Color::Black);
+    this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
+    this->text.setPosition(x, y - 5);
 }

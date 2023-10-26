@@ -1,8 +1,6 @@
 #include "ColorSelectButton.h"
-#include "InitialMenu.h"
-#include "Dial.h"
 
-void ColorSelectButton::updateTexture(RenderWindow* window)
+void ColorSelectButton::updateTexture(sf::RenderWindow* window)
 {
 	this->texture.loadFromFile(this->texturePath);
 	this->sprite.setTexture(this->texture);
@@ -22,7 +20,7 @@ ColorSelectButton::ColorSelectButton(int id, string color, int x, int y) : Butto
 	this->sprite.setPosition(x, y);
 }
 
-void ColorSelectButton::draw(RenderWindow* window)
+void ColorSelectButton::draw(sf::RenderWindow* window)
 {
 	if (!this->isSelected) { this->texturePath = "images/tile" + this->color + "G.png"; }
 	else { this->texturePath = "images/tile" + this->color + ".png"; }
@@ -42,12 +40,12 @@ void ColorSelectButton::setIsAvailable(bool isAvailable)
 	this->isAvailable = isAvailable;
 }
 
-string ColorSelectButton::getColor()
+string ColorSelectButton::getColor() const
 {
 	return this->color;
 }
 
-bool ColorSelectButton::getIsSelected()
+bool ColorSelectButton::getIsSelected() const
 {
 	return this->isSelected;
 }

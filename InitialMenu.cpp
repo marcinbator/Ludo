@@ -1,8 +1,10 @@
 #include "InitialMenu.h"
 #include "Team.h"
 #include "MenuConfirmButton.h"
+#include "ColorSelectButton.h"
 #include "Game.h"
 #include "Dial.h"
+#include "Button.h"
 
 void InitialMenu::handleLevelClick(int index)
 {
@@ -90,8 +92,8 @@ void InitialMenu::handleClick(Event event, Game* game)
 {
     if (this->button->isClicked(event)) {
         if (this->button->handleClick(this, this->dial)) {
-            game->initGame();
             this->isDisplayed = false;
+            game->initGame();
         }
     }
     for (int i = 0; i < 4; i++) {

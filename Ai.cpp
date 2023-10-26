@@ -1,4 +1,5 @@
 #include "Ai.h"
+#include "Game.h"
 
 Ai::Ai(int level)
 {
@@ -18,14 +19,14 @@ bool Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
 		if (pawn->handleClick(dice, window, board)) {
 			return true;
 		}
-	} while (i<4);
+	} while (i<Game::PAWNS_TEAM);
 	return false;
 }
 
 void Ai::setPawnToMoveId()
 {
 	this->pawnToMoveId++;
-	if (this->pawnToMoveId > 3) {
+	if (this->pawnToMoveId > Game::PAWNS_TEAM-1) {
 		this->pawnToMoveId = 0;
 	}
 }

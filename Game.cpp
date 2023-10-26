@@ -104,8 +104,9 @@ void Game::initGame()
     if (this->aiPlayersAmount > 0) {
         this->ai = new Ai(this->initialMenu->getLevel());
     }
+    this->setNextTeamId();
     this->board->getDial()->setText("Zaczyna gracz: " + this->teams[this->currentTeamId]->getName());
-
+    this->delay(this->delayTime, "");
     cout << "Game loaded successfully.\nPlayers: " << this->livePlayersAmount << "+" << this->aiPlayersAmount << endl;
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
 
@@ -166,9 +167,8 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
 
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->board->getTossButton()->canToss = false;
-    this->delay(this->delayTime * 2,
-        "Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+    this->delay(this->delayTime * 2, "");
     if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
         this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
         this->delay(this->delayTime, "");
@@ -202,7 +202,6 @@ void Game::handlePawnClick(int pawnId) {
             }
             this->setNextTeamId(); //get next or detect game ends
         }
-        this->delay(this->delayTime, "");
     }
     else {
         this->board->getDial()->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
@@ -239,14 +238,18 @@ void Game::setNextTeamId()
     if (!this->teams[this->currentTeamId]->getIsAi()) { //not ai - let player toss
         this->board->getTossButton()->canToss = true;
     }
+    else {
+        this->board->getTossButton()->canToss = false;
+    }
     this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+    this->delay(this->delayTime, "");
 }
 
 void Game::handleAllObstructed()
 {
-    this->delay(this->delayTime, "Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+    this->delay(this->delayTime, "");
     this->setNextTeamId();
-    this->board->getTossButton()->canToss = true;
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
 }
 

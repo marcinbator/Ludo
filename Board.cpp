@@ -2,13 +2,14 @@
 #include "Dial.h"
 #include "TossButton.h"
 #include "Button.h"
+#include "Tile.h"
 
-Board::Board(RenderWindow* window)
+Board::Board(sf::RenderWindow* window)
 {
     this->setCenter(window);
     this->initTiles();
+    this->initButtons();
     this->initBoard();
-    cout << "Board initialized successfully.\n";
 }
 
 Board::~Board()
@@ -20,15 +21,15 @@ Board::~Board()
     }
 }
 
-void Board::drawBoard(RenderWindow* window) {
+void Board::drawBoard(sf::RenderWindow* window) {
+    window->draw(this->dice);
+    this->drawLogo(window);
     this->warp->draw(window);
     this->rematch->draw(window);
     this->dial->draw(window);
-    window->draw(this->dice);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
-    drawLogo(window);
 }
 
 void Board::setDiceTexture(string texturePath)
@@ -37,11 +38,17 @@ void Board::setDiceTexture(string texturePath)
     this->dice.setTexture(this->diceTexture);
 }
 
-Tile** Board::getTiles() {
-    return this->tiles;
+int Board::getCenterX() const
+{
+    return this->centerX;
 }
 
-Tile* Board::getTileById(int counter)
+int Board::getCenterY() const
+{
+    return this->centerY;
+}
+
+Tile* Board::getTileById(int counter) const
 {
     for (int i = 0; i < TILES_AMOUNT; i++) {
         if (this->tiles[i]->getId() == counter) {
@@ -51,37 +58,30 @@ Tile* Board::getTileById(int counter)
     return nullptr;
 }
 
-int Board::getCenterX()
-{
-    return this->centerX;
-}
-
-int Board::getCenterY()
-{
-    return this->centerY;
-}
-
-Button* Board::getWarp()
+Button* Board::getWarp() const
 {
     return this->warp;
 }
 
-Button* Board::getRematch()
+Button* Board::getRematch() const
 {
     return this->rematch;
 }
 
-Dial* Board::getDial()
+Dial* Board::getDial() const
 {
     return this->dial;
 }
 
-TossButton* Board::getTossButton()
+TossButton* Board::getTossButton() const
 {
     return this->tossButton;
 }
 
-//private
+Tile** Board::getTiles()
+{
+    return this->tiles;
+}
 
 void Board::setCenter(sf::RenderWindow* window)
 {
@@ -91,18 +91,22 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
+    for (int i = 0; i < TILES_AMOUNT; i++) {
+        this->tiles[i] = new Tile();
+    }
+}
+
+void Board::initButtons()
+{
     this->tossButton = new TossButton("RZUT", this->getCenterX(), this->getCenterY() + 40 * 9);
     this->dial = new Dial("Witaj w grze!", this->getCenterX(), this->getCenterY() + 40 * 7);
     this->diceTexture.loadFromFile("images/0dice.png");
-    this->dice.setTexture(this -> diceTexture);
+    this->dice.setTexture(this->diceTexture);
     this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
     this->dice.setPosition(this->centerX + 40 * 9, this->centerY);
     this->dice.setScale(2, 2);
     this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
     this->rematch = new Button("", "images/rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
-    for (int i = 0; i < TILES_AMOUNT; i++) {
-        this->tiles[i] = new Tile();
-    }
 }
 
 void Board::drawLogo(sf::RenderWindow* window)

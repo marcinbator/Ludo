@@ -4,29 +4,27 @@
 #include <SFML/Window.hpp>
 
 using namespace std;
-using namespace sf;
 
 class Button
 {
 protected:
-	Font font;
-	Text text;
-	Texture texture;
-	Sprite sprite;
-
-	void initSprite(string texturePath, int x, int y);
-	void initText(string text, int x, int y);
-
+	sf::Font font;
+	sf::Text text;
+	sf::Texture texture;
+	sf::Sprite sprite;
 public:
 	Button() = delete;
 	Button(string text, string texturePath, int x, int y);
 
-	void draw(RenderWindow* window);
+	void draw(sf::RenderWindow* window);
+	void setText(sf::Text text);
+	void setTexture(string texturePath);
 	void handleClick();
 
-	void setText(Text text);
-	void setTexture(string texturePath);
-	const Sprite getSprite();
-	const Text getText();
-	const bool isClicked(Event event);
+	const sf::Sprite getSprite() const;
+	const sf::Text getText() const;
+	const bool isClicked(sf::Event event) const;
+protected:
+	void initSprite(string texturePath, int x, int y);
+	void initText(string text, int x, int y);
 };

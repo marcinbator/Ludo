@@ -2,6 +2,7 @@
 #include "Dial.h"
 #include "Team.h"
 #include "Game.h"
+#include "Button.h"
 
 void LeaderBoard::initTitle(int centerX, int centerY)
 {

@@ -5,7 +5,9 @@ using namespace sf;
 using namespace std;
 class Team;
 class TossButton;
+class Button;
 class MenuConfirmButton;
+class ColorSelectButton;
 class Dial;
 class Game;
 
