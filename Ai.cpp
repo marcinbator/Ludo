@@ -1,9 +1,4 @@
 #include "Ai.h"
-#include "Random.h"
-#include "Board.h"
-#include "Team.h"
-
-using namespace sf;
 
 Ai::Ai(int level)
 {

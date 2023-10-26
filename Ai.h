@@ -1,20 +1,18 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
-using namespace sf;
-class Board;
-class Team;
+#include "Random.h"
+#include "Board.h"
+#include "Team.h"
 
 class Ai
 {
 	int pawnToMoveId;
 	int level;
-	Team* team;
 public:
 	Ai() = delete;
 	Ai(int level);
 
-	bool move(Team* team, int dice, RenderWindow* window, Board* board);
+	bool move(Team* team, int dice, sf::RenderWindow* window, Board* board);
 	void setPawnToMoveId();
 };
 

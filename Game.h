@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable:6385)
 #include <iostream>
 #include "Random.h"
 #include <SFML/Graphics.hpp>
@@ -16,8 +17,6 @@ class LeaderBoard;
 
 class Game
 {
-    const int PAWNS_TEAM = 4;
-
     int dice{};
     int livePlayersAmount{};
     int aiPlayersAmount{};
@@ -36,6 +35,8 @@ class Game
     sf::RenderWindow* window;
     sf::Clock delayClock;
 public:
+    const int PAWNS_TEAM = 4;
+    Game() = delete;
     Game(bool& restart);
     ~Game();
     void update();
@@ -48,15 +49,15 @@ private:
     void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void renderPawns();
     
-    void pollEvents();
-
     void handleAiMove();
     void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
+    void handleWarpClick();
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
 
     void delay(int time, string dial);
     void setNextTeamId();
+    void pollEvents();
 };

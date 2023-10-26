@@ -25,7 +25,7 @@ Game::~Game()
     delete this->board;
     for (int i = 0; i < this->playersAmount; i++)
         delete this->teams[i];
-    for (int i = 0; i < this->playersAmount * 4; i++)
+    for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++)
         delete this->pawns[i];
     delete this->window;
 }
@@ -74,7 +74,7 @@ void Game::initWindow() {
 }
 
 void Game::renderPawns() {
-    for (int i = 0; i < this->playersAmount*4; i++) {
+    for (int i = 0; i < this->playersAmount*this->PAWNS_TEAM; i++) {
         this->pawns[i]->draw(this->pawns[i]->getCurrentTile(), this->window);
     }
 }
@@ -93,10 +93,10 @@ void Game::initGame()
     this->createAiPlayers(names, baseTiles, startTiles);
 
     for (int i = 0; i < this->playersAmount; i++) { //assign pawns to teams
-        Pawn* subpawns[] = { this->pawns[i * 4],
-            this->pawns[i * 4 + 1],
-            this->pawns[i * 4 + 2],
-            this->pawns[i * 4 + 3] };
+        Pawn* subpawns[] = { this->pawns[i * this->PAWNS_TEAM],
+            this->pawns[i * this->PAWNS_TEAM + 1],
+            this->pawns[i * this->PAWNS_TEAM + 2],
+            this->pawns[i * this->PAWNS_TEAM + 3] };
         this->teams[i]->setPawns(subpawns);
     }
 
@@ -110,8 +110,8 @@ void Game::initGame()
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
 
     //debug
-    //for (int i = 0; i < 4; i++) {
-    //    this->pawns[i]->draw(this->board->getTileById(40 - i), this->window);
+    //for (int i = 0; i < this->PAWNS_TEAM; i++) {
+    //    this->pawns[i]->draw(this->board->getTileById(this->PAWNS_TEAM0 - i), this->window);
     //    this->pawns[i]->setIsAtBase(false);
     //}
 }
@@ -126,8 +126,8 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
                 Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
-                for (int k = 0; k < 4; k++) {
-                    int index = i * 4 + k;
+                for (int k = 0; k < this->PAWNS_TEAM; k++) {
+                    int index = i * this->PAWNS_TEAM + k;
                     int teamIndex = i;
                     int tileId = baseTiles[j] + k;
                     Tile* tile = this->board->getTileById(tileId);
@@ -145,13 +145,13 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     const string aiImages[] = { "images/RpawnAI.png", "images/BpawnAI.png", "images/GpawnAI.png", "images/YpawnAI.png" };
     int menuAiPlayersUsed = 0;
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
-        for (int j = menuAiPlayersUsed; j < 4; j++) {
+        for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
                 Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j]);
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
-                for (int k = 0; k < 4; k++) {
-                    int index = i * 4 + k;
+                for (int k = 0; k < this->PAWNS_TEAM; k++) {
+                    int index = i * this->PAWNS_TEAM + k;
                     int teamIndex = i;
                     int tileId = baseTiles[j] + k;
                     Tile* tile = this->board->getTileById(tileId);
@@ -207,6 +207,14 @@ void Game::handlePawnClick(int pawnId) {
     else {
         this->board->getDial()->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
     }
+}
+
+void Game::handleWarpClick()
+{
+    this->isWarp = !this->isWarp;
+    string texture = this->isWarp ? "images/unwarp.png" : "images/warp.png";
+    this->delayTime = this->isWarp ? 100 : 800;
+    this->board->getWarp()->setTexture(texture);
 }
 
 void Game::setNextTeamId()
@@ -287,7 +295,7 @@ void Game::pollEvents()
                     tile->handleClick();
                 }
             }
-            for (int i = 0; i < this->playersAmount*4; i++) { //pawns clicks
+            for (int i = 0; i < this->playersAmount*this->PAWNS_TEAM; i++) { //pawns clicks
                 if (pawns[i]->isClicked(event)) {
                     this->handlePawnClick(i);
                 }
@@ -296,10 +304,7 @@ void Game::pollEvents()
                 this->handlePlayerTossClick();
             }
             if (this->board->getWarp()->isClicked(event)) { //warp click
-                this->isWarp = !this->isWarp;
-                string texture = this->isWarp ? "images/unwarp.png": "images/warp.png";
-                this->delayTime = this->isWarp ? 100 : 800;
-                this->board->getWarp()->setTexture(texture);
+                handleWarpClick();
             }
             if (this->board->getRematch()->isClicked(event)) { //rematch click
                 this->restart = true;
