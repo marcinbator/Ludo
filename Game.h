@@ -16,10 +16,12 @@ class LeaderBoard;
 
 class Game
 {
+    const int PAWNS_TEAM = 4;
+
     int dice{};
-    int playersAmount{};
+    int livePlayersAmount{};
     int aiPlayersAmount{};
-    int playersTotalAmount{};
+    int playersAmount{};
     int currentTeamId{};
     int currentFreePodiumPlace = 1;
     int delayTime = 1000;
@@ -28,8 +30,6 @@ class Game
     Board* board;
     Team* teams[4];
     Pawn* pawns[16];
-    Dial* dial;
-    TossButton* tossButton;
     InitialMenu* initialMenu;
     LeaderBoard* leaderBoard;
     Ai* ai;
@@ -40,21 +40,23 @@ public:
     ~Game();
     void update();
     void render();
-    void createTeams();
-    bool isRunning() const;
+    void initGame();
+    bool inline isRunning() const { return this->window->isOpen(); };
 private:
     void initWindow();
-    void initControls();
+    void createLivePlayers(const string* names, const int *baseTiles, const int* startTiles);
+    void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void renderPawns();
-
+    
     void pollEvents();
 
     void handleAiMove();
-    void handleTossClick();
+    void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
 
+    void delay(int time, string dial);
     void setNextTeamId();
 };

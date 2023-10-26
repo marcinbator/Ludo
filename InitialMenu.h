@@ -11,7 +11,7 @@ class Game;
 
 class InitialMenu : public Menu
 {
-    int playersAmount;
+    int livePlayersAmount;
     int aiPlayersAmount;
     int level;
 
@@ -37,7 +37,7 @@ public:
     void pollMenuEvents(RenderWindow* window, Game* game, bool& restart);
     void draw(RenderWindow* window, int centerX, int centerY);
     void handleClick(Event event, Game* game);
-    void showWinners(Team** teams, int playersAmount);
+    void showWinners(Team** teams, int livePlayersAmount);
 
     int getLevel();
     int getPlayersAmount();

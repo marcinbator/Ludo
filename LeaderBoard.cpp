@@ -57,19 +57,19 @@ LeaderBoard::~LeaderBoard()
     delete this->exitButton;
 }
 
-void LeaderBoard::showWinners(Team** teams, int playersAmount)
+void LeaderBoard::showWinners(Team** teams, int livePlayersAmount)
 {
     string text = "";
     Team* leaderboard[4];
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < livePlayersAmount; i++) {
         if (teams[i]->getStanding() != 0) {
             leaderboard[teams[i]->getStanding() - 1] = teams[i];
         }
         else {
-            leaderboard[playersAmount - 1] = teams[i];
+            leaderboard[livePlayersAmount - 1] = teams[i];
         }
     }
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < livePlayersAmount; i++) {
         text += "Miejsce " + to_string(i + 1) + ": " + leaderboard[i]->getName() + "\n";
     }
     this->dial->setText(text);

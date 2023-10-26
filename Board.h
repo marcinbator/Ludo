@@ -3,11 +3,15 @@
 
 using namespace sf;
 class Button;
+class Dial;
+class TossButton;
 
 class Board
 {
 	int centerX;
 	int centerY;
+	Dial* dial;
+	TossButton* tossButton;
 	Button* warp;
 	Button* rematch;
 	Texture diceTexture;
@@ -41,4 +45,6 @@ public:
 	int getCenterY();
 	Button* getWarp();
 	Button* getRematch();
+	Dial* getDial();
+	TossButton* getTossButton();
 };

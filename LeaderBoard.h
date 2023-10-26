@@ -23,7 +23,7 @@ public:
 	~LeaderBoard();
 	void pollEvents(RenderWindow* window, Game* game, bool& restart);
 
-	void showWinners(Team** teams, int playersAmount);
+	void showWinners(Team** teams, int livePlayersAmount);
 	void draw(RenderWindow* window, int centerX, int centerY);
 	void handleClick(Event event, Game* game, RenderWindow* window, bool& restart);
 

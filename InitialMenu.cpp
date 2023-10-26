@@ -13,11 +13,11 @@ void InitialMenu::handleLevelClick(int index)
 void InitialMenu::handlePlayerButtonClick(int index)
 {
     this->playersButtons[index]->handleClick(this, this->dial, this->aiPlayersButtons[index]);
-    this->playersAmount = 0;
+    this->livePlayersAmount = 0;
     for (int i = 0; i < 4; i++) {
         if (this->playersButtons[i]->getIsSelected()) {
             this->playersColors[i] = this->playersButtons[i]->getColor();
-            this->playersAmount++;
+            this->livePlayersAmount++;
         }
         else {
             this->playersColors[i] = "";
@@ -59,7 +59,7 @@ void InitialMenu::handleAiPlayerButtonClick(int index)
 
 InitialMenu::InitialMenu(int centerX, int centerY) : Menu(centerX, centerY)
 {
-    this->playersAmount = 0;
+    this->livePlayersAmount = 0;
     this->aiPlayersAmount = 0;
     this->level = 0;
     this->button = new MenuConfirmButton("Zatwierdz", centerX, centerY + 370);
@@ -90,7 +90,7 @@ void InitialMenu::handleClick(Event event, Game* game)
 {
     if (this->button->isClicked(event)) {
         if (this->button->handleClick(this, this->dial)) {
-            game->createTeams();
+            game->initGame();
             this->isDisplayed = false;
         }
     }
@@ -109,19 +109,19 @@ void InitialMenu::handleClick(Event event, Game* game)
     }
 }
 
-void InitialMenu::showWinners(Team** teams, int playersAmount)
+void InitialMenu::showWinners(Team** teams, int livePlayersAmount)
 {
     system("cls");
     Team* leaderboard[4];
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < livePlayersAmount; i++) {
         if (teams[i]->getStanding() != 0) {
             leaderboard[teams[i]->getStanding() - 1] = teams[i];
         }
         else {
-            leaderboard[playersAmount - 1] = teams[i];
+            leaderboard[livePlayersAmount - 1] = teams[i];
         }
     }
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < livePlayersAmount; i++) {
         cout << "\tMiejsce " + to_string(i + 1) << ": " << leaderboard[i]->getName() << endl;
     }
 }
@@ -160,7 +160,7 @@ int InitialMenu::getLevel() {
 
 int InitialMenu::getPlayersAmount()
 {
-    return this->playersAmount;
+    return this->livePlayersAmount;
 }
 
 int InitialMenu::getAiPlayersAmount()

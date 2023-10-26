@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Dial.h"
+#include "TossButton.h"
 #include "Button.h"
 
 Board::Board(RenderWindow* window)
@@ -11,6 +13,8 @@ Board::Board(RenderWindow* window)
 
 Board::~Board()
 {
+    delete this->tossButton;
+    delete this->dial;
     for (int i = 0; i < TILES_AMOUNT; i++) {
         delete this->tiles[i];
     }
@@ -19,6 +23,7 @@ Board::~Board()
 void Board::drawBoard(RenderWindow* window) {
     this->warp->draw(window);
     this->rematch->draw(window);
+    this->dial->draw(window);
     window->draw(this->dice);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
@@ -66,6 +71,16 @@ Button* Board::getRematch()
     return this->rematch;
 }
 
+Dial* Board::getDial()
+{
+    return this->dial;
+}
+
+TossButton* Board::getTossButton()
+{
+    return this->tossButton;
+}
+
 //private
 
 void Board::setCenter(sf::RenderWindow* window)
@@ -76,6 +91,8 @@ void Board::setCenter(sf::RenderWindow* window)
 
 void Board::initTiles()
 {
+    this->tossButton = new TossButton("RZUT", this->getCenterX(), this->getCenterY() + 40 * 9);
+    this->dial = new Dial("Witaj w grze!", this->getCenterX(), this->getCenterY() + 40 * 7);
     this->diceTexture.loadFromFile("images/0dice.png");
     this->dice.setTexture(this -> diceTexture);
     this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
