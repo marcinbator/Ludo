@@ -29,7 +29,7 @@ void ColorSelectButton::draw(RenderWindow* window)
 	this->updateTexture(window);
 }
 
-void ColorSelectButton::handleClick(InitialMenu* menu, Dial* dial, ColorSelectButton* parallelButton)
+void ColorSelectButton::handleClick(InitialMenu* initialMenu, Dial* dial, ColorSelectButton* parallelButton)
 {
 	if (this->isAvailable) {
 		this->isSelected = !this->isSelected;

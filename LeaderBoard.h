@@ -21,6 +21,7 @@ public:
 
 	LeaderBoard(int centerX, int centerY);
 	~LeaderBoard();
+	void pollEvents(RenderWindow* window, Game* game, bool& restart);
 
 	void showWinners(Team** teams, int playersAmount);
 	void draw(RenderWindow* window, int centerX, int centerY);

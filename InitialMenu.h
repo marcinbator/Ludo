@@ -34,6 +34,7 @@ public:
     InitialMenu(int centerX, int centerY);
     ~InitialMenu();
 
+    void pollMenuEvents(RenderWindow* window, Game* game, bool& restart);
     void draw(RenderWindow* window, int centerX, int centerY);
     void handleClick(Event event, Game* game);
     void showWinners(Team** teams, int playersAmount);

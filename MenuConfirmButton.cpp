@@ -15,9 +15,9 @@ MenuConfirmButton::MenuConfirmButton(string text, int x, int y) : Button(text, "
     this->initText(text, x, y-13);
 }
 
-bool MenuConfirmButton::handleClick(InitialMenu* menu, Dial* dial)
+bool MenuConfirmButton::handleClick(InitialMenu* initialMenu, Dial* dial)
 {
-    if (menu->getPlayersAmount() + menu->getAiPlayersAmount() < 1) { //debug - <2
+    if (initialMenu->getPlayersAmount() + initialMenu->getAiPlayersAmount() < 1) { //debug - <2
         dial->setText("Zbyt mala liczba graczy!", Color::Red);
         return false;
     }

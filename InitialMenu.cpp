@@ -2,6 +2,7 @@
 #include "Team.h"
 #include "MenuConfirmButton.h"
 #include "Game.h"
+#include "Dial.h"
 
 void InitialMenu::handleLevelClick(int index)
 {
@@ -20,6 +21,23 @@ void InitialMenu::handlePlayerButtonClick(int index)
         }
         else {
             this->playersColors[i] = "";
+        }
+    }
+}
+
+void InitialMenu::pollMenuEvents(RenderWindow* window, Game* game, bool &restart)
+{
+    Event event;
+    while (window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
+        {
+            restart = false;
+            window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            this->handleClick(event, game);
         }
     }
 }

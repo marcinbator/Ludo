@@ -1,61 +1,60 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Board.h"
-#include "Team.h"
-#include "Pawn.h"
-#include "TossButton.h"
-#include "Dial.h"
-#include "Ai.h"
+#include "Random.h"
+#include <SFML/Graphics.hpp>
 
-using namespace sf;
 using namespace std;
+
+class Board;
+class Team;
+class Pawn;
+class TossButton;
+class Dial;
+class Ai;
 class InitialMenu;
 class LeaderBoard;
 
 class Game
 {
-
-    int dice;
-    bool isWarp;
+    int dice{};
+    int playersAmount{};
+    int aiPlayersAmount{};
+    int playersTotalAmount{};
+    int currentTeamId{};
+    int currentFreePodiumPlace = 1;
+    int delayTime = 1000;
+    bool isWarp = false;
     bool& restart;
-    int currentFreePodiumPlace;
-    int playersAmount;
-    int aiPlayersAmount;
-    int playersTotalAmount;
-    int currentTeamId;
-    int delayTime;
-    RenderWindow* window;
     Board* board;
     Team* teams[4];
     Pawn* pawns[16];
-    TossButton* tossButton;
     Dial* dial;
-    InitialMenu* menu;
+    TossButton* tossButton;
+    InitialMenu* initialMenu;
     LeaderBoard* leaderBoard;
     Ai* ai;
-    Clock delayClock;
-
+    sf::RenderWindow* window;
+    sf::Clock delayClock;
+public:
+    Game(bool& restart);
+    ~Game();
+    void update();
+    void render();
+    void createTeams();
+    bool isRunning() const;
+private:
     void initWindow();
     void initControls();
     void renderPawns();
+
+    void pollEvents();
+
+    void handleAiMove();
     void handleTossClick();
     void handlePawnClick(int pawnId);
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
-    void getNextTeamId();
-    void pollEvents();
-    void pollMenuEvents();
-    void pollLeaderboardEvents();
 
-public:
-    Game(bool& restart);
-    ~Game();
-
-    void update();
-    void render();
-    void createTeams();
-
-    bool isRunning();
+    void setNextTeamId();
 };

@@ -25,6 +25,23 @@ void LeaderBoard::handleExitButtonClick(RenderWindow* window, bool& restart)
     window->close();
 }
 
+void LeaderBoard::pollEvents(RenderWindow* window, Game* game, bool& restart)
+{
+    Event event;
+    while (window->pollEvent(event))
+    {
+        if (event.type == Event::Closed)
+        {
+            restart = false;
+            window->close();
+        }
+        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        {
+            this->handleClick(event, game, window, restart);
+        }
+    }
+}
+
 LeaderBoard::LeaderBoard(int centerX, int centerY)
     : Menu(centerX, centerY)
 {

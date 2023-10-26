@@ -17,7 +17,7 @@ public:
 	ColorSelectButton(int id, string texturePath, int x, int y);
 
 	void draw(RenderWindow* window);
-	void handleClick(InitialMenu* menu, Dial* dial, ColorSelectButton* parallelButton);
+	void handleClick(InitialMenu* initialMenu, Dial* dial, ColorSelectButton* parallelButton);
 
 	void setIsAvailable(bool isAvailable);
 	string getColor();

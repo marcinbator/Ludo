@@ -1,86 +1,59 @@
 #include "Game.h"
+#include "Board.h"
+#include "Team.h"
+#include "Pawn.h"
+#include "TossButton.h"
+#include "Dial.h"
+#include "Ai.h"
 #include "InitialMenu.h"
 #include "LeaderBoard.h"
-#include "Random.h"
-#include <thread>
-#include <chrono>
 
 Game::Game(bool& restart): restart(restart)
 {
     this->restart = restart;
-    this->currentFreePodiumPlace = 1;
-    this->delayTime = 1000;
-    this->isWarp = false;
     this->initWindow();
     this->board = new Board(window);
+    this->initialMenu = new InitialMenu(this->board->getCenterX(), this->board->getCenterY());
     this->leaderBoard = new LeaderBoard(this->board->getCenterX(), this->board->getCenterY());
-    this->menu = new InitialMenu(this->board->getCenterX(), this->board->getCenterY());
-    this->dice = 0;
 }
 
 Game::~Game()
 {
-    delete this->window;
-    delete this->board;
     delete this->tossButton;
     delete this->dial;
-    delete this->menu;
+    delete this->initialMenu;
     delete this->leaderBoard;
+    delete this->board;
     for (int i = 0; i < this->playersTotalAmount; i++) {
         delete this->teams[i];
     }
     for (int i = 0; i < this->playersTotalAmount * 4; i++) {
         delete this->pawns[i];
     }
+    delete this->window;
 }
 
 void Game::update()
 {
-    this->window->setFramerateLimit(60);
-    if (this->menu->getIsDisplayed()) {
-        this->pollMenuEvents();
+    if (this->initialMenu->getIsDisplayed()) { //initialMenu active
+        this->initialMenu->pollMenuEvents(this->window, this, this->restart);
     }
-    else if (this->leaderBoard->getIsDisplayed()) {
-        this->pollLeaderboardEvents();
+    else if (this->leaderBoard->getIsDisplayed()) { //leaderboard active
+        this->leaderBoard->pollEvents(this->window, this, this->restart);
     }
-    else {
+    else { //game active
         this->pollEvents();
         if (this->teams[this->currentTeamId]->getIsAi()) {
-            this->tossButton->handleClick(this->dice, this->board);
-            this->delayClock.restart();
-            while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime*2) {
-                this->tossButton->canToss = false;
-                this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
-                this->render();
-                this->pollEvents();
-            }
-            if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) {
-                this->dial->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
-                this->delayClock.restart();
-                while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
-                    this->render();
-                    this->pollEvents();
-                }
-            }
-            if (this->teams[this->currentTeamId]->isWin()) { //check win
-                this->handleSingleWin();
-            }
-            this->dice = 0;
-            this->getNextTeamId();
-            this->delayClock.restart();
-            while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
-                this->render();
-                this->pollEvents();
-            }
+            this->handleAiMove();
         }
     }    
 }
 
 void Game::render()
 {
-    if (this->menu->getIsDisplayed()) {
+    if (this->initialMenu->getIsDisplayed()) {
         this->window->clear();
-        this->menu->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
+        this->initialMenu->draw(this->window, this->board->getCenterX(), this->board->getCenterY());
         this->window->display();
     }
     else if (this->leaderBoard->getIsDisplayed()) {
@@ -100,7 +73,7 @@ void Game::render()
     }
 }
 
-bool Game::isRunning()
+bool Game::isRunning() const
 {
     return this->window->isOpen();
 }
@@ -108,6 +81,7 @@ bool Game::isRunning()
 //private
 void Game::initWindow() {
     this->window = new RenderWindow(VideoMode(1200, 920), "Ludo", Style::Titlebar | Style::Close);
+    this->window->setFramerateLimit(60);
     Image icon;
     icon.loadFromFile("images/logo.png");
     this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -127,9 +101,9 @@ void Game::renderPawns() {
 
 void Game::createTeams()
 {
-    this->ai = new Ai(this->menu->getLevel());
-    this->playersAmount = menu->getPlayersAmount();
-    this->aiPlayersAmount = menu->getAiPlayersAmount();
+    this->ai = new Ai(this->initialMenu->getLevel());
+    this->playersAmount = initialMenu->getPlayersAmount();
+    this->aiPlayersAmount = initialMenu->getAiPlayersAmount();
     this->playersTotalAmount = this->playersAmount + this->aiPlayersAmount;
     this->currentTeamId = random(0, playersTotalAmount - 1);
 
@@ -142,7 +116,7 @@ void Game::createTeams()
     int menuPlayersIndex = 0; //create players
     for (int i = 0; i < this->playersAmount; i++) {
         for (int j = menuPlayersIndex; j < 4; j++) {
-            if (this->menu->getPlayersColors()[j] != "") {
+            if (this->initialMenu->getPlayersColors()[j] != "") {
                 Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
                 this->teams[i] = team;
                 menuPlayersIndex = j+1;
@@ -161,7 +135,7 @@ void Game::createTeams()
     int menuAiPlayersIndex = 0; //create ai players
     for (int i = this->playersAmount; i < this->playersTotalAmount; i++) {
         for (int j = menuAiPlayersIndex; j < 4; j++) {
-            if (this->menu->getAiPlayersColors()[j] != "") {
+            if (this->initialMenu->getAiPlayersColors()[j] != "") {
                 Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j]);
                 this->teams[i] = team;
                 menuAiPlayersIndex = j + 1;
@@ -196,6 +170,35 @@ void Game::createTeams()
     //}
 }
 
+void Game::handleAiMove() {
+    this->tossButton->handleClick(this->dice, this->board);
+    this->delayClock.restart();
+    while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime * 2) {
+        this->tossButton->canToss = false;
+        this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+        this->render();
+        this->pollEvents();
+    }
+    if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) {
+        this->dial->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+        this->delayClock.restart();
+        while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
+            this->render();
+            this->pollEvents();
+        }
+    }
+    if (this->teams[this->currentTeamId]->isWin()) { //check win
+        this->handleSingleWin();
+    }
+    this->dice = 0;
+    this->setNextTeamId();
+    this->delayClock.restart();
+    while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
+        this->render();
+        this->pollEvents();
+    }
+}
+
 void Game::handleTossClick() {
     this->tossButton->handleClick(this->dice, this->board);
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
@@ -215,7 +218,7 @@ void Game::handlePawnClick(int pawnId) {
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
-            this->getNextTeamId(); //get next or detect game ends
+            this->setNextTeamId(); //get next or detect game ends
         }
         this->delayClock.restart();
         while (this->delayClock.getElapsedTime().asMilliseconds() < this->delayTime) {
@@ -228,7 +231,7 @@ void Game::handlePawnClick(int pawnId) {
     }
 }
 
-void Game::getNextTeamId()
+void Game::setNextTeamId()
 {
     int id = this->currentTeamId;
     int attempts = 0;
@@ -265,7 +268,7 @@ void Game::handleAllObstructed()
         this->render();
         this->pollEvents();
     }
-    this->getNextTeamId();
+    this->setNextTeamId();
     this->tossButton->canToss = true;
     this->dial->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
 }
@@ -293,38 +296,6 @@ void Game::handleGameEnd()
     }
     this->leaderBoard->setIsDisplayed(true);
     this->leaderBoard->showWinners(this->teams, this->playersTotalAmount);
-}
-
-void Game::pollMenuEvents()
-{
-    Event event;
-    while (this->window->pollEvent(event))
-    {
-        if (event.type == Event::Closed)
-        {
-            this->window->close();
-        }
-        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
-        {
-            this->menu->handleClick(event, this);
-        }
-    }
-}
-
-void Game::pollLeaderboardEvents()
-{
-    Event event;
-    while (this->window->pollEvent(event))
-    {
-        if (event.type == Event::Closed)
-        {
-            this->window->close();
-        }
-        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
-        {
-            this->leaderBoard->handleClick(event, this, this->window, this->restart);
-        }
-    }
 }
 
 void Game::pollEvents()

@@ -1,8 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-#include "InitialMenu.h"
-
-using namespace sf;
 
 int main() {
     bool restart = false;
