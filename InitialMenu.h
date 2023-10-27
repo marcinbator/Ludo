@@ -28,7 +28,6 @@ public:
     ~InitialMenu();
 
     void draw(sf::RenderWindow* window, int centerX, int centerY);
-    void showWinners(Team** teams, int livePlayersAmount);
     void pollMenuEvents(sf::RenderWindow* window, Game* game, bool& restart);
 
     int getLevel() const;

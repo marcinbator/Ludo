@@ -1,32 +1,28 @@
 #pragma once
 #include "Menu.h"
+#include "Game.h"
+#include "Team.h"
 
-using namespace sf;
 using namespace std;
+
 class Button;
-class Game;
 
 class LeaderBoard : public Menu
 {
-	Text leaderboard;
-
 	Button* rematchButton;
 	Button* exitButton;
-
-	void initTitle(int centerX, int centerY);
-	void handleRematchButtonClick(Game* game, RenderWindow* window, bool& restart);
-	void handleExitButtonClick(RenderWindow* window, bool& restart);
-
+	sf::Text leaderboard;
 public:
-
+	LeaderBoard() = delete;
 	LeaderBoard(int centerX, int centerY);
 	~LeaderBoard();
-	void pollEvents(RenderWindow* window, Game* game, bool& restart);
 
-	void showWinners(Team** teams, int livePlayersAmount);
-	void draw(RenderWindow* window, int centerX, int centerY);
-	void handleClick(Event event, Game* game, RenderWindow* window, bool& restart);
-
+	void draw(sf::RenderWindow* window, int centerX, int centerY);
 	void setIsDisplayed(bool isDisplayed);
+	void showWinners(Team** teams, int livePlayersAmount);
+	void pollEvents(sf::RenderWindow* window, Game* game, bool& restart);
+private:
+	void initTitle(int centerX, int centerY);
+	void handleRematchButtonClick(Game* game, sf::RenderWindow* window, bool& restart);
+	void handleExitButtonClick(sf::RenderWindow* window, bool& restart);
 };
-

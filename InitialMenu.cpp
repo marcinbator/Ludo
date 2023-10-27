@@ -63,23 +63,6 @@ void InitialMenu::draw(RenderWindow* window, int centerX, int centerY)
     }
 }
 
-void InitialMenu::showWinners(Team** teams, int livePlayersAmount)
-{
-    Team* leaderboard[Game::MAX_TEAMS];
-    for (int i = 0; i < livePlayersAmount; i++) {
-        if (teams[i]->getStanding() != 0) { //player not last
-            leaderboard[teams[i]->getStanding() - 1] = teams[i];
-        }
-        else {
-            leaderboard[livePlayersAmount - 1] = teams[i];
-        }
-    }
-    system("cls");
-    for (int i = 0; i < livePlayersAmount; i++) {
-        cout << "\tMiejsce " + to_string(i + 1) << ": " << leaderboard[i]->getName() << endl;
-    }
-}
-
 void InitialMenu::pollMenuEvents(RenderWindow* window, Game* game, bool& restart)
 {
     Event event;
