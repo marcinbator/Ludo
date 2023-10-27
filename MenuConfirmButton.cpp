@@ -11,6 +11,7 @@ void MenuConfirmButton::initText(string text, int x, int y)
 MenuConfirmButton::MenuConfirmButton(string text, int x, int y) : Button(text, string(TEXTURE_PATH) + "button1.png", x, y)
 {
     this->initText(text, x, y-13);
+    this->sprite.scale(1.5, 1.5);
 }
 
 bool MenuConfirmButton::handleClick(InitialMenu* initialMenu, Dial* dial)

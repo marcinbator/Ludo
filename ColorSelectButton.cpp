@@ -18,6 +18,7 @@ ColorSelectButton::ColorSelectButton(int id, string color, int x, int y) : Butto
 	this->sprite.setTexture(this->texture);
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 	this->sprite.setPosition(x, y);
+	
 }
 
 void ColorSelectButton::draw(sf::RenderWindow* window)

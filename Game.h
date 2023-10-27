@@ -28,6 +28,7 @@ class Game
     int currentFreePodiumPlace = 1;
     int delayTime = 1000;
     bool isWarp = false;
+    bool isSound = true;
     bool& restart;
     Board* board;
     Team* teams[4];
@@ -60,7 +61,9 @@ private:
     void handleAiMove();
     void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
+    void handleMouseOverPawn(int pawnId);
     void handleWarpClick();
+    void handleSoundClick();
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
