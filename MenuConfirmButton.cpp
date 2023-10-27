@@ -1,6 +1,4 @@
 #include "MenuConfirmButton.h"
-#include "InitialMenu.h"
-#include "Dial.h"
 
 void MenuConfirmButton::initText(string text, int x, int y)
 {
@@ -17,7 +15,7 @@ MenuConfirmButton::MenuConfirmButton(string text, int x, int y) : Button(text, "
 
 bool MenuConfirmButton::handleClick(InitialMenu* initialMenu, Dial* dial)
 {
-    if (initialMenu->getPlayersAmount() + initialMenu->getAiPlayersAmount() < Game::MIN_PLAYERS) { //debug - <2
+    if (initialMenu->getPlayersAmount() + initialMenu->getAiPlayersAmount() < Game::MIN_PLAYERS) {
         dial->setText("Zbyt mala liczba graczy!", Color::Red);
         return false;
     }
