@@ -1,13 +1,14 @@
 #pragma once
 #include "Button.h"
-class InitialMenu;
-class Dial;
+#include "InitialMenu.h"
+#include "Dial.h"
 
 class MenuConfirmButton : public Button
 {
-	void initText(string text, int x, int y);
 public:
 	MenuConfirmButton(string text, int x, int y);
 	bool handleClick(InitialMenu* menu, Dial* dial);
+private:
+	void initText(string text, int x, int y);
 };
 

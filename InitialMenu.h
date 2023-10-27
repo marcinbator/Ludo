@@ -1,41 +1,41 @@
 #pragma once
 #include "Menu.h"
+#include "Team.h"
+#include "Game.h"
+#include "Dial.h"
 
-using namespace sf;
 using namespace std;
-class Team;
-class TossButton;
+
+class Button;
 class MenuConfirmButton;
-class Dial;
-class Game;
+class ColorSelectButton;
 
 class InitialMenu : public Menu
 {
-    int playersAmount;
-    int aiPlayersAmount;
-
-    Text text1;
-    Text text2;
-    ColorSelectButton* playersButtons[4];
-    ColorSelectButton* aiPlayersButtons[4];
-    string playersColors[4];
-    string aiPlayersColors[4];
-    MenuConfirmButton* button;
-
-    void initMenu(int centerX, int centerY);
-    void handlePlayerButtonClick(int index);
-    void handleAiPlayerButtonClick(int index);
-
+    int livePlayersAmount{};
+    int aiPlayersAmount{};
+    int level{};
+    ColorSelectButton* playersButtons[Game::MAX_TEAMS];
+    ColorSelectButton* aiPlayersButtons[Game::MAX_TEAMS];
+    string playersColors[Game::MAX_TEAMS];
+    string aiPlayersColors[Game::MAX_TEAMS];
+    Button* levelButtons[3];
+    MenuConfirmButton* submitButton;
+    sf::Text texts[3];
 public:
+    InitialMenu() = delete;
     InitialMenu(int centerX, int centerY);
     ~InitialMenu();
 
-    void draw(RenderWindow* window, int centerX, int centerY);
-    void handleClick(Event event, Game* game);
-    void showWinners(Team** teams, int playersAmount);
+    void draw(sf::RenderWindow* window, int centerX, int centerY);
+    void pollMenuEvents(sf::RenderWindow* window, Game* game, bool& restart);
 
-    int getPlayersAmount();
-    int getAiPlayersAmount();
+    int getLevel() const;
+    int getPlayersAmount() const;
+    int getAiPlayersAmount() const;
     string* getPlayersColors();
     string* getAiPlayersColors();
+private:
+    void handlePlayerButtonClick(int index);
+    void handleAiPlayerButtonClick(int index);
 };

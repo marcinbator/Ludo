@@ -1,29 +1,37 @@
 #include "Board.h"
+#include "Dial.h"
+#include "TossButton.h"
 #include "Button.h"
+#include "Tile.h"
 
-Board::Board(RenderWindow* window)
+Board::Board(sf::RenderWindow* window)
 {
     this->setCenter(window);
     this->initTiles();
+    this->initButtons();
     this->initBoard();
-    cout << "Board initialized successfully.\n";
 }
 
 Board::~Board()
 {
+    delete this->tossButton;
+    delete this->dial;
     for (int i = 0; i < TILES_AMOUNT; i++) {
         delete this->tiles[i];
     }
 }
 
-void Board::drawBoard(RenderWindow* window) {
+void Board::drawBoard(sf::RenderWindow* window) {
+    this->initBackground();
+    window->draw(this->background);
+    window->draw(this->dice);
+    this->drawLogo(window);
     this->warp->draw(window);
     this->rematch->draw(window);
-    window->draw(this->dice);
+    this->dial->draw(window);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
     }
-    drawLogo(window);
 }
 
 void Board::setDiceTexture(string texturePath)
@@ -32,11 +40,17 @@ void Board::setDiceTexture(string texturePath)
     this->dice.setTexture(this->diceTexture);
 }
 
-Tile** Board::getTiles() {
-    return this->tiles;
+int Board::getCenterX() const
+{
+    return this->centerX;
 }
 
-Tile* Board::getTileById(int counter)
+int Board::getCenterY() const
+{
+    return this->centerY;
+}
+
+Tile* Board::getTileById(int counter) const
 {
     for (int i = 0; i < TILES_AMOUNT; i++) {
         if (this->tiles[i]->getId() == counter) {
@@ -46,27 +60,30 @@ Tile* Board::getTileById(int counter)
     return nullptr;
 }
 
-int Board::getCenterX()
-{
-    return this->centerX;
-}
-
-int Board::getCenterY()
-{
-    return this->centerY;
-}
-
-Button* Board::getWarp()
+Button* Board::getWarp() const
 {
     return this->warp;
 }
 
-Button* Board::getRematch()
+Button* Board::getRematch() const
 {
     return this->rematch;
 }
 
-//private
+Dial* Board::getDial() const
+{
+    return this->dial;
+}
+
+TossButton* Board::getTossButton() const
+{
+    return this->tossButton;
+}
+
+Tile** Board::getTiles()
+{
+    return this->tiles;
+}
 
 void Board::setCenter(sf::RenderWindow* window)
 {
@@ -74,25 +91,39 @@ void Board::setCenter(sf::RenderWindow* window)
     this->centerY = window->getSize().y / 2;
 }
 
+void Board::initBackground()
+{
+    this->bgTexture.loadFromFile(string(TEXTURE_PATH) + "bg.png");
+    this->background.setTexture(this->bgTexture);
+    this->background.setOrigin(this->background.getGlobalBounds().width / 2, this->background.getGlobalBounds().height / 2);
+    this->background.setPosition(this->centerX, this->centerY);
+}
+
 void Board::initTiles()
 {
-    this->diceTexture.loadFromFile("images/0dice.png");
-    this->dice.setTexture(this -> diceTexture);
-    this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
-    this->dice.setPosition(this->centerX + 40 * 9, this->centerY);
-    this->dice.setScale(2, 2);
-    this->warp = new Button("", "images/warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
-    this->rematch = new Button("", "images/rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i] = new Tile();
     }
 }
 
+void Board::initButtons()
+{
+    this->tossButton = new TossButton("RZUT", this->getCenterX(), this->getCenterY() + 40 * 9);
+    this->dial = new Dial("Witaj w grze!", this->getCenterX(), this->getCenterY() + 40 * 7);
+    this->diceTexture.loadFromFile(string(TEXTURE_PATH) + "0dice.png");
+    this->dice.setTexture(this->diceTexture);
+    this->dice.setOrigin(this->dice.getGlobalBounds().width / 2, this->dice.getGlobalBounds().height / 2);
+    this->dice.setPosition(this->centerX + 40 * 9, this->centerY);
+    this->dice.setScale(2, 2);
+    this->warp = new Button("", string(TEXTURE_PATH) + "warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
+    this->rematch = new Button("", string(TEXTURE_PATH) + "rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
+}
+
 void Board::drawLogo(sf::RenderWindow* window)
 {
-    Texture texture;
-    texture.loadFromFile("images/logo.png");
-    Sprite sprite(texture);
+    sf::Texture texture;
+    texture.loadFromFile(string(TEXTURE_PATH) + "logo.png");
+    sf::Sprite sprite(texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
     sprite.setPosition(this->centerX, this->centerY - 40 * 9);
     sprite.setScale(0.3, 0.3);
@@ -107,71 +138,71 @@ void Board::initBoard()
         for (int j = -1; j <= 1; j += 2) {
             int x = this->centerX + j * this->tiles[counter]->getWidth();
             int y = this->centerY + this->tiles[counter]->getHeight() * i;
-            this->tiles[counter] = new Tile( x, y, 0, "images/tile.png");counter++;
+            this->tiles[counter] = new Tile( x, y, 0, string(TEXTURE_PATH) + "tile.png");counter++;
         }
-        this->tiles[counter] = new Tile( this->centerX,this->centerY + this->tiles[counter]->getHeight() * i, 0, "images/tileRed.png");counter++;
+        this->tiles[counter] = new Tile( this->centerX,this->centerY + this->tiles[counter]->getHeight() * i, 0, string(TEXTURE_PATH) + "tileRed.png");counter++;
     }
     for (int i = -1; i <= 1; i++) {
-        this->tiles[counter] = new Tile( this->centerX + i * this->tiles[counter]->getWidth(),this->centerY + this->tiles[counter]->getHeight() * 5, 0, "images/tile.png");counter++;
+        this->tiles[counter] = new Tile( this->centerX + i * this->tiles[counter]->getWidth(),this->centerY + this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tile.png");counter++;
     }
     //top
     for (int i = 1; i <= 4; i++) {
         for (int j = -1; j <= 1; j += 2) {
-            this->tiles[counter] = new Tile( this->centerX + j * this->tiles[counter]->getWidth(),this->centerY - this->tiles[counter]->getHeight() * i, 0, "images/tile.png");counter++;
+            this->tiles[counter] = new Tile( this->centerX + j * this->tiles[counter]->getWidth(),this->centerY - this->tiles[counter]->getHeight() * i, 0, string(TEXTURE_PATH) + "tile.png");counter++;
         }
-        this->tiles[counter] = new Tile( this->centerX,this->centerY - this->tiles[counter]->getHeight() * i, 0, "images/tileGreen.png");counter++;
+        this->tiles[counter] = new Tile( this->centerX,this->centerY - this->tiles[counter]->getHeight() * i, 0, string(TEXTURE_PATH) + "tileGreen.png");counter++;
     }
     for (int i = -1; i <= 1; i++) {
-        this->tiles[counter] = new Tile( this->centerX + i * this->tiles[counter]->getWidth(),this->centerY - this->tiles[counter]->getHeight() * 5, 0, "images/tile.png");counter++;
+        this->tiles[counter] = new Tile( this->centerX + i * this->tiles[counter]->getWidth(),this->centerY - this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tile.png");counter++;
     }
     //left
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth(),this->centerY, 0, "images/tileBlue.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth(),this->centerY, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
     for (int i = 2; i <= 4; i++) {
         for (int j = -1; j <= 1; j += 2) {
-            this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * i,this->centerY + j * this->tiles[counter]->getHeight(), 0, "images/tile.png");counter++;
+            this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * i,this->centerY + j * this->tiles[counter]->getHeight(), 0, string(TEXTURE_PATH) + "tile.png");counter++;
         }
-        this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * i,this->centerY, 0, "images/tileBlue.png");counter++;
+        this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * i,this->centerY, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
     }
     for (int i = -1; i <= 1; i++) {
-        this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - i * this->tiles[counter]->getHeight(), 0, "images/tile.png");counter++; 
+        this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - i * this->tiles[counter]->getHeight(), 0, string(TEXTURE_PATH) + "tile.png");counter++; 
     }
     //right
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth(),this->centerY, 0, "images/tileYellow.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth(),this->centerY, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++;
     for (int i = 2; i <= 4; i++) {
         for (int j = -1; j <= 1; j += 2) {
-            this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * i,this->centerY + j * this->tiles[counter]->getHeight(), 0, "images/tile.png");counter++;    
+            this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * i,this->centerY + j * this->tiles[counter]->getHeight(), 0, string(TEXTURE_PATH) + "tile.png");counter++;    
         }
-        this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * i,this->centerY, 0, "images/tileYellow.png");counter++; 
+        this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * i,this->centerY, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++; 
     }
     for (int i = -1; i <= 1; i++) {
-        this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - i * this->tiles[counter]->getHeight(), 0, "images/tile.png");counter++; 
+        this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - i * this->tiles[counter]->getHeight(), 0, string(TEXTURE_PATH) + "tile.png");counter++; 
     }
     //arrows
-    this->tiles[12] = new Tile(this->tiles[12]->getPositionX(), this->tiles[12]->getPositionY(), 0 ,"images/Rarrow.png");
-    this->tiles[42] = new Tile(this->tiles[42]->getPositionX(), this->tiles[42]->getPositionY(), 90 ,"images/Barrow.png");
-    this->tiles[29] = new Tile(this->tiles[29]->getPositionX(), this->tiles[29]->getPositionY(), 180 ,"images/Garrow.png");
-    this->tiles[53] = new Tile(this->tiles[53]->getPositionX(), this->tiles[53]->getPositionY(), 270 ,"images/Yarrow.png");
+    this->tiles[12] = new Tile(this->tiles[12]->getPositionX(), this->tiles[12]->getPositionY(), 0 ,string(TEXTURE_PATH) + "Rarrow.png");
+    this->tiles[42] = new Tile(this->tiles[42]->getPositionX(), this->tiles[42]->getPositionY(), 90 ,string(TEXTURE_PATH) + "Barrow.png");
+    this->tiles[29] = new Tile(this->tiles[29]->getPositionX(), this->tiles[29]->getPositionY(), 180 ,string(TEXTURE_PATH) + "Garrow.png");
+    this->tiles[53] = new Tile(this->tiles[53]->getPositionX(), this->tiles[53]->getPositionY(), 270 ,string(TEXTURE_PATH) + "Yarrow.png");
     //bases
     //lefttop
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 5, 0, "images/tileBlue.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 5, 0, "images/tileBlue.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 4, 0, "images/tileBlue.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 4, 0, "images/tileBlue.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileBlue.png");counter++;
     //righttop
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 5, 0, "images/tileGreen.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 5, 0, "images/tileGreen.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 4, 0, "images/tileGreen.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 4, 0, "images/tileGreen.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileGreen.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileGreen.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY - this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileGreen.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY - this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileGreen.png");counter++;
     //rightbottom
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 5, 0, "images/tileYellow.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 5, 0, "images/tileYellow.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 4, 0, "images/tileYellow.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 4, 0, "images/tileYellow.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX + this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileYellow.png");counter++;
     //leftbottom
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 5, 0, "images/tileRed.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 5, 0, "images/tileRed.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 4, 0, "images/tileRed.png");counter++;
-    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 4, 0, "images/tileRed.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileRed.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 5, 0, string(TEXTURE_PATH) + "tileRed.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 4,this->centerY + this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileRed.png");counter++;
+    this->tiles[counter] = new Tile( this->centerX - this->tiles[counter]->getWidth() * 5,this->centerY + this->tiles[counter]->getHeight() * 4, 0, string(TEXTURE_PATH) + "tileRed.png");counter++;
     this->setIds();
 }
 

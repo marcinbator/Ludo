@@ -15,7 +15,7 @@ Tile::Tile( int x, int y, int rotateDeg, string texturePath) {
     this->currentPawn = nullptr;
 }
 
-void Tile::drawTile( RenderWindow* window)
+void Tile::drawTile(sf::RenderWindow* window)
 {
     window->draw(this->sprite);
 }
@@ -34,7 +34,7 @@ void Tile::setCurrentPawn(Pawn* pawn)
     this->currentPawn = pawn;
 }
 
-int Tile::getId()
+int Tile::getId() const
 {
     return this->id;
 }
@@ -44,43 +44,37 @@ Pawn* Tile::getCurrentPawn()
     return this->currentPawn;
 }
 
-int Tile::getWidth()
+int Tile::getWidth() const
 {
     return this->width;
 }
 
-int Tile::getHeight()
+int Tile::getHeight() const
 {
     return this->height;
 }
 
-int Tile::getPositionX()
+int Tile::getPositionX() const
 {
     return this->sprite.getPosition().x;
 }
 
-int Tile::getPositionY()
+int Tile::getPositionY() const
 {
     return this->sprite.getPosition().y;
 }
 
-Sprite Tile::getSprite() const
+sf::Sprite Tile::getSprite() const
 {
     return this->sprite;
 }
 
-bool Tile::isClicked(Event event) const
+bool Tile::isClicked(sf::Event event) const
 {
-    if (this->getSprite()
+    return this->getSprite()
         .getGlobalBounds()
-        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
-    {
-        return true;
-    }
-    return false;
+        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
 }
-
-//private
 
 void Tile::initSprite(string texturePath, int x, int y, int rotateDeg)
 {

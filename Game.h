@@ -1,61 +1,71 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#pragma warning(disable:6385)
 #include <iostream>
-#include "Board.h"
-#include "Team.h"
-#include "Pawn.h"
-#include "TossButton.h"
-#include "Dial.h"
-#include "Ai.h"
+#include "Random.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-using namespace sf;
+constexpr auto TEXTURE_PATH = "images/";
+
 using namespace std;
+
+class Board;
+class Team;
+class Pawn;
+class TossButton;
+class Dial;
+class Ai;
 class InitialMenu;
 class LeaderBoard;
 
 class Game
 {
-
-    int dice;
-    bool isWarp;
+    int dice{};
+    int livePlayersAmount{};
+    int aiPlayersAmount{};
+    int playersAmount{};
+    int currentTeamId{};
+    int currentFreePodiumPlace = 1;
+    int delayTime = 1000;
+    bool isWarp = false;
     bool& restart;
-    int currentFreePodiumPlace;
-    int playersAmount;
-    int aiPlayersAmount;
-    int playersTotalAmount;
-    int currentTeamId;
-    int delayTime;
-    RenderWindow* window;
     Board* board;
     Team* teams[4];
     Pawn* pawns[16];
-    TossButton* tossButton;
-    Dial* dial;
-    InitialMenu* menu;
+    InitialMenu* initialMenu;
     LeaderBoard* leaderBoard;
-    Ai ai;
-    Clock delayClock;
+    Ai* ai;
+    sf::RenderWindow* window;
+    sf::Clock delayClock;
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
+public:
+    static const int PAWNS_TEAM = 4;
+    static const int MAX_TEAMS = 4;
+    static const int MIN_PLAYERS = 1; //debug = normal->2
 
+    Game() = delete;
+    Game(bool& restart);
+    ~Game();
+    void update();
+    void render();
+    void initGame();
+    bool inline isRunning() const { return this->window->isOpen(); };
+private:
     void initWindow();
-    void initControls();
+    void createLivePlayers(const string* names, const int *baseTiles, const int* startTiles);
+    void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void renderPawns();
-    void handleTossClick();
+    
+    void handleAiMove();
+    void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
+    void handleWarpClick();
     void handleAllObstructed();
     void handleSingleWin();
     void handleGameEnd();
-    void getNextTeamId();
+
+    void delay(int time, string dial);
+    void setNextTeamId();
     void pollEvents();
-    void pollMenuEvents();
-    void pollLeaderboardEvents();
-
-public:
-    Game(bool& restart);
-    ~Game();
-
-    void update();
-    void render();
-    void createTeams();
-
-    bool isRunning();
 };

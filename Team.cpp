@@ -1,18 +1,16 @@
 #include "Team.h"
-#include "Board.h"
 
 Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath)
 {
     this->id = id;
     this->name = name;
     this->isAi = isAi;
-    this->standing = 0;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
     cout << "Team " + this->name << " created successfully.\n";
 }
 
-void Team::setPawns(Pawn* pawns[4])
+void Team::setPawns(Pawn* pawns[Game::PAWNS_TEAM])
 {
     for (int i = 0; i < 4; i++) {
         this->pawns[i] = pawns[i];
@@ -24,17 +22,17 @@ void Team::setStanding(int standing)
     this->standing = standing;
 }
 
-int Team::getId()
+int Team::getId() const
 {
     return this->id;
 }
 
-string Team::getName()
+string Team::getName() const
 {
     return this->name;
 }
 
-bool Team::getIsAi()
+bool Team::getIsAi() const
 {
     return this->isAi;
 }
@@ -44,7 +42,7 @@ Pawn** Team::getPawns()
     return this->pawns;
 }
 
-int Team::getStanding()
+int Team::getStanding() const
 {
     return this->standing;
 }
@@ -54,12 +52,12 @@ Tile* Team::getStartingTile()
     return this->startingTile;
 }
 
-string Team::getTexturePath()
+string Team::getTexturePath() const
 {
     return this->texturePath;
 }
 
-bool Team::isWin()
+bool Team::isWin() const
 {
     int atTarget = 0;
     for (int i = 0; i < 4; i++) {
@@ -70,7 +68,7 @@ bool Team::isWin()
     return atTarget == 4;
 }
 
-bool Team::areAllObstructed(int dice, Board* board)
+bool Team::areAllObstructed(int dice, Board* board) const
 {
     int obstructed = 0;
     for (int i = 0; i < 4; i++) {

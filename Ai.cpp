@@ -1,16 +1,13 @@
 #include "Ai.h"
-#include "Random.h"
-#include "Board.h"
-#include "Team.h"
+#include "Game.h"
 
-using namespace sf;
-
-Ai::Ai()
+Ai::Ai(int level)
 {
-	this->pawnToMoveId = 0;
+	this->level = level;
+	cout << "level:"<< level << endl;
 }
 
-void Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
+bool Ai::move(Team* team, int dice, sf::RenderWindow* window, Board* board)
 {
 	int i = 0;
 	Pawn* pawn = team->getPawns()[this->pawnToMoveId];
@@ -18,13 +15,17 @@ void Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
 		this->setPawnToMoveId();
 		pawn = team->getPawns()[this->pawnToMoveId];
 		i++;
-	} while (!pawn->handleClick(dice, window, board) && i<4);
+		if (pawn->handleClick(dice, window, board)) {
+			return true;
+		}
+	} while (i<Game::PAWNS_TEAM);
+	return false;
 }
 
 void Ai::setPawnToMoveId()
 {
 	this->pawnToMoveId++;
-	if (this->pawnToMoveId > 3) {
+	if (this->pawnToMoveId > Game::PAWNS_TEAM-1) {
 		this->pawnToMoveId = 0;
 	}
 }
