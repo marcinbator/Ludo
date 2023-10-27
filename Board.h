@@ -18,6 +18,7 @@ class Board
 	TossButton* tossButton;
 	Button* warp;
 	Button* rematch;
+	Button* sound;
 	Tile* tiles[72];
 	sf::Texture diceTexture;
 	sf::Sprite dice;
@@ -43,6 +44,7 @@ public:
 	Tile* getTileById(int id) const;
 	Button* getWarp() const;
 	Button* getRematch() const;
+	Button* getSound() const;
 	Dial* getDial() const;
 	TossButton* getTossButton() const;
 	Tile** getTiles();

@@ -47,14 +47,13 @@ void Button::initSprite(string texturePath, int x, int y)
 {
     this->texture.loadFromFile(texturePath);
     this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(x, y);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
-    this->sprite.setScale(1.5, 1);
+    this->sprite.setPosition(x, y);
 }
 
 void Button::initText(string text, int x, int y)
 {
-    this->text = sf::Text(text, this->font, 20);
+    this->text = sf::Text(text, this->font, 16);
     this->text.setFillColor(sf::Color::Black);
     this->text.setOrigin(this->text.getGlobalBounds().width / 2, this->text.getGlobalBounds().height / 2);
     this->text.setPosition(x, y - 5);

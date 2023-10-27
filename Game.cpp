@@ -220,6 +220,19 @@ void Game::handleWarpClick()
     this->board->getWarp()->setTexture(texture);
 }
 
+void Game::handleSoundClick()
+{
+    this->isSound = !this->isSound;
+    string texture = this->isSound ? string(TEXTURE_PATH) + "sound.png" : string(TEXTURE_PATH) + "soundOff.png";
+    if (this->isSound) {
+        this->sound.play();
+    }
+    else {
+        this->sound.pause();
+    }
+    this->board->getSound()->setTexture(texture);
+}
+
 void Game::setNextTeamId()
 {
     int id = this->currentTeamId;
@@ -311,7 +324,10 @@ void Game::pollEvents()
                 this->handlePlayerTossClick();
             }
             if (this->board->getWarp()->isClicked(event)) { //warp click
-                handleWarpClick();
+                this->handleWarpClick();
+            }
+            if (this->board->getSound()->isClicked(event)) { //sound click
+                this->handleSoundClick();
             }
             if (this->board->getRematch()->isClicked(event)) { //rematch click
                 this->restart = true;
