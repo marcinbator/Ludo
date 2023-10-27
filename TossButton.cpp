@@ -1,7 +1,8 @@
 #include "TossButton.h"
+#include "Game.h"
 
 TossButton::TossButton(string text,  int x, int y) 
-    : Button(text, "images/button1.png",  x, y)
+    : Button(text, string(TEXTURE_PATH) + "button1.png",  x, y)
 {
     this->canToss = true;
     initText(text);
@@ -11,7 +12,7 @@ TossButton::TossButton(string text,  int x, int y)
 void TossButton::handleClick(int& dice, Board* board)
 {
     dice = random(1, 6);
-    board->setDiceTexture("images/" + to_string(dice) + "dice.png");
+    board->setDiceTexture(string(TEXTURE_PATH) + "" + to_string(dice) + "dice.png");
     cout << "Toss button clicked. Value: " << dice << endl;
 }
 

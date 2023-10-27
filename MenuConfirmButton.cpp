@@ -8,7 +8,7 @@ void MenuConfirmButton::initText(string text, int x, int y)
     this->text.setPosition(x, y + 10);
 }
 
-MenuConfirmButton::MenuConfirmButton(string text, int x, int y) : Button(text, "images/button1.png", x, y)
+MenuConfirmButton::MenuConfirmButton(string text, int x, int y) : Button(text, string(TEXTURE_PATH) + "button1.png", x, y)
 {
     this->initText(text, x, y-13);
 }

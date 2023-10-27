@@ -7,13 +7,13 @@ void ColorSelectButton::updateTexture(sf::RenderWindow* window)
 	window->draw(this->sprite);
 }
 
-ColorSelectButton::ColorSelectButton(int id, string color, int x, int y) : Button("", "images/tile.png", x, y)
+ColorSelectButton::ColorSelectButton(int id, string color, int x, int y) : Button("", string(TEXTURE_PATH) + "tile.png", x, y)
 {
 	this->id = id;
 	this->isSelected = false;
 	this->isAvailable = true;
 	this->color = color;
-	this->texturePath = "images/tile" + this->color + ".png";
+	this->texturePath = string(TEXTURE_PATH) + "tile" + this->color + ".png";
 	this->texture.loadFromFile(this->texturePath);
 	this->sprite.setTexture(this->texture);
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
@@ -22,8 +22,8 @@ ColorSelectButton::ColorSelectButton(int id, string color, int x, int y) : Butto
 
 void ColorSelectButton::draw(sf::RenderWindow* window)
 {
-	if (!this->isSelected) { this->texturePath = "images/tile" + this->color + "G.png"; }
-	else { this->texturePath = "images/tile" + this->color + ".png"; }
+	if (!this->isSelected) { this->texturePath = string(TEXTURE_PATH) + "tile" + this->color + "G.png"; }
+	else { this->texturePath = string(TEXTURE_PATH) + "tile" + this->color + ".png"; }
 	this->updateTexture(window);
 }
 

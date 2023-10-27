@@ -5,8 +5,9 @@
 LeaderBoard::LeaderBoard(int centerX, int centerY) : Menu(centerX, centerY)
 {
 	this->isDisplayed = false;
-    this->rematchButton = new Button("Powtórz", "images/button1.png", centerX, centerY + 50);
-    this->exitButton = new Button("Wyjdz", "images/button1.png", centerX, centerY + 100);
+    this->initBackground(centerX, centerY);
+    this->rematchButton = new Button("Powtórz", string(TEXTURE_PATH) + "button1.png", centerX, centerY + 50);
+    this->exitButton = new Button("Wyjdz", string(TEXTURE_PATH) + "button1.png", centerX, centerY + 100);
     initTitle(centerX, centerY);
 }
 
@@ -18,6 +19,7 @@ LeaderBoard::~LeaderBoard()
 
 void LeaderBoard::draw(sf::RenderWindow* window, int centerX, int centerY)
 {
+    window->draw(this->background);
     this->drawLogo(window, centerX, centerY);
 	this->dial->draw(window);
     this->rematchButton->draw(window);

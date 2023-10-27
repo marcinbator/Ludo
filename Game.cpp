@@ -66,11 +66,15 @@ void Game::render()
 }
 
 void Game::initWindow() {
-    this->window = new sf::RenderWindow(sf::VideoMode(1200, 920), "Ludo", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(sf::VideoMode(900, 900), "Ludo", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
     sf::Image icon;
-    icon.loadFromFile("images/logo.png");
+    icon.loadFromFile(string(TEXTURE_PATH) + "logo.png");
     this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    this->buffer.loadFromFile("music/audio.wav");
+    this->sound.setBuffer(buffer);
+    this->sound.play();
+    this->sound.setLoop(true);
 }
 
 void Game::renderPawns() {
@@ -119,7 +123,7 @@ void Game::initGame()
 
 void Game::createLivePlayers(const string* names, const int* baseTiles, const int* startTiles)
 {
-    const string images[] = { "images/Rpawn.png", "images/Bpawn.png", "images/Gpawn.png", "images/Ypawn.png" };
+    const string images[] = { string(TEXTURE_PATH) + "Rpawn.png", string(TEXTURE_PATH) + "Bpawn.png", string(TEXTURE_PATH) + "Gpawn.png", string(TEXTURE_PATH) + "Ypawn.png" };
     int menuPlayersUsed = 0;
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
@@ -143,7 +147,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
 
 void Game::createAiPlayers(const string* names, const int* baseTiles, const int* startTiles)
 {
-    const string aiImages[] = { "images/RpawnAI.png", "images/BpawnAI.png", "images/GpawnAI.png", "images/YpawnAI.png" };
+    const string aiImages[] = { string(TEXTURE_PATH) + "RpawnAI.png", string(TEXTURE_PATH) + "BpawnAI.png", string(TEXTURE_PATH) + "GpawnAI.png", string(TEXTURE_PATH) + "YpawnAI.png" };
     int menuAiPlayersUsed = 0;
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
@@ -211,7 +215,7 @@ void Game::handlePawnClick(int pawnId) {
 void Game::handleWarpClick()
 {
     this->isWarp = !this->isWarp;
-    string texture = this->isWarp ? "images/unwarp.png" : "images/warp.png";
+    string texture = this->isWarp ? string(TEXTURE_PATH) + "unwarp.png" : string(TEXTURE_PATH) + "warp.png";
     this->delayTime = this->isWarp ? 100 : 800;
     this->board->getWarp()->setTexture(texture);
 }

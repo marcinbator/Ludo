@@ -58,21 +58,39 @@
     <None Include="images\tile.xcf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="images\0dice.png" />
+    <Image Include="images\1dice.png" />
+    <Image Include="images\2dice.png" />
+    <Image Include="images\3dice.png" />
+    <Image Include="images\4dice.png" />
+    <Image Include="images\5dice.png" />
+    <Image Include="images\6dice.png" />
     <Image Include="images\Barrow.png" />
     <Image Include="images\Bpawn.png" />
+    <Image Include="images\BpawnAI.png" />
     <Image Include="images\button1.png" />
     <Image Include="images\Garrow.png" />
     <Image Include="images\Gpawn.png" />
+    <Image Include="images\GpawnAI.png" />
     <Image Include="images\logo.png" />
     <Image Include="images\Rarrow.png" />
+    <Image Include="images\rematch.png" />
     <Image Include="images\Rpawn.png" />
+    <Image Include="images\RpawnAI.png" />
     <Image Include="images\tile.png" />
     <Image Include="images\tileBlue.png" />
+    <Image Include="images\tileBlueG.png" />
     <Image Include="images\tileGreen.png" />
+    <Image Include="images\tileGreenG.png" />
     <Image Include="images\tileRed.png" />
+    <Image Include="images\tileRedG.png" />
     <Image Include="images\tileYellow.png" />
+    <Image Include="images\tileYellowG.png" />
+    <Image Include="images\unwarp.png" />
+    <Image Include="images\warp.png" />
     <Image Include="images\Yarrow.png" />
     <Image Include="images\Ypawn.png" />
+    <Image Include="images\YpawnAI.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\YoungSerif-Regular.ttf" />
@@ -160,7 +178,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-s-d.lib	;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-s-d.lib	;sfml-window-s-d.lib;sfml-audio-s-d.lib	;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -3,6 +3,9 @@
 #include <iostream>
 #include "Random.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+constexpr auto TEXTURE_PATH = "images/";
 
 using namespace std;
 
@@ -34,6 +37,8 @@ class Game
     Ai* ai;
     sf::RenderWindow* window;
     sf::Clock delayClock;
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
 public:
     static const int PAWNS_TEAM = 4;
     static const int MAX_TEAMS = 4;

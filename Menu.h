@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Game.h"
 
 using namespace std;
 
@@ -13,6 +14,8 @@ protected:
     Dial* dial;
     sf::Font font;
     sf::Text title;
+    sf::Texture bgTexture;
+    sf::Sprite background;
 public:
     Menu() = delete;
     Menu(int centerX, int centerY);
@@ -22,6 +25,7 @@ public:
 
     virtual bool getIsDisplayed() const;
 protected:
+    void initBackground(int centerX, int centerY);
     void initMenu(int centerX, int centerY);
     void drawLogo(sf::RenderWindow* window, int centerX, int centerY);
 };

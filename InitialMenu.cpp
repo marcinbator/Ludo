@@ -5,6 +5,7 @@
 
 InitialMenu::InitialMenu(int centerX, int centerY) : Menu(centerX, centerY)
 {
+    this->initBackground(centerX, centerY);
     this->submitButton = new MenuConfirmButton("Zatwierdz", centerX, centerY + 370);
     string textsStrings[] = { "Wybierz graczy", "Wybierz graczy SI", "Wybierz poziom trudnosci SI" };
     for (int i = 0; i < 3; i++) {
@@ -22,7 +23,7 @@ InitialMenu::InitialMenu(int centerX, int centerY) : Menu(centerX, centerY)
     }
     string texts[] = { "Latwy", "Sredni", "Trudny" };
     for (int i = -1; i < 2; i++) {
-        this->levelButtons[i + 1] = new Button(texts[i + 1], "images/button1.png", centerX + i * 150, centerY + 250);
+        this->levelButtons[i + 1] = new Button(texts[i + 1], string(TEXTURE_PATH) + "button1.png", centerX + i * 150, centerY + 250);
     }
 }
 
@@ -37,6 +38,7 @@ InitialMenu::~InitialMenu()
 
 void InitialMenu::draw(sf::RenderWindow* window, int centerX, int centerY)
 {
+    window->draw(this->background);
     this->dial->draw(window); //dial
     for (int i = 0; i < Game::MAX_TEAMS; i++) { //team buttons
         this->playersButtons[i]->draw(window);

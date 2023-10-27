@@ -15,6 +15,7 @@ Menu::~Menu()
 
 void Menu::draw(sf::RenderWindow* window, int centerX, int centerY)
 {
+    window->draw(this->background);
     this->dial->draw(window);
     this->drawLogo(window, centerX, centerY);
 }
@@ -22,6 +23,14 @@ void Menu::draw(sf::RenderWindow* window, int centerX, int centerY)
 bool Menu::getIsDisplayed() const
 {
     return this->isDisplayed;
+}
+
+void Menu::initBackground(int centerX, int centerY)
+{
+    this->bgTexture.loadFromFile(string(TEXTURE_PATH) + "bg2.png");
+    this->background.setTexture(this->bgTexture);
+    this->background.setOrigin(this->background.getGlobalBounds().width / 2, this->background.getGlobalBounds().height / 2);
+    this->background.setPosition(centerX, centerY);
 }
 
 void Menu::initMenu(int centerX, int centerY)
@@ -36,7 +45,7 @@ void Menu::initMenu(int centerX, int centerY)
 void Menu::drawLogo(sf::RenderWindow* window, int centerX, int centerY)
 {
     sf::Texture texture;
-    texture.loadFromFile("images/logo.png");
+    texture.loadFromFile(string(TEXTURE_PATH) + "logo.png");
     sf::Sprite sprite(texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
     sprite.setPosition(centerX, centerY - 40 * 9);

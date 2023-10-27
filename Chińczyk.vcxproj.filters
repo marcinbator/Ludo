@@ -165,6 +165,60 @@
     <Image Include="images\logo.png">
       <Filter>Resource files</Filter>
     </Image>
+    <Image Include="images\0dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\1dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\2dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\3dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\4dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\5dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\6dice.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\BpawnAI.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\GpawnAI.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\rematch.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\RpawnAI.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileBlueG.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileGreenG.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileRedG.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\tileYellowG.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\unwarp.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\warp.png">
+      <Filter>Resource files</Filter>
+    </Image>
+    <Image Include="images\YpawnAI.png">
+      <Filter>Resource files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\YoungSerif-Regular.ttf">

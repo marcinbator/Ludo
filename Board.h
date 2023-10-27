@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Game.h"
 
 using namespace std;
 
@@ -20,6 +21,8 @@ class Board
 	Tile* tiles[72];
 	sf::Texture diceTexture;
 	sf::Sprite dice;
+	sf::Texture bgTexture;
+	sf::Sprite background;
 public:
 	const static int TILES_AMOUNT = 72;
 	const static int BASE_FIRST_ID = 100;
@@ -46,6 +49,7 @@ public:
 private:
 	void setCenter(sf::RenderWindow* window);
 	void drawLogo(sf::RenderWindow* window);
+	void initBackground();
 	void initTiles();
 	void initButtons();
 	void initBoard();
