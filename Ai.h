@@ -6,8 +6,8 @@
 
 class Ai
 {
-	int pawnToMoveId;
-	int level;
+	int pawnToMoveId{};
+	int level{};
 public:
 	Ai() = delete;
 	Ai(int level);

@@ -4,7 +4,6 @@
 Ai::Ai(int level)
 {
 	this->level = level;
-	this->pawnToMoveId = 0;
 	cout << "level:"<< level << endl;
 }
 

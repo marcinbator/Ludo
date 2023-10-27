@@ -36,6 +36,7 @@ class Game
     sf::Clock delayClock;
 public:
     static const int PAWNS_TEAM = 4;
+    static const int MAX_TEAMS = 4;
     Game() = delete;
     Game(bool& restart);
     ~Game();

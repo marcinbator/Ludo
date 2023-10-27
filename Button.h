@@ -19,7 +19,6 @@ public:
 	void draw(sf::RenderWindow* window);
 	void setText(sf::Text text);
 	void setTexture(string texturePath);
-	void handleClick();
 
 	const sf::Sprite getSprite() const;
 	const sf::Text getText() const;

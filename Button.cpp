@@ -26,11 +26,6 @@ void Button::setTexture(string texturePath)
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }
 
-void Button::handleClick()
-{
-    cout << "Button clicked.\n";
-}
-
 const sf::Sprite Button::getSprite() const
 {
     return this->sprite;

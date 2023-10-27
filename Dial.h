@@ -3,21 +3,19 @@
 #include <SFML/Graphics.hpp>
 
 using namespace std;
-using namespace sf;
 
 class Dial
 {
-	Text text;
-	Font font;
-
-	void initText(string text, int x, int y);
-
+	sf::Text text;
+	sf::Font font;
 public:
 	Dial() = delete;
 	Dial(string text, int x, int y);
 
-	void draw(RenderWindow* window);
+	void draw(sf::RenderWindow* window);
 	void setText(string text);
-	void setText(string text, Color color);
+	void setText(string text, sf::Color color);
+private:
+	void initText(string text, int x, int y);
 };
 

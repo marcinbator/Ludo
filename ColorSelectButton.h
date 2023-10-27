@@ -3,18 +3,18 @@
 #include <SFML/Graphics.hpp>
 #include "InitialMenu.h"
 #include "Dial.h"
-#include "ColorSelectButton.h"
 
 using namespace std;
 
 class ColorSelectButton : public Button
 {
-	int id;
+	int id{};
 	bool isSelected;
 	bool isAvailable;
 	string color;
 	string texturePath;
 public:
+	ColorSelectButton() = delete;
 	ColorSelectButton(int id, string texturePath, int x, int y);
 
 	void draw(sf::RenderWindow* window);
