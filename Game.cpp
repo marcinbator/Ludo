@@ -198,7 +198,7 @@ void Game::handlePlayerTossClick() {
 
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
-        if (this->pawns[pawnId]->handleClick(this->dice, this->window,this->board)) { //if move is possible -> move itself
+        if (this->pawns[pawnId]->handleClick(this->dice, this->window, this->board)) { //if move is possible -> move itself
             this->dice = 0;
             this->board->getTossButton()->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
@@ -209,6 +209,13 @@ void Game::handlePawnClick(int pawnId) {
     }
     else {
         this->board->getDial()->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
+    }
+}
+
+void Game::handleMouseOverPawn(int pawnId)
+{
+    if (this->pawns[pawnId]->getTeam()->getId()-1 == this->currentTeamId && this->dice != 0) {
+        this->pawns[pawnId]->handleMouseOver(this->dice, this->window, this->board);
     }
 }
 
@@ -250,7 +257,11 @@ void Game::setNextTeamId()
     do {
         id = (id + 1) % this->playersAmount;
         attempts++;
-    } while (this->teams[id]->isWin() && attempts < this->playersAmount); //search for next player
+    } while (this->teams[id]->isWin() && attempts < this->playersAmount);
+    if (attempts >= this->playersAmount) { //no valid player found
+        this->currentTeamId = id + 10;
+        return;
+    }
     this->currentTeamId = id;
     if (!this->teams[this->currentTeamId]->getIsAi()) { //not ai - let player toss
         this->board->getTossButton()->canToss = true;
@@ -332,6 +343,14 @@ void Game::pollEvents()
             if (this->board->getRematch()->isClicked(event)) { //rematch click
                 this->restart = true;
                 window->close();
+            }
+        }
+        for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) { //pawns mouseover
+            if (pawns[i]->isMouseOver(event)) {
+                this->handleMouseOverPawn(i);
+            }
+            else {
+                this->pawns[i]->setIsTargetVisible(false);
             }
         }
     }

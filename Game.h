@@ -61,6 +61,7 @@ private:
     void handleAiMove();
     void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
+    void handleMouseOverPawn(int pawnId);
     void handleWarpClick();
     void handleSoundClick();
     void handleAllObstructed();

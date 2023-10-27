@@ -12,10 +12,13 @@ class Pawn
 	int id{};
 	bool isAtBase;
 	bool isAtTarget;
+	bool isTargetVisible = false;
 	Team* team;
 	Tile* currentTile;
 	sf::Texture texture;
 	sf::Sprite sprite;
+	sf::Texture targetTexture;
+	sf::Sprite target;
 public:
 
 	Pawn() = delete;
@@ -23,8 +26,10 @@ public:
 
 	void draw(Tile* tile, sf::RenderWindow* window);
 	bool handleClick(int dice, sf::RenderWindow* window, Board* board);
+	void handleMouseOver(int dice, sf::RenderWindow* window, Board* board);
 	void setAtBase(sf::RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
+	void setIsTargetVisible(bool isTargetVisible);
 
 	int getId() const;
 	Team* getTeam();
@@ -32,6 +37,7 @@ public:
 	bool getIsAtBase() const;
 	bool getIsAtTarget() const;
 	bool isClicked(sf::Event event) const;
+	bool isMouseOver(sf::Event event) const;
 	bool canMoveFurther(int tiles, Board* board);
 private:
 	void initSprite();

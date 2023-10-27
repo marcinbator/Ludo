@@ -20,6 +20,9 @@ void Pawn::draw(Tile* tile, sf::RenderWindow* window)
 	this->currentTile = tile;
 	this->currentTile->setCurrentPawn(this);
 	window->draw(this->sprite);
+	if (this->isTargetVisible) {
+		window->draw(this->target);
+	}
 }
 
 //standard move
@@ -38,6 +41,24 @@ bool Pawn::handleClick(int dice, sf::RenderWindow* window, Board* board)
 		}
 	}
 	return false;
+}
+
+void Pawn::handleMouseOver(int dice, sf::RenderWindow* window, Board* board)
+{
+	if (!this->isAtBase || dice == 1 || dice == 6) {
+		int nextId = this->currentTile->getId();
+		for (int i = 0; i < dice; i++) { //get desired tile
+			nextId = this->getNextTileId(nextId);
+		}
+		Tile* destination = board->getTileById(nextId);
+		if (destination != nullptr) {
+			this->targetTexture.loadFromFile(string(TEXTURE_PATH) + "target.png");
+			this->target.setTexture(targetTexture);
+			this->target.setOrigin(target.getGlobalBounds().width / 2, target.getGlobalBounds().height / 2);
+			this->target.setPosition(destination->getPositionX(), destination->getPositionY());
+			this->isTargetVisible = true;
+		}
+	}
 }
 
 //return current tile to base
@@ -60,6 +81,11 @@ void Pawn::setAtBase(sf::RenderWindow* window, Board* board)
 void Pawn::setIsAtBase(bool isAtBase)
 {
 	this->isAtBase = isAtBase;
+}
+
+void Pawn::setIsTargetVisible(bool isTargetVisible)
+{
+	this->isTargetVisible = isTargetVisible;
 }
 
 int Pawn::getId()  const
@@ -92,6 +118,13 @@ bool Pawn::isClicked(sf::Event event)  const
 	return this->sprite
 		.getGlobalBounds()
 		.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+}
+
+bool Pawn::isMouseOver(sf::Event event) const
+{
+	return this->sprite
+		.getGlobalBounds()
+		.contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
 }
 
 bool Pawn::canMoveFurther(int tiles, Board* board)
@@ -149,13 +182,18 @@ bool Pawn::deploy(int dice, sf::RenderWindow* window, Board* board)
 
 int Pawn::getNextTileId(int currentId) {
 	int nextId = currentId;
-	if (currentId == this->team->getStartingTile()->getId() - 1 || (this->team->getStartingTile()->getId() == 1 && currentId == Board::LAST_TILE)) { //pawn at target-turning tile
+	if (this->isAtBase) {
+		nextId = this->team->getStartingTile()->getId();
+	}
+	else if (currentId == this->team->getStartingTile()->getId() - 1 || (this->team->getStartingTile()->getId() == 1 && currentId == Board::LAST_TILE)) { //pawn at target-turning tile
 		nextId = this->team->getStartingTile()->getId() + Board::TARGET_FIRST_ID;
 	}
 	else if (currentId == Board::LAST_TILE) { //pawn at end of board
 		nextId = 1;
 	}
-	nextId++;
+	else {
+		nextId++;
+	}
 	return nextId;
 }
 
