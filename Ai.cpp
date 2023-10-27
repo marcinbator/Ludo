@@ -7,7 +7,7 @@ Ai::Ai(int level)
 	cout << "level:"<< level << endl;
 }
 
-bool Ai::move(Team* team, int dice, RenderWindow* window, Board* board)
+bool Ai::move(Team* team, int dice, sf::RenderWindow* window, Board* board)
 {
 	int i = 0;
 	Pawn* pawn = team->getPawns()[this->pawnToMoveId];

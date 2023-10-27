@@ -2,37 +2,34 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-using namespace sf;
 using namespace std;
 class Pawn;
 
 class Tile
 {
-    int id;
-    int width;
-    int height;
-    Texture texture;
-    Sprite sprite;
+    int id{};
+    int width{};
+    int height{};
     Pawn* currentPawn;
-
-    void initSprite(string texturePath, int x, int y, int rotateDeg);
-
+    sf::Texture texture;
+    sf::Sprite sprite;
 public:
     Tile();
     Tile(int x, int y, int rotateDeg, string texturePath);
 
-    void drawTile(RenderWindow* window);
+    void drawTile(sf::RenderWindow* window);
     void handleClick();
-
     void setId(int id);
     void setCurrentPawn(Pawn* pawn);
 
-    int getId();
-    int getWidth();
-    int getHeight();
-    int getPositionX();
-    int getPositionY();
+    int getId() const;
+    int getWidth() const;
+    int getHeight() const;
+    int getPositionX() const;
+    int getPositionY() const;
     Pawn* getCurrentPawn();
-    Sprite getSprite() const;
-    bool isClicked(Event event) const;
+    sf::Sprite getSprite() const;
+    bool isClicked(sf::Event event) const;
+private:
+    void initSprite(string texturePath, int x, int y, int rotateDeg);
 };

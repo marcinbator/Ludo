@@ -111,9 +111,9 @@ void Board::initButtons()
 
 void Board::drawLogo(sf::RenderWindow* window)
 {
-    Texture texture;
+    sf::Texture texture;
     texture.loadFromFile("images/logo.png");
-    Sprite sprite(texture);
+    sf::Sprite sprite(texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
     sprite.setPosition(this->centerX, this->centerY - 40 * 9);
     sprite.setScale(0.3, 0.3);

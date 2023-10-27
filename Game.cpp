@@ -66,9 +66,9 @@ void Game::render()
 }
 
 void Game::initWindow() {
-    this->window = new RenderWindow(VideoMode(1200, 920), "Ludo", Style::Titlebar | Style::Close);
+    this->window = new sf::RenderWindow(sf::VideoMode(1200, 920), "Ludo", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
-    Image icon;
+    sf::Image icon;
     icon.loadFromFile("images/logo.png");
     this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
@@ -281,15 +281,15 @@ void Game::delay(int time, string dial) {
 
 void Game::pollEvents()
 {
-    Event event;
+    sf::Event event;
     while (this->window->pollEvent(event))
     {
-        if (event.type == Event::Closed) //close window
+        if (event.type == sf::Event::Closed) //close window
         {
             this->restart = false;
             this->window->close();
         }
-        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) //mouse click
+        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) //mouse click
         {
             for (int i = 0; i < 72; i++) //tiles clicks
             {

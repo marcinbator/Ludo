@@ -8,7 +8,7 @@ InitialMenu::InitialMenu(int centerX, int centerY) : Menu(centerX, centerY)
     this->submitButton = new MenuConfirmButton("Zatwierdz", centerX, centerY + 370);
     string textsStrings[] = { "Wybierz graczy", "Wybierz graczy SI", "Wybierz poziom trudnosci SI" };
     for (int i = 0; i < 3; i++) {
-        this->texts[i] = Text(textsStrings[i], this->font, 20);
+        this->texts[i] = sf::Text(textsStrings[i], this->font, 20);
         this->texts[i].setFillColor(sf::Color::White);
         this->texts[i].setOrigin(this->texts[i].getGlobalBounds().width / 2, this->texts[i].getGlobalBounds().height / 2);
         this->texts[i].setPosition(centerX, centerY + i * 100);
@@ -35,7 +35,7 @@ InitialMenu::~InitialMenu()
     }
 }
 
-void InitialMenu::draw(RenderWindow* window, int centerX, int centerY)
+void InitialMenu::draw(sf::RenderWindow* window, int centerX, int centerY)
 {
     this->dial->draw(window); //dial
     for (int i = 0; i < Game::MAX_TEAMS; i++) { //team buttons
@@ -44,13 +44,13 @@ void InitialMenu::draw(RenderWindow* window, int centerX, int centerY)
     }
     for (int i = 0; i < 3; i++) { //level buttons
         if (i == this->level) { //current level
-            Text text = this->levelButtons[i]->getText();
-            text.setFillColor(Color::Red);
+            sf::Text text = this->levelButtons[i]->getText();
+            text.setFillColor(sf::Color::Red);
             this->levelButtons[i]->setText(text);
         }
         else { //normal level
-            Text text = this->levelButtons[i]->getText();
-            text.setFillColor(Color::Black);
+            sf::Text text = this->levelButtons[i]->getText();
+            text.setFillColor(sf::Color::Black);
             this->levelButtons[i]->setText(text);
         }
         this->levelButtons[i]->draw(window);
@@ -63,17 +63,17 @@ void InitialMenu::draw(RenderWindow* window, int centerX, int centerY)
     }
 }
 
-void InitialMenu::pollMenuEvents(RenderWindow* window, Game* game, bool& restart)
+void InitialMenu::pollMenuEvents(sf::RenderWindow* window, Game* game, bool& restart)
 {
-    Event event;
+    sf::Event event;
     while (window->pollEvent(event))
     {
-        if (event.type == Event::Closed)
+        if (event.type == sf::Event::Closed)
         {
             restart = false;
             window->close();
         }
-        else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
             if (this->submitButton->isClicked(event)) { //submit
                 if (this->submitButton->handleClick(this, this->dial)) {

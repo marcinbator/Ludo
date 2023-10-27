@@ -13,7 +13,7 @@ Pawn::Pawn(int id, Team* team, Tile* currentTile)
 	cout << "Pawn " + to_string(this->id) + " initialized successfully.\n";
 }
 
-void Pawn::draw(Tile* tile, RenderWindow* window)
+void Pawn::draw(Tile* tile, sf::RenderWindow* window)
 {
 	this->currentTile->setCurrentPawn(nullptr);
 	this->sprite.setPosition(tile->getPositionX(), tile->getPositionY());
@@ -23,7 +23,7 @@ void Pawn::draw(Tile* tile, RenderWindow* window)
 }
 
 //standard move
-bool Pawn::handleClick(int dice, RenderWindow* window, Board* board)
+bool Pawn::handleClick(int dice, sf::RenderWindow* window, Board* board)
 {
 	if (this->isAtBase){ //deploy desired
 		return deploy(dice, window, board);
@@ -41,7 +41,7 @@ bool Pawn::handleClick(int dice, RenderWindow* window, Board* board)
 }
 
 //return current tile to base
-void Pawn::setAtBase(RenderWindow* window, Board* board)
+void Pawn::setAtBase(sf::RenderWindow* window, Board* board)
 {
 	int tileId = this->team->getStartingTile()->getId() + Board::BASE_FIRST_ID; //first base tile id
 	Tile* tile = board->getTileById(tileId);
@@ -87,7 +87,7 @@ bool Pawn::getIsAtTarget() const
 	return this->isAtTarget;
 }
 
-bool Pawn::isClicked(Event event)  const
+bool Pawn::isClicked(sf::Event event)  const
 {
 	return this->sprite
 		.getGlobalBounds()
@@ -119,7 +119,7 @@ void Pawn::initSprite()
 }
 
 //move with checking possibility on desired tile
-bool Pawn::move(Tile* tile, RenderWindow* window, Board* board)
+bool Pawn::move(Tile* tile, sf::RenderWindow* window, Board* board)
 {
 	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
 		if (tile->getCurrentPawn()->team == this->team) { //tile occupied by teammate
@@ -135,7 +135,7 @@ bool Pawn::move(Tile* tile, RenderWindow* window, Board* board)
 	return true;
 }
 
-bool Pawn::deploy(int dice, RenderWindow* window, Board* board)
+bool Pawn::deploy(int dice, sf::RenderWindow* window, Board* board)
 {
 	if (dice == 1 || dice == 6) { //deploy condition 
 		if (this->move(this->team->getStartingTile(), window, board)) { //deploy possible

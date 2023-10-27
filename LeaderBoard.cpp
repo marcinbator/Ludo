@@ -50,7 +50,7 @@ void LeaderBoard::showWinners(Team** teams, int livePlayersAmount)
 
 void LeaderBoard::pollEvents(sf::RenderWindow* window, Game* game, bool& restart)
 {
-    Event event;
+    sf::Event event;
     while (window->pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
