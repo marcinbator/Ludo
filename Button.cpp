@@ -38,13 +38,9 @@ const sf::Text Button::getText() const
 
 const bool Button::isClicked(sf::Event event) const
 {
-    if (this->sprite
+    return this->sprite
         .getGlobalBounds()
-        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
-    {
-        return true;
-    }
-    return false;
+        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
 }
 
 void Button::initSprite(string texturePath, int x, int y)

@@ -1,7 +1,6 @@
 #include "Pawn.h"
 #include "Tile.h"
 #include "Team.h"
-#include "Board.h"
 
 Pawn::Pawn(int id, Team* team, Tile* currentTile)
 {
@@ -14,7 +13,6 @@ Pawn::Pawn(int id, Team* team, Tile* currentTile)
 	cout << "Pawn " + to_string(this->id) + " initialized successfully.\n";
 }
 
-//just draw pawn (at the beginning of game or with move possibility assertion)
 void Pawn::draw(Tile* tile, RenderWindow* window)
 {
 	this->currentTile->setCurrentPawn(nullptr);
@@ -64,7 +62,7 @@ void Pawn::setIsAtBase(bool isAtBase)
 	this->isAtBase = isAtBase;
 }
 
-int Pawn::getId()
+int Pawn::getId()  const
 {
 	return this->id;
 }
@@ -79,28 +77,25 @@ Tile* Pawn::getCurrentTile()
 	return this->currentTile;
 }
 
-bool Pawn::getIsAtBase()
+bool Pawn::getIsAtBase() const
 {
 	return this->isAtBase;
 }
 
-bool Pawn::getIsAtTarget()
+bool Pawn::getIsAtTarget() const
 {
 	return this->isAtTarget;
 }
 
-bool Pawn::isClicked(Event event) 
+bool Pawn::isClicked(Event event)  const
 {
-	if (this->sprite
+	return this->sprite
 		.getGlobalBounds()
-		.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
-	{
-		return true;
-	}
-	return false;
+		.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
 }
 
-bool Pawn::canMoveFurther(int tiles, Board* board) {
+bool Pawn::canMoveFurther(int tiles, Board* board)
+{
 	int nextId = this->currentTile->getId();
 	for (int i = 0; i < tiles; i++) { //get desired tile
 		nextId = this->getNextTileId(nextId);
@@ -116,8 +111,6 @@ bool Pawn::canMoveFurther(int tiles, Board* board) {
 	return false;
 }
 
-//private
-
 void Pawn::initSprite()
 {
 	this->texture.loadFromFile(this->team->getTexturePath());
@@ -125,7 +118,7 @@ void Pawn::initSprite()
 	this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }
 
-//move with checking possibility on desired tile (private)
+//move with checking possibility on desired tile
 bool Pawn::move(Tile* tile, RenderWindow* window, Board* board)
 {
 	if (tile->getCurrentPawn() != nullptr) { //desired tile occupied
@@ -151,7 +144,6 @@ bool Pawn::deploy(int dice, RenderWindow* window, Board* board)
 			return true;
 		}
 	}
-	//canToss = true; //deploy not possible
 	return false;
 }
 
@@ -163,10 +155,7 @@ int Pawn::getNextTileId(int currentId) {
 	else if (currentId == Board::LAST_TILE) { //pawn at end of board
 		nextId = 1;
 	}
-	else// if(currentId != this->team->getStartingTile()->getId() + Board::BASE_DISTANCE_END) //pawn not at the end of its route
-	{
-		nextId++;
-	}
+	nextId++;
 	return nextId;
 }
 

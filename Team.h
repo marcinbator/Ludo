@@ -2,34 +2,35 @@
 #include <string>
 #include "Pawn.h"
 #include "Tile.h"
+#include "Board.h"
+#include "Game.h"
 
 using namespace std;
-class Board;
 
 class Team
 {
-	int id;
-	string name;
+	int id{};
+	int standing{};
 	bool isAi;
-	int standing;
+	string name;
 	string texturePath;
 	Tile* startingTile;
-	Pawn* pawns[4];
+	Pawn* pawns[Game::PAWNS_TEAM];
 
 public:
 	Team() = delete;
 	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath);
 
-	void setPawns(Pawn* pawns[4]);
+	void setPawns(Pawn* pawns[Game::PAWNS_TEAM]);
 	void setStanding(int standing);
 
-	int getId();
-	string getName();
-	bool getIsAi();
+	int getId() const;
+	string getName() const;
+	bool getIsAi() const;
 	Pawn** getPawns();
-	int getStanding();
+	int getStanding() const;
 	Tile* getStartingTile();
-	string getTexturePath();
-	bool isWin();
-	bool areAllObstructed(int dice, Board* board);
+	string getTexturePath() const;
+	bool isWin() const;
+	bool areAllObstructed(int dice, Board* board) const;
 };

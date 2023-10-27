@@ -1,6 +1,4 @@
 #include "TossButton.h"
-#include "Random.h"
-#include "Board.h"
 
 TossButton::TossButton(string text,  int x, int y) 
     : Button(text, "images/button1.png",  x, y)
@@ -16,8 +14,6 @@ void TossButton::handleClick(int& dice, Board* board)
     board->setDiceTexture("images/" + to_string(dice) + "dice.png");
     cout << "Toss button clicked. Value: " << dice << endl;
 }
-
-//private
 
 void TossButton::initText(string text)
 {
