@@ -211,10 +211,11 @@ void Game::orderPlayers(const string* namesOrder)
 
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
+    this->delay(this->delayTime, "");
     if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
         this->board->getDial()->setText("Gracz zablokowany");
         this->sounds[this->OBSTRUCTED_SOUND_ID].play();
-        this->delay(this->delayTime, "");
+        this->delay(this->delayTime/2, "");
     }
     else {
         this->sounds[this->MOVE_SOUND_ID].play();
@@ -225,13 +226,14 @@ void Game::handleAiMove() {
     int diceT = this->dice;
     this->dice = 0;
     this->setNextTeamId(diceT);
-    this->delay(this->delayTime, "");
+    this->delay(this->delayTime/2, "");
 }
 
 void Game::handlePlayerTossClick() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    if (this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->currentTeamId, this->dice, this->window, this->board) != -1) { //auto move - one option
-        this->handlePawnClick(this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->currentTeamId, this->dice, this->window, this->board));
+    int autoMove = this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->dice, this->board);
+    if (autoMove != -1) { //auto move - one option
+        this->handlePawnClick(autoMove);
     }
     this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;
@@ -318,10 +320,6 @@ void Game::setNextTeamId(int diceT)
         id = (id + 1) % this->playersAmount;
         attempts++;
     } while (this->teams[id]->isWin() && attempts < this->playersAmount);
-    if (attempts >= this->playersAmount) { //no valid player found
-        this->currentTeamId = id + 10;
-        return;
-    }
     this->currentTeamId = id;
     this->selectPlayer();
     this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
@@ -419,7 +417,8 @@ void Game::pollEvents()
                 this->pawns[i]->setIsTargetVisible(false);
             }
         }
-        for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) {
+        for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) { //visualise possible moves
+            if(!this->pawns[i]->getTeam()->getIsAi())
             this->pawns[i]->setIsPossibleVisible(this->currentTeamId, this->dice, this->window, this->board);
         }
     }

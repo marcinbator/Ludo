@@ -55,20 +55,18 @@ int Team::getPrime() const
     return this->prime;
 }
 
-int Team::getIsPossibleMovesOne(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) const
+int Team::getIsPossibleMovesOne(int dice, Board* board) const
 {
     int moves = 0;
+    int id = 0;
     for (int i = 0; i < Game::PAWNS_TEAM; i++) {
-        if (this->pawns[i]->setIsPossibleVisible(currentTeamId, dice, window, board)) {
+        if (this->pawns[i]->canMove(dice, board)) {
             moves++;
+            id = this->pawns[i]->getId();
         }
     }
     if (moves == 1) {
-        for (int i = 0; i < Game::PAWNS_TEAM; i++) {
-            if (this->pawns[i]->setIsPossibleVisible(currentTeamId, dice, window, board)) {
-                return this->pawns[i]->getId();
-            }
-        }
+        return id;
     }
     return -1;
 }
@@ -116,18 +114,16 @@ bool Team::isWin() const
             atTarget++;
         }
     }
-    return atTarget == 4;
+    return atTarget == Game::PAWNS_TEAM;
 }
 
 bool Team::areAllObstructed(int dice, Board* board) const
 {
     int obstructed = 0;
     for (int i = 0; i < 4; i++) {
-        if ((dice!=1 && dice !=6 && this->pawns[i]->getIsAtBase()) //at base, cannot exit
-            || (this->pawns[i]->getIsAtBase() == false && !this->pawns[i]->canMoveFurther(dice, board))){ //not at base, cannot move
+        if (!this->pawns[i]->canMove(dice, board)) {
             obstructed++;
-            cout << " Pawn " + to_string(this->pawns[i]->getId()) << " obstructed."<<endl;
         }
     }
-    return obstructed == 4;
+    return obstructed == Game::PAWNS_TEAM;
 }

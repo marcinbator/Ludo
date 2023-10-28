@@ -1,20 +1,20 @@
 ﻿  Game.cpp
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(48,65): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(49,65): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(48,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(49,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(53,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(54,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(53,42): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Pawn.h(54,42): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
@@ -40,8 +40,8 @@ C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Butt
               T=float
           ]
   Generating code
-  3 of 440 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+  4 of 440 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Chińczyk.vcxproj -> C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Release\Ludo.exe
