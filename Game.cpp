@@ -19,7 +19,6 @@ Game::Game(bool& restart): restart(restart)
 
 Game::~Game()
 {
-    delete this->ai;
     delete this->initialMenu;
     delete this->leaderBoard;
     delete this->board;
@@ -107,11 +106,7 @@ void Game::initGame()
             this->pawns[i * this->PAWNS_TEAM + 3] };
         this->teams[i]->setPawns(subpawns);
     }
-
     this->currentTeamId = random(0, playersAmount - 1);
-    if (this->aiPlayersAmount > 0) {
-        this->ai = new Ai(this->initialMenu->getLevel());
-    }
     this->setNextTeamId(this->dice);
     this->board->getDial()->setText("Zaczyna gracz: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime, "");
@@ -132,7 +127,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getPlayersColors()[j] != "") { //player exists
-                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -156,7 +151,7 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j]);
+                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -177,7 +172,7 @@ void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime * 2, "");
-    if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
+    if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
         this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
         this->delay(this->delayTime, "");
     }
@@ -260,7 +255,7 @@ void Game::setNextTeamId(int diceT)
         this->handleGameEnd();
         return;
     }
-    if (diceT == 6 && this->teams[this->currentTeamId]->getPrime() < 3) {
+    if (diceT == 6 && this->teams[this->currentTeamId]->getPrime() < 3) { //prime - retoss
         this->teams[this->currentTeamId]->setPrime(this->teams[this->currentTeamId]->getPrime() + 1);
         this->selectPlayer();
         this->board->getDial()->setText("Ponowny rzut gracza " + this->teams[this->currentTeamId]->getName());

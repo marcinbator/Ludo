@@ -35,7 +35,6 @@ class Game
     Pawn* pawns[16];
     InitialMenu* initialMenu;
     LeaderBoard* leaderBoard;
-    Ai* ai;
     sf::RenderWindow* window;
     sf::Clock delayClock;
     sf::SoundBuffer buffer;

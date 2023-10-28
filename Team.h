@@ -7,12 +7,15 @@
 
 using namespace std;
 
+class Ai;
+
 class Team
 {
 	int id{};
 	int prime{};
 	int standing{};
 	bool isAi;
+	Ai* ai;
 	string name;
 	string texturePath;
 	Tile* startingTile;
@@ -20,7 +23,8 @@ class Team
 
 public:
 	Team() = delete;
-	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath);
+	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level);
+	~Team();
 
 	void setPawns(Pawn* pawns[Game::PAWNS_TEAM]);
 	void setStanding(int standing);
@@ -30,6 +34,7 @@ public:
 	int getPrime() const;
 	string getName() const;
 	bool getIsAi() const;
+	Ai* getAi();
 	Pawn** getPawns();
 	int getStanding() const;
 	Tile* getStartingTile();
