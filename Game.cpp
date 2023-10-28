@@ -417,5 +417,8 @@ void Game::pollEvents()
                 this->pawns[i]->setIsTargetVisible(false);
             }
         }
+        for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) {
+            this->pawns[i]->setIsPossibleVisible(this->currentTeamId, this->dice, this->window, this->board);
+        }
     }
 }

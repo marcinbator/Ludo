@@ -23,6 +23,9 @@ void Pawn::draw(Tile* tile, sf::RenderWindow* window)
 	if (this->isTargetVisible) {
 		window->draw(this->target);
 	}
+	if (this->isPossibleVisible) {
+		window->draw(this->possible);
+	}
 }
 
 //standard move
@@ -91,6 +94,30 @@ void Pawn::setIsAtBase(bool isAtBase)
 void Pawn::setIsTargetVisible(bool isTargetVisible)
 {
 	this->isTargetVisible = isTargetVisible;
+}
+
+void Pawn::setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) //highlight possible move
+{
+	if (this->team->getId() == currentTeamId) {
+		if (!this->isAtBase || dice == 1 || dice == 6) {
+			int nextId = this->currentTile->getId();
+			for (int i = 0; i < dice; i++) { //get desired tile
+				nextId = this->getNextTileId(nextId);
+			}
+			Tile* destination = board->getTileById(nextId);
+			if (destination != nullptr && this->canMoveFurther(dice, board)) {
+				if (destination->getCurrentPawn() == nullptr || !(destination->getCurrentPawn()->team == this->team)) { //desired tile occupied
+					this->possibleTexture.loadFromFile(string(TEXTURE_PATH) + "possible.png");
+					this->possible.setTexture(possibleTexture);
+					this->possible.setOrigin(this->sprite.getOrigin());
+					this->possible.setPosition(this->sprite.getPosition());
+					this->isPossibleVisible = true;
+					return;
+				}
+			}
+		}
+	}
+	this->isPossibleVisible = false;
 }
 
 int Pawn::getId()  const
