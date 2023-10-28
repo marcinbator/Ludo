@@ -108,7 +108,6 @@ void Game::initGame()
     }
     this->currentTeamId = random(0, playersAmount - 1);
     this->setNextTeamId(this->dice);
-    this->board->getDial()->setText("Zaczyna gracz: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime, "");
     cout << "Game loaded successfully.\nPlayers: " << this->livePlayersAmount << "+" << this->aiPlayersAmount << endl;
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
