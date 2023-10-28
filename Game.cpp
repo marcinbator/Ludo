@@ -83,6 +83,10 @@ void Game::renderPawns() {
     }
 }
 
+void Game::checkPrime()
+{
+}
+
 void Game::initGame()
 {
     this->livePlayersAmount = initialMenu->getPlayersAmount();
@@ -108,7 +112,7 @@ void Game::initGame()
     if (this->aiPlayersAmount > 0) {
         this->ai = new Ai(this->initialMenu->getLevel());
     }
-    this->setNextTeamId();
+    this->setNextTeamId(this->dice);
     this->board->getDial()->setText("Zaczyna gracz: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime, "");
     cout << "Game loaded successfully.\nPlayers: " << this->livePlayersAmount << "+" << this->aiPlayersAmount << endl;
@@ -180,8 +184,9 @@ void Game::handleAiMove() {
     if (this->teams[this->currentTeamId]->isWin()) { //check win
         this->handleSingleWin();
     }
+    int diceT = this->dice;
     this->dice = 0;
-    this->setNextTeamId();
+    this->setNextTeamId(diceT);
     this->delay(this->delayTime, "");
 }
 
@@ -199,12 +204,13 @@ void Game::handlePlayerTossClick() {
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
         if (this->pawns[pawnId]->handleClick(this->dice, this->window, this->board)) { //if move is possible -> move itself
-            this->dice = 0;
             this->board->getTossButton()->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
-            this->setNextTeamId(); //get next or detect game ends
+            int diceT = this->dice;
+            this->dice = 0;
+            this->setNextTeamId(diceT); //get next or detect game ends
         }
     }
     else {
@@ -240,7 +246,7 @@ void Game::handleSoundClick()
     this->board->getSound()->setTexture(texture);
 }
 
-void Game::setNextTeamId()
+void Game::setNextTeamId(int diceT)
 {
     int id = this->currentTeamId;
     int attempts = 0;
@@ -254,6 +260,16 @@ void Game::setNextTeamId()
         this->handleGameEnd();
         return;
     }
+    if (diceT == 6 && this->teams[this->currentTeamId]->getPrime() < 3) {
+        this->teams[this->currentTeamId]->setPrime(this->teams[this->currentTeamId]->getPrime() + 1);
+        this->selectPlayer();
+        this->board->getDial()->setText("Ponowny rzut gracza " + this->teams[this->currentTeamId]->getName());
+        this->delay(this->delayTime, "");
+        return;
+    }
+    else {
+        this->teams[this->currentTeamId]->setPrime(0);
+    }
     do {
         id = (id + 1) % this->playersAmount;
         attempts++;
@@ -263,21 +279,26 @@ void Game::setNextTeamId()
         return;
     }
     this->currentTeamId = id;
+    this->selectPlayer();
+    this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+    this->delay(this->delayTime, "");
+}
+
+void Game::selectPlayer()
+{
     if (!this->teams[this->currentTeamId]->getIsAi()) { //not ai - let player toss
         this->board->getTossButton()->canToss = true;
     }
     else {
         this->board->getTossButton()->canToss = false;
     }
-    this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
-    this->delay(this->delayTime, "");
 }
 
 void Game::handleAllObstructed()
 {
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->delay(this->delayTime, "");
-    this->setNextTeamId();
+    this->setNextTeamId(this->dice);
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
 }
 

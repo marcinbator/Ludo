@@ -10,6 +10,7 @@ using namespace std;
 class Team
 {
 	int id{};
+	int prime{};
 	int standing{};
 	bool isAi;
 	string name;
@@ -23,8 +24,10 @@ public:
 
 	void setPawns(Pawn* pawns[Game::PAWNS_TEAM]);
 	void setStanding(int standing);
+	void setPrime(int prime);
 
 	int getId() const;
+	int getPrime() const;
 	string getName() const;
 	bool getIsAi() const;
 	Pawn** getPawns();

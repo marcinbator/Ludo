@@ -22,9 +22,19 @@ void Team::setStanding(int standing)
     this->standing = standing;
 }
 
+void Team::setPrime(int prime)
+{
+    this->prime = prime;
+}
+
 int Team::getId() const
 {
     return this->id;
+}
+
+int Team::getPrime() const
+{
+    return this->prime;
 }
 
 string Team::getName() const
