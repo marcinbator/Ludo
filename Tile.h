@@ -29,7 +29,11 @@ public:
     int getPositionY() const;
     Pawn* getCurrentPawn();
     sf::Sprite getSprite() const;
-    bool isClicked(sf::Event event) const;
+    inline bool isClicked(sf::Event event) const {
+        return this->sprite
+            .getGlobalBounds()
+            .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+    }
 private:
     void initSprite(string texturePath, int x, int y, int rotateDeg);
 };

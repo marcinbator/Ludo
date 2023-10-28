@@ -20,9 +20,13 @@ public:
 	void setText(sf::Text text);
 	void setTexture(string texturePath);
 
-	const sf::Sprite getSprite() const;
-	const sf::Text getText() const;
-	const bool isClicked(sf::Event event) const;
+	sf::Sprite getSprite() const;
+	sf::Text getText() const;
+	inline bool isClicked(sf::Event event) const {
+		return this->sprite
+			.getGlobalBounds()
+			.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+	}
 protected:
 	void initSprite(string texturePath, int x, int y);
 	void initText(string text, int x, int y);

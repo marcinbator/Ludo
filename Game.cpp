@@ -294,7 +294,7 @@ void Game::handleAllObstructed()
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->delay(this->delayTime, "");
     this->setNextTeamId(this->dice);
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
+    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rucha gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleSingleWin()

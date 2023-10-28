@@ -36,9 +36,17 @@ public:
 	Tile* getCurrentTile();
 	bool getIsAtBase() const;
 	bool getIsAtTarget() const;
-	bool isClicked(sf::Event event) const;
-	bool isMouseOver(sf::Event event) const;
 	bool canMoveFurther(int tiles, Board* board);
+	inline bool isClicked(sf::Event event) const {
+		return this->sprite
+			.getGlobalBounds()
+			.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+	}
+	inline bool isMouseOver(sf::Event event) const {
+		return this->sprite
+			.getGlobalBounds()
+			.contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+	}
 private:
 	void initSprite();
 	bool move(Tile* tile, sf::RenderWindow* window, Board* board);
