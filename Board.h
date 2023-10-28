@@ -18,7 +18,7 @@ class Board
 	TossButton* tossButton;
 	Button* warp;
 	Button* rematch;
-	Button* sound;
+	Button* music;
 	Tile* tiles[72];
 	sf::Texture diceTexture;
 	sf::Sprite dice;

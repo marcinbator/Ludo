@@ -23,6 +23,11 @@ Team::~Team()
         delete this->ai;
 }
 
+void Team::setId(int id)
+{
+    this->id = id;
+}
+
 void Team::setPawns(Pawn* pawns[Game::PAWNS_TEAM])
 {
     for (int i = 0; i < 4; i++) {

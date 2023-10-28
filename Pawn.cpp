@@ -61,6 +61,11 @@ void Pawn::handleMouseOver(int dice, sf::RenderWindow* window, Board* board)
 	}
 }
 
+void Pawn::setTeam(Team* team)
+{
+	this->team = team;
+}
+
 //return current tile to base
 void Pawn::setAtBase(sf::RenderWindow* window, Board* board)
 {

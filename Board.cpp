@@ -28,7 +28,7 @@ void Board::drawBoard(sf::RenderWindow* window) {
     this->drawLogo(window);
     this->warp->draw(window);
     this->rematch->draw(window);
-    this->sound->draw(window);
+    this->music->draw(window);
     this->dial->draw(window);
     for (int i = 0; i < TILES_AMOUNT; i++) {
         this->tiles[i]->drawTile(window);
@@ -73,7 +73,7 @@ Button* Board::getRematch() const
 
 Button* Board::getSound() const
 {
-    return this->sound;
+    return this->music;
 }
 
 Dial* Board::getDial() const
@@ -123,7 +123,7 @@ void Board::initButtons()
     this->dice.setScale(2, 2);
     this->warp = new Button("", string(TEXTURE_PATH) + "warp.png", this->centerX + 40 * 9, this->centerY - 40 * 9);
     this->rematch = new Button("", string(TEXTURE_PATH) + "rematch.png", this->centerX - 40 * 9, this->centerY - 40 * 9);
-    this->sound = new Button("", string(TEXTURE_PATH) + "sound.png", this->centerX - 40 * 7, this->centerY - 40 * 9);
+    this->music = new Button("", string(TEXTURE_PATH) + "sound.png", this->centerX - 40 * 7, this->centerY - 40 * 9);
 }
 
 void Board::drawLogo(sf::RenderWindow* window)
