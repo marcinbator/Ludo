@@ -10,6 +10,5 @@ int main() {
             game.render();
         }
     } while (restart == true);
-    system("pause");
     return 0;
 }
