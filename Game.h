@@ -21,9 +21,8 @@ class LeaderBoard;
 class Game
 {
     static const int MOVE_SOUND_ID = 0;
-    static const int STRIKE_SOUND_ID = 1;
-    static const int OBSTRUCTED_SOUND_ID = 2;
-    static const int WIN_SOUND_ID = 3;
+    static const int OBSTRUCTED_SOUND_ID = 1;
+    static const int WIN_SOUND_ID = 2;
 
     int dice{};
     int livePlayersAmount{};
@@ -44,8 +43,8 @@ class Game
     sf::Clock delayClock;
     sf::SoundBuffer musicBuffer;
     sf::Sound music;
-    sf::SoundBuffer soundsBuffers[4];
-    sf::Sound sounds[4];
+    sf::SoundBuffer soundsBuffers[3];
+    sf::Sound sounds[3];
 public:
     static const int PAWNS_TEAM = 4;
     static const int MAX_TEAMS = 4;

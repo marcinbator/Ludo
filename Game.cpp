@@ -82,8 +82,8 @@ void Game::initSounds()
     this->music.play();
     this->music.setLoop(true);
     //sounds
-    string soundNames[] = { "move.wav", "strike.wav", "obstructed.wav", "win.wav" };
-    for (int i = 0; i < 4; i++) {
+    string soundNames[] = { "move.wav", "obstructed.wav", "win.wav" };
+    for (int i = 0; i < 3; i++) {
         this->soundsBuffers[i].loadFromFile(soundPath + soundNames[i]);
         this->sounds[i].setBuffer(this->soundsBuffers[i]);
     }
@@ -213,7 +213,7 @@ void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
     this->delay(this->delayTime * 2, "");
     if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
-        this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+        this->board->getDial()->setText("Gracz zablokowany");
         this->sounds[this->OBSTRUCTED_SOUND_ID].play();
         this->delay(this->delayTime, "");
     }
@@ -231,8 +231,7 @@ void Game::handleAiMove() {
 
 void Game::handlePlayerTossClick() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->board->getDial()->setText(
-        "Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+    this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;
     if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) { //player is obstructed
         this->handleAllObstructed();
@@ -340,10 +339,10 @@ void Game::selectPlayer()
 void Game::handleAllObstructed()
 {
     this->sounds[this->OBSTRUCTED_SOUND_ID].play();
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+    this->board->getDial()->setText("Gracz zablokowany");
     this->delay(this->delayTime, "");
     this->setNextTeamId(this->dice);
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza " + this->teams[this->currentTeamId]->getName());
+    //this->board->getDial()->setText("Ruch gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleSingleWin()
