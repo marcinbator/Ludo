@@ -19,7 +19,6 @@ Game::Game(bool& restart): restart(restart)
 
 Game::~Game()
 {
-    delete this->ai;
     delete this->initialMenu;
     delete this->leaderBoard;
     delete this->board;
@@ -83,6 +82,10 @@ void Game::renderPawns() {
     }
 }
 
+void Game::checkPrime()
+{
+}
+
 void Game::initGame()
 {
     this->livePlayersAmount = initialMenu->getPlayersAmount();
@@ -103,13 +106,8 @@ void Game::initGame()
             this->pawns[i * this->PAWNS_TEAM + 3] };
         this->teams[i]->setPawns(subpawns);
     }
-
     this->currentTeamId = random(0, playersAmount - 1);
-    if (this->aiPlayersAmount > 0) {
-        this->ai = new Ai(this->initialMenu->getLevel());
-    }
-    this->setNextTeamId();
-    this->board->getDial()->setText("Zaczyna gracz: " + this->teams[this->currentTeamId]->getName());
+    this->setNextTeamId(this->dice);
     this->delay(this->delayTime, "");
     cout << "Game loaded successfully.\nPlayers: " << this->livePlayersAmount << "+" << this->aiPlayersAmount << endl;
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
@@ -128,7 +126,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getPlayersColors()[j] != "") { //player exists
-                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j]);
+                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -152,7 +150,7 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j]);
+                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -173,15 +171,16 @@ void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime * 2, "");
-    if (!this->ai->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
+    if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
         this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
         this->delay(this->delayTime, "");
     }
     if (this->teams[this->currentTeamId]->isWin()) { //check win
         this->handleSingleWin();
     }
+    int diceT = this->dice;
     this->dice = 0;
-    this->setNextTeamId();
+    this->setNextTeamId(diceT);
     this->delay(this->delayTime, "");
 }
 
@@ -199,12 +198,13 @@ void Game::handlePlayerTossClick() {
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
         if (this->pawns[pawnId]->handleClick(this->dice, this->window, this->board)) { //if move is possible -> move itself
-            this->dice = 0;
             this->board->getTossButton()->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
             }
-            this->setNextTeamId(); //get next or detect game ends
+            int diceT = this->dice;
+            this->dice = 0;
+            this->setNextTeamId(diceT); //get next or detect game ends
         }
     }
     else {
@@ -240,7 +240,7 @@ void Game::handleSoundClick()
     this->board->getSound()->setTexture(texture);
 }
 
-void Game::setNextTeamId()
+void Game::setNextTeamId(int diceT)
 {
     int id = this->currentTeamId;
     int attempts = 0;
@@ -254,6 +254,16 @@ void Game::setNextTeamId()
         this->handleGameEnd();
         return;
     }
+    if (diceT == 6 && this->teams[this->currentTeamId]->getPrime() < 3) { //prime - retoss
+        this->teams[this->currentTeamId]->setPrime(this->teams[this->currentTeamId]->getPrime() + 1);
+        this->selectPlayer();
+        this->board->getDial()->setText("Ponowny rzut gracza " + this->teams[this->currentTeamId]->getName());
+        this->delay(this->delayTime, "");
+        return;
+    }
+    else {
+        this->teams[this->currentTeamId]->setPrime(0);
+    }
     do {
         id = (id + 1) % this->playersAmount;
         attempts++;
@@ -263,22 +273,27 @@ void Game::setNextTeamId()
         return;
     }
     this->currentTeamId = id;
+    this->selectPlayer();
+    this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
+    this->delay(this->delayTime, "");
+}
+
+void Game::selectPlayer()
+{
     if (!this->teams[this->currentTeamId]->getIsAi()) { //not ai - let player toss
         this->board->getTossButton()->canToss = true;
     }
     else {
         this->board->getTossButton()->canToss = false;
     }
-    this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
-    this->delay(this->delayTime, "");
 }
 
 void Game::handleAllObstructed()
 {
     this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
     this->delay(this->delayTime, "");
-    this->setNextTeamId();
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rzuca gracz " + this->teams[this->currentTeamId]->getName());
+    this->setNextTeamId(this->dice);
+    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rucha gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleSingleWin()

@@ -1,13 +1,26 @@
 #include "Team.h"
+#include "Ai.h"
 
-Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath)
+Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath, int level)
 {
     this->id = id;
     this->name = name;
     this->isAi = isAi;
     this->texturePath = texturePath;
     this->startingTile = startingTile;
+    if (this->isAi) {
+        this->ai = new Ai(level);
+    }
+    else {
+        this->ai = nullptr;
+    }
     cout << "Team " + this->name << " created successfully.\n";
+}
+
+Team::~Team()
+{
+    if(this->ai != nullptr)
+        delete this->ai;
 }
 
 void Team::setPawns(Pawn* pawns[Game::PAWNS_TEAM])
@@ -22,9 +35,19 @@ void Team::setStanding(int standing)
     this->standing = standing;
 }
 
+void Team::setPrime(int prime)
+{
+    this->prime = prime;
+}
+
 int Team::getId() const
 {
     return this->id;
+}
+
+int Team::getPrime() const
+{
+    return this->prime;
 }
 
 string Team::getName() const
@@ -35,6 +58,11 @@ string Team::getName() const
 bool Team::getIsAi() const
 {
     return this->isAi;
+}
+
+Ai* Team::getAi()
+{
+    return this->ai;
 }
 
 Pawn** Team::getPawns()

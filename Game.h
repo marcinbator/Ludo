@@ -35,7 +35,6 @@ class Game
     Pawn* pawns[16];
     InitialMenu* initialMenu;
     LeaderBoard* leaderBoard;
-    Ai* ai;
     sf::RenderWindow* window;
     sf::Clock delayClock;
     sf::SoundBuffer buffer;
@@ -57,6 +56,7 @@ private:
     void createLivePlayers(const string* names, const int *baseTiles, const int* startTiles);
     void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void renderPawns();
+    void checkPrime();
     
     void handleAiMove();
     void handlePlayerTossClick();
@@ -69,6 +69,7 @@ private:
     void handleGameEnd();
 
     void delay(int time, string dial);
-    void setNextTeamId();
+    void setNextTeamId(int diceT);
+    void selectPlayer();
     void pollEvents();
 };

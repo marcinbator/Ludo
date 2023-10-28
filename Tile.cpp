@@ -69,13 +69,6 @@ sf::Sprite Tile::getSprite() const
     return this->sprite;
 }
 
-bool Tile::isClicked(sf::Event event) const
-{
-    return this->getSprite()
-        .getGlobalBounds()
-        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-}
-
 void Tile::initSprite(string texturePath, int x, int y, int rotateDeg)
 {
     this->width = this->sprite.getGlobalBounds().getSize().x;

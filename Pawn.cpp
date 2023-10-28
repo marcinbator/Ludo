@@ -113,20 +113,6 @@ bool Pawn::getIsAtTarget() const
 	return this->isAtTarget;
 }
 
-bool Pawn::isClicked(sf::Event event)  const
-{
-	return this->sprite
-		.getGlobalBounds()
-		.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-}
-
-bool Pawn::isMouseOver(sf::Event event) const
-{
-	return this->sprite
-		.getGlobalBounds()
-		.contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-}
-
 bool Pawn::canMoveFurther(int tiles, Board* board)
 {
 	int nextId = this->currentTile->getId();

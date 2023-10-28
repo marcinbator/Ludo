@@ -26,21 +26,14 @@ void Button::setTexture(string texturePath)
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2, this->sprite.getGlobalBounds().height / 2);
 }
 
-const sf::Sprite Button::getSprite() const
+sf::Sprite Button::getSprite() const
 {
     return this->sprite;
 }
 
-const sf::Text Button::getText() const
+sf::Text Button::getText() const
 {
     return this->text;
-}
-
-const bool Button::isClicked(sf::Event event) const
-{
-    return this->sprite
-        .getGlobalBounds()
-        .contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
 }
 
 void Button::initSprite(string texturePath, int x, int y)
