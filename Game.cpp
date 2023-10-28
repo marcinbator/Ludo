@@ -70,10 +70,23 @@ void Game::initWindow() {
     sf::Image icon;
     icon.loadFromFile(string(TEXTURE_PATH) + "logo.png");
     this->window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-    this->buffer.loadFromFile("music/audio.wav");
-    this->sound.setBuffer(buffer);
-    this->sound.play();
-    this->sound.setLoop(true);
+    this->initSounds();
+}
+
+void Game::initSounds()
+{
+    string soundPath = "music/";
+    //music
+    this->musicBuffer.loadFromFile(soundPath + "audio.wav");
+    this->music.setBuffer(musicBuffer);
+    this->music.play();
+    this->music.setLoop(true);
+    //sounds
+    string soundNames[] = { "move.wav", "obstructed.wav", "win.wav" };
+    for (int i = 0; i < 3; i++) {
+        this->soundsBuffers[i].loadFromFile(soundPath + soundNames[i]);
+        this->sounds[i].setBuffer(this->soundsBuffers[i]);
+    }
 }
 
 void Game::renderPawns() {
@@ -82,23 +95,18 @@ void Game::renderPawns() {
     }
 }
 
-void Game::checkPrime()
-{
-}
-
 void Game::initGame()
 {
     this->livePlayersAmount = initialMenu->getPlayersAmount();
     this->aiPlayersAmount = initialMenu->getAiPlayersAmount();
     this->playersAmount = this->livePlayersAmount + this->aiPlayersAmount;
 
-    const string names[] = { "Czerwony", "Niebiski", "Zielony", "Zolty" };
+    const string names[] = { "Czerwony", "Niebieski", "Zielony", "Zolty" };
     const int startTiles[] = { 1, 11, 21, 31 };
     const int baseTiles[] = { 101, 111, 121, 131 };
 
     this->createLivePlayers(names, baseTiles, startTiles);
     this->createAiPlayers(names, baseTiles, startTiles);
-
     for (int i = 0; i < this->playersAmount; i++) { //assign pawns to teams
         Pawn* subpawns[] = { this->pawns[i * this->PAWNS_TEAM],
             this->pawns[i * this->PAWNS_TEAM + 1],
@@ -106,6 +114,7 @@ void Game::initGame()
             this->pawns[i * this->PAWNS_TEAM + 3] };
         this->teams[i]->setPawns(subpawns);
     }
+    this->orderPlayers(names);
     this->currentTeamId = random(0, playersAmount - 1);
     this->setNextTeamId(this->dice);
     this->delay(this->delayTime, "");
@@ -126,7 +135,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getPlayersColors()[j] != "") { //player exists
-                Team* team = new Team(i + 1, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
+                Team* team = new Team(i, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -150,7 +159,7 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i + 1, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
+                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -167,13 +176,49 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     }
 }
 
+void Game::orderPlayers(const string* namesOrder)
+{
+    int index = 0;
+    string customOrder[this->MAX_TEAMS];
+    for (int i = 0; i < this->MAX_TEAMS; i++) { //set custom order
+        bool matches = false;
+        for (int j = 0; j < this->playersAmount; j++) {
+            if (namesOrder[i] == this->teams[j]->getName()) {
+                matches = true;
+            }
+        }
+        if (matches) {
+            customOrder[index] = namesOrder[i];
+            index++;
+        }
+    }
+    for (int i = 0; i < this->playersAmount; i++) { //swap teams if necessary
+        if (this->teams[i]->getName() != customOrder[i]) {
+            for (int j = 0; j < this->playersAmount; j++) {
+                if (this->teams[j]->getName() == customOrder[i]) {
+                    Team* team = this->teams[j];
+                    this->teams[j] = this->teams[i];
+                    this->teams[i] = team;
+                    break;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < this->playersAmount; i++) {
+        this->teams[i]->setId(i);
+    }
+}
+
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->delay(this->delayTime * 2, "");
     if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
-        this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+        this->board->getDial()->setText("Gracz zablokowany");
+        this->sounds[this->OBSTRUCTED_SOUND_ID].play();
         this->delay(this->delayTime, "");
+    }
+    else {
+        this->sounds[this->MOVE_SOUND_ID].play();
     }
     if (this->teams[this->currentTeamId]->isWin()) { //check win
         this->handleSingleWin();
@@ -186,8 +231,7 @@ void Game::handleAiMove() {
 
 void Game::handlePlayerTossClick() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->board->getDial()->setText(
-        "Kostka: " + to_string(this->dice) + ". Ruch gracza: " + this->teams[this->currentTeamId]->getName());
+    this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;
     if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) { //player is obstructed
         this->handleAllObstructed();
@@ -196,8 +240,9 @@ void Game::handlePlayerTossClick() {
 }
 
 void Game::handlePawnClick(int pawnId) {
-    if (this->pawns[pawnId]->getTeam()->getId() == 1 + this->currentTeamId) { //pawn of correct team clicked
+    if (this->pawns[pawnId]->getTeam()->getId() == this->currentTeamId) { //pawn of correct team clicked
         if (this->pawns[pawnId]->handleClick(this->dice, this->window, this->board)) { //if move is possible -> move itself
+            this->sounds[this->MOVE_SOUND_ID].play();
             this->board->getTossButton()->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
@@ -206,15 +251,18 @@ void Game::handlePawnClick(int pawnId) {
             this->dice = 0;
             this->setNextTeamId(diceT); //get next or detect game ends
         }
+        else {
+            this->sounds[this->OBSTRUCTED_SOUND_ID].play();        }
     }
     else {
+        this->sounds[this->OBSTRUCTED_SOUND_ID].play();
         this->board->getDial()->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
     }
 }
 
 void Game::handleMouseOverPawn(int pawnId)
 {
-    if (this->pawns[pawnId]->getTeam()->getId()-1 == this->currentTeamId && this->dice != 0) {
+    if (this->pawns[pawnId]->getTeam()->getId() == this->currentTeamId && this->dice != 0) {
         this->pawns[pawnId]->handleMouseOver(this->dice, this->window, this->board);
     }
 }
@@ -232,10 +280,10 @@ void Game::handleSoundClick()
     this->isSound = !this->isSound;
     string texture = this->isSound ? string(TEXTURE_PATH) + "sound.png" : string(TEXTURE_PATH) + "soundOff.png";
     if (this->isSound) {
-        this->sound.play();
+        this->music.play();
     }
     else {
-        this->sound.pause();
+        this->music.pause();
     }
     this->board->getSound()->setTexture(texture);
 }
@@ -290,15 +338,17 @@ void Game::selectPlayer()
 
 void Game::handleAllObstructed()
 {
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Gracz zablokowany");
+    this->sounds[this->OBSTRUCTED_SOUND_ID].play();
+    this->board->getDial()->setText("Gracz zablokowany");
     this->delay(this->delayTime, "");
     this->setNextTeamId(this->dice);
-    this->board->getDial()->setText("Kostka: " + to_string(this->dice) + ". Rucha gracza " + this->teams[this->currentTeamId]->getName());
+    //this->board->getDial()->setText("Ruch gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleSingleWin()
 {
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
+    this->sounds[this->WIN_SOUND_ID].play();
     this->currentFreePodiumPlace++;
     this->delay(this->delayTime * 2, "Zwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
 }
@@ -352,7 +402,7 @@ void Game::pollEvents()
             if (this->board->getWarp()->isClicked(event)) { //warp click
                 this->handleWarpClick();
             }
-            if (this->board->getSound()->isClicked(event)) { //sound click
+            if (this->board->getSound()->isClicked(event)) { //music click
                 this->handleSoundClick();
             }
             if (this->board->getRematch()->isClicked(event)) { //rematch click

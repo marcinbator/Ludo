@@ -27,6 +27,7 @@ public:
 	void draw(Tile* tile, sf::RenderWindow* window);
 	bool handleClick(int dice, sf::RenderWindow* window, Board* board);
 	void handleMouseOver(int dice, sf::RenderWindow* window, Board* board);
+	void setTeam(Team* team);
 	void setAtBase(sf::RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
 	void setIsTargetVisible(bool isTargetVisible);

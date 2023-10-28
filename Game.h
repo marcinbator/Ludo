@@ -20,6 +20,10 @@ class LeaderBoard;
 
 class Game
 {
+    static const int MOVE_SOUND_ID = 0;
+    static const int OBSTRUCTED_SOUND_ID = 1;
+    static const int WIN_SOUND_ID = 2;
+
     int dice{};
     int livePlayersAmount{};
     int aiPlayersAmount{};
@@ -37,8 +41,10 @@ class Game
     LeaderBoard* leaderBoard;
     sf::RenderWindow* window;
     sf::Clock delayClock;
-    sf::SoundBuffer buffer;
-    sf::Sound sound;
+    sf::SoundBuffer musicBuffer;
+    sf::Sound music;
+    sf::SoundBuffer soundsBuffers[3];
+    sf::Sound sounds[3];
 public:
     static const int PAWNS_TEAM = 4;
     static const int MAX_TEAMS = 4;
@@ -53,10 +59,11 @@ public:
     bool inline isRunning() const { return this->window->isOpen(); };
 private:
     void initWindow();
+    void initSounds();
     void createLivePlayers(const string* names, const int *baseTiles, const int* startTiles);
     void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
+    void orderPlayers(const string* namesOrder);
     void renderPawns();
-    void checkPrime();
     
     void handleAiMove();
     void handlePlayerTossClick();

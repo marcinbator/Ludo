@@ -12,11 +12,11 @@ class Ai;
 class Team
 {
 	int id{};
+	string name;
 	int prime{};
 	int standing{};
 	bool isAi;
 	Ai* ai;
-	string name;
 	string texturePath;
 	Tile* startingTile;
 	Pawn* pawns[Game::PAWNS_TEAM];
@@ -26,6 +26,7 @@ public:
 	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level);
 	~Team();
 
+	void setId(int id);
 	void setPawns(Pawn* pawns[Game::PAWNS_TEAM]);
 	void setStanding(int standing);
 	void setPrime(int prime);
