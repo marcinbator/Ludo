@@ -342,7 +342,6 @@ void Game::handleAllObstructed()
     this->board->getDial()->setText("Gracz zablokowany");
     this->delay(this->delayTime, "");
     this->setNextTeamId(this->dice);
-    //this->board->getDial()->setText("Ruch gracza " + this->teams[this->currentTeamId]->getName());
 }
 
 void Game::handleSingleWin()
