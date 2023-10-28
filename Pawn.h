@@ -34,7 +34,7 @@ public:
 	void setAtBase(sf::RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
 	void setIsTargetVisible(bool isTargetVisible);
-	void setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board);
+	bool setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board);
 
 	int getId() const;
 	Team* getTeam();

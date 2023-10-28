@@ -211,7 +211,6 @@ void Game::orderPlayers(const string* namesOrder)
 
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->delay(this->delayTime * 2, "");
     if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
         this->board->getDial()->setText("Gracz zablokowany");
         this->sounds[this->OBSTRUCTED_SOUND_ID].play();
@@ -231,6 +230,9 @@ void Game::handleAiMove() {
 
 void Game::handlePlayerTossClick() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
+    if (this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->currentTeamId, this->dice, this->window, this->board) != -1) { //auto move - one option
+        this->handlePawnClick(this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->currentTeamId, this->dice, this->window, this->board));
+    }
     this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;
     if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) { //player is obstructed

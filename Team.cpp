@@ -55,6 +55,24 @@ int Team::getPrime() const
     return this->prime;
 }
 
+int Team::getIsPossibleMovesOne(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) const
+{
+    int moves = 0;
+    for (int i = 0; i < Game::PAWNS_TEAM; i++) {
+        if (this->pawns[i]->setIsPossibleVisible(currentTeamId, dice, window, board)) {
+            moves++;
+        }
+    }
+    if (moves == 1) {
+        for (int i = 0; i < Game::PAWNS_TEAM; i++) {
+            if (this->pawns[i]->setIsPossibleVisible(currentTeamId, dice, window, board)) {
+                return this->pawns[i]->getId();
+            }
+        }
+    }
+    return -1;
+}
+
 string Team::getName() const
 {
     return this->name;

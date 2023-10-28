@@ -12,6 +12,7 @@ class Ai;
 class Team
 {
 	int id{};
+	int possibleMoves{};
 	string name;
 	int prime{};
 	int standing{};
@@ -33,6 +34,7 @@ public:
 
 	int getId() const;
 	int getPrime() const;
+	int getIsPossibleMovesOne(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) const;
 	string getName() const;
 	bool getIsAi() const;
 	Ai* getAi();

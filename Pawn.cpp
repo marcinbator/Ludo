@@ -96,7 +96,7 @@ void Pawn::setIsTargetVisible(bool isTargetVisible)
 	this->isTargetVisible = isTargetVisible;
 }
 
-void Pawn::setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) //highlight possible move
+bool Pawn::setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) //highlight possible move
 {
 	if (this->team->getId() == currentTeamId) {
 		if (!this->isAtBase || dice == 1 || dice == 6) {
@@ -112,12 +112,13 @@ void Pawn::setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* w
 					this->possible.setOrigin(this->sprite.getOrigin());
 					this->possible.setPosition(this->sprite.getPosition());
 					this->isPossibleVisible = true;
-					return;
+					return true;
 				}
 			}
 		}
 	}
 	this->isPossibleVisible = false;
+	return false;
 }
 
 int Pawn::getId()  const
