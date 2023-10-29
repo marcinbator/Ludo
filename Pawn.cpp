@@ -130,6 +130,28 @@ Tile* Pawn::getCurrentTile()
 	return this->currentTile;
 }
 
+Tile* Pawn::getDesiredTile(int dice, Board* board)
+{
+	int nextId = this->getCurrentTile()->getId();
+	for (int i = 0; i < dice; i++) { //get desired tile
+		nextId = this->getNextTileId(nextId);
+	}
+	return board->getTileById(id);
+}
+
+int Pawn::getDistanceFromStart(Board* board)
+{
+	if (this->isAtBase) {
+		return Board::LAST_TILE+1;
+	}
+	int distance = 0;
+	int tileId = this->team->getStartingTile()->getId();
+	while (this->currentTile->getId() != this->getNextTileId(tileId)) {
+		distance++;
+	}
+	return distance;
+}
+
 bool Pawn::getIsAtBase() const
 {
 	return this->isAtBase;
@@ -142,10 +164,7 @@ bool Pawn::getIsAtTarget() const
 
 bool Pawn::canMoveFurther(int tiles, Board* board)
 {
-	int nextId = this->currentTile->getId();
-	for (int i = 0; i < tiles; i++) { //get desired tile
-		nextId = this->getNextTileId(nextId);
-	}
+	int nextId = this->getDesiredTile(tiles, board)->getId();
 	if (nextId <= this->team->getStartingTile()->getId() + Board::TARGET_LAST_ID) //pawn next move not exceed its route
 	{
 		Tile* tile = board->getTileById(nextId);

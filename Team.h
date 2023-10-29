@@ -24,7 +24,7 @@ class Team
 
 public:
 	Team() = delete;
-	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level);
+	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level, Board* board);
 	~Team();
 
 	void setId(int id);

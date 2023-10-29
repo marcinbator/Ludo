@@ -1,7 +1,7 @@
 #include "Team.h"
 #include "Ai.h"
 
-Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath, int level)
+Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath, int level, Board* board)
 {
     this->id = id;
     this->name = name;
@@ -9,7 +9,7 @@ Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePa
     this->texturePath = texturePath;
     this->startingTile = startingTile;
     if (this->isAi) {
-        this->ai = new Ai(level);
+        this->ai = new Ai(level, this, board);
     }
     else {
         this->ai = nullptr;

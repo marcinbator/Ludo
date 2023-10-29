@@ -135,7 +135,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getPlayersColors()[j] != "") { //player exists
-                Team* team = new Team(i, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
+                Team* team = new Team(i, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel(), this->board);
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -159,7 +159,7 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
+                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel(), this->board);
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -212,7 +212,7 @@ void Game::orderPlayers(const string* namesOrder)
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
     this->delay(this->delayTime, "");
-    if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
+    if (!this->teams[this->currentTeamId]->getAi()->move(this->dice, this->window)) { //move not possible
         this->board->getDial()->setText("Gracz zablokowany");
         this->sounds[this->OBSTRUCTED_SOUND_ID].play();
         this->delay(this->delayTime/2, "");

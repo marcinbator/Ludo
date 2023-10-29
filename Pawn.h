@@ -40,6 +40,8 @@ public:
 	int getId() const;
 	Team* getTeam();
 	Tile* getCurrentTile();
+	Tile* getDesiredTile(int dice, Board* board);
+	int getDistanceFromStart(Board* board);
 	bool getIsAtBase() const;
 	bool getIsAtTarget() const;
 	bool canMoveFurther(int tiles, Board* board);
