@@ -12,6 +12,7 @@ class Ai;
 class Team
 {
 	int id{};
+	int possibleMoves{};
 	string name;
 	int prime{};
 	int standing{};
@@ -23,7 +24,7 @@ class Team
 
 public:
 	Team() = delete;
-	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level);
+	Team(int id, bool isAi, string name, Tile* startingTile, string texturePath, int level, Board* board);
 	~Team();
 
 	void setId(int id);
@@ -33,6 +34,7 @@ public:
 
 	int getId() const;
 	int getPrime() const;
+	int getIsPossibleMovesOne(int dice, Board* board) const;
 	string getName() const;
 	bool getIsAi() const;
 	Ai* getAi();

@@ -1,7 +1,7 @@
 #include "Team.h"
 #include "Ai.h"
 
-Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath, int level)
+Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePath, int level, Board* board)
 {
     this->id = id;
     this->name = name;
@@ -9,7 +9,7 @@ Team::Team(int id, bool isAi, string name,  Tile* startingTile, string texturePa
     this->texturePath = texturePath;
     this->startingTile = startingTile;
     if (this->isAi) {
-        this->ai = new Ai(level);
+        this->ai = new Ai(level, this, board);
     }
     else {
         this->ai = nullptr;
@@ -55,6 +55,22 @@ int Team::getPrime() const
     return this->prime;
 }
 
+int Team::getIsPossibleMovesOne(int dice, Board* board) const
+{
+    int moves = 0;
+    int id = 0;
+    for (int i = 0; i < Game::PAWNS_TEAM; i++) {
+        if (this->pawns[i]->canMove(dice, board)) {
+            moves++;
+            id = this->pawns[i]->getId();
+        }
+    }
+    if (moves == 1) {
+        return id;
+    }
+    return -1;
+}
+
 string Team::getName() const
 {
     return this->name;
@@ -98,18 +114,16 @@ bool Team::isWin() const
             atTarget++;
         }
     }
-    return atTarget == 4;
+    return atTarget == Game::PAWNS_TEAM;
 }
 
 bool Team::areAllObstructed(int dice, Board* board) const
 {
     int obstructed = 0;
     for (int i = 0; i < 4; i++) {
-        if ((dice!=1 && dice !=6 && this->pawns[i]->getIsAtBase()) //at base, cannot exit
-            || (this->pawns[i]->getIsAtBase() == false && !this->pawns[i]->canMoveFurther(dice, board))){ //not at base, cannot move
+        if (!this->pawns[i]->canMove(dice, board)) {
             obstructed++;
-            cout << " Pawn " + to_string(this->pawns[i]->getId()) << " obstructed."<<endl;
         }
     }
-    return obstructed == 4;
+    return obstructed == Game::PAWNS_TEAM;
 }

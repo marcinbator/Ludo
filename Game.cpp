@@ -95,6 +95,13 @@ void Game::renderPawns() {
     }
 }
 
+void Game::playSound(int soundId)
+{
+    if (this->isSound) {
+        this->sounds[soundId].play();
+    }
+}
+
 void Game::initGame()
 {
     this->livePlayersAmount = initialMenu->getPlayersAmount();
@@ -120,12 +127,6 @@ void Game::initGame()
     this->delay(this->delayTime, "");
     cout << "Game loaded successfully.\nPlayers: " << this->livePlayersAmount << "+" << this->aiPlayersAmount << endl;
     cout << "Current player: " << this->teams[this->currentTeamId]->getName() << endl;
-
-    //debug
-    //for (int i = 0; i < this->PAWNS_TEAM; i++) {
-    //    this->pawns[i]->draw(this->board->getTileById(this->PAWNS_TEAM0 - i), this->window);
-    //    this->pawns[i]->setIsAtBase(false);
-    //}
 }
 
 void Game::createLivePlayers(const string* names, const int* baseTiles, const int* startTiles)
@@ -135,7 +136,7 @@ void Game::createLivePlayers(const string* names, const int* baseTiles, const in
     for (int i = 0; i < this->livePlayersAmount; i++) {
         for (int j = menuPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getPlayersColors()[j] != "") { //player exists
-                Team* team = new Team(i, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel());
+                Team* team = new Team(i, false, names[j], this->board->getTileById(startTiles[j]), images[j], this->initialMenu->getLevel(), this->board);
                 this->teams[i] = team;
                 menuPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -159,7 +160,18 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel());
+                int lvl = 0;
+                switch (this->initialMenu->getLevel()) {
+                case 0:
+                    lvl = 0;
+                    break;
+                case 1:
+                    lvl = random(0, 1);
+                    break;
+                case 2:
+                    lvl = 1;
+                }
+                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], lvl, this->board);
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {
@@ -211,14 +223,14 @@ void Game::orderPlayers(const string* namesOrder)
 
 void Game::handleAiMove() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
-    this->delay(this->delayTime * 2, "");
-    if (!this->teams[this->currentTeamId]->getAi()->move(this->teams[this->currentTeamId], this->dice, this->window, this->board)) { //move not possible
+    this->delay(this->delayTime, "");
+    if (!this->teams[this->currentTeamId]->getAi()->move(this->dice, this->window)) { //move not possible
         this->board->getDial()->setText("Gracz zablokowany");
-        this->sounds[this->OBSTRUCTED_SOUND_ID].play();
-        this->delay(this->delayTime, "");
+        this->playSound(this->OBSTRUCTED_SOUND_ID);
+        this->delay(this->delayTime/2, "");
     }
     else {
-        this->sounds[this->MOVE_SOUND_ID].play();
+        this->playSound(this->MOVE_SOUND_ID);
     }
     if (this->teams[this->currentTeamId]->isWin()) { //check win
         this->handleSingleWin();
@@ -226,11 +238,16 @@ void Game::handleAiMove() {
     int diceT = this->dice;
     this->dice = 0;
     this->setNextTeamId(diceT);
-    this->delay(this->delayTime, "");
+    this->delay(this->delayTime/2, "");
 }
 
 void Game::handlePlayerTossClick() {
     this->board->getTossButton()->handleClick(this->dice, this->board);
+    int autoMove = this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->dice, this->board);
+    if (autoMove != -1) { //auto move - one option
+        this->handlePawnClick(autoMove);
+        return;
+    }
     this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;
     if (this->teams[currentTeamId]->areAllObstructed(this->dice, this->board)) { //player is obstructed
@@ -242,7 +259,7 @@ void Game::handlePlayerTossClick() {
 void Game::handlePawnClick(int pawnId) {
     if (this->pawns[pawnId]->getTeam()->getId() == this->currentTeamId) { //pawn of correct team clicked
         if (this->pawns[pawnId]->handleClick(this->dice, this->window, this->board)) { //if move is possible -> move itself
-            this->sounds[this->MOVE_SOUND_ID].play();
+            this->playSound(this->MOVE_SOUND_ID);
             this->board->getTossButton()->canToss = false;
             if (this->teams[this->currentTeamId]->isWin()) { //check win
                 this->handleSingleWin();
@@ -252,10 +269,11 @@ void Game::handlePawnClick(int pawnId) {
             this->setNextTeamId(diceT); //get next or detect game ends
         }
         else {
-            this->sounds[this->OBSTRUCTED_SOUND_ID].play();        }
+            this->playSound(this->OBSTRUCTED_SOUND_ID);
+        }
     }
     else {
-        this->sounds[this->OBSTRUCTED_SOUND_ID].play();
+        this->playSound(this->OBSTRUCTED_SOUND_ID);
         this->board->getDial()->setText("Blad! Teraz ruch gracza " + this->teams[this->currentTeamId]->getName());
     }
 }
@@ -271,7 +289,7 @@ void Game::handleWarpClick()
 {
     this->isWarp = !this->isWarp;
     string texture = this->isWarp ? string(TEXTURE_PATH) + "unwarp.png" : string(TEXTURE_PATH) + "warp.png";
-    this->delayTime = this->isWarp ? 100 : 800;
+    this->delayTime = this->isWarp ? this->BASE_DELAY/5 : this->BASE_DELAY;
     this->board->getWarp()->setTexture(texture);
 }
 
@@ -316,10 +334,6 @@ void Game::setNextTeamId(int diceT)
         id = (id + 1) % this->playersAmount;
         attempts++;
     } while (this->teams[id]->isWin() && attempts < this->playersAmount);
-    if (attempts >= this->playersAmount) { //no valid player found
-        this->currentTeamId = id + 10;
-        return;
-    }
     this->currentTeamId = id;
     this->selectPlayer();
     this->board->getDial()->setText("Rzut gracza " + this->teams[this->currentTeamId]->getName());
@@ -338,7 +352,7 @@ void Game::selectPlayer()
 
 void Game::handleAllObstructed()
 {
-    this->sounds[this->OBSTRUCTED_SOUND_ID].play();
+    this->playSound(this->OBSTRUCTED_SOUND_ID);
     this->board->getDial()->setText("Gracz zablokowany");
     this->delay(this->delayTime, "");
     this->setNextTeamId(this->dice);
@@ -347,7 +361,7 @@ void Game::handleAllObstructed()
 void Game::handleSingleWin()
 {
     this->teams[this->currentTeamId]->setStanding(this->currentFreePodiumPlace);
-    this->sounds[this->WIN_SOUND_ID].play();
+    this->playSound(this->WIN_SOUND_ID);
     this->currentFreePodiumPlace++;
     this->delay(this->delayTime * 2, "Zwycieza gracz " + this->teams[this->currentTeamId]->getName() + "!");
 }
@@ -391,7 +405,7 @@ void Game::pollEvents()
                 }
             }
             for (int i = 0; i < this->playersAmount*this->PAWNS_TEAM; i++) { //pawns clicks
-                if (pawns[i]->isClicked(event)) {
+                if (pawns[i]->isClicked(event) && !this->pawns[i]->getTeam()->getIsAi()) {
                     this->handlePawnClick(i);
                 }
             }
@@ -410,12 +424,16 @@ void Game::pollEvents()
             }
         }
         for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) { //pawns mouseover
-            if (pawns[i]->isMouseOver(event)) {
+            if (pawns[i]->isMouseOver(event) && !this->pawns[i]->getTeam()->getIsAi()) {
                 this->handleMouseOverPawn(i);
             }
             else {
                 this->pawns[i]->setIsTargetVisible(false);
             }
+        }
+        for (int i = 0; i < this->playersAmount * this->PAWNS_TEAM; i++) { //visualise possible moves
+            if(!this->pawns[i]->getTeam()->getIsAi())
+            this->pawns[i]->setIsPossibleVisible(this->currentTeamId, this->dice, this->window, this->board);
         }
     }
 }

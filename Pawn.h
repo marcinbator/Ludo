@@ -13,12 +13,15 @@ class Pawn
 	bool isAtBase;
 	bool isAtTarget;
 	bool isTargetVisible = false;
+	bool isPossibleVisible = false;
 	Team* team;
 	Tile* currentTile;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	sf::Texture targetTexture;
 	sf::Sprite target;
+	sf::Texture possibleTexture;
+	sf::Sprite possible;
 public:
 
 	Pawn() = delete;
@@ -31,10 +34,14 @@ public:
 	void setAtBase(sf::RenderWindow* window, Board* board);
 	void setIsAtBase(bool isAtBase);
 	void setIsTargetVisible(bool isTargetVisible);
+	bool setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board);
+	bool canMove(int dice, Board* board);
 
 	int getId() const;
 	Team* getTeam();
 	Tile* getCurrentTile();
+	Tile* getDesiredTile(int dice, Board* board);
+	int getDistanceFromStart(Board* board);
 	bool getIsAtBase() const;
 	bool getIsAtTarget() const;
 	bool canMoveFurther(int tiles, Board* board);

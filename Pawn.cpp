@@ -23,6 +23,9 @@ void Pawn::draw(Tile* tile, sf::RenderWindow* window)
 	if (this->isTargetVisible) {
 		window->draw(this->target);
 	}
+	if (this->isPossibleVisible) {
+		window->draw(this->possible);
+	}
 }
 
 //standard move
@@ -93,6 +96,25 @@ void Pawn::setIsTargetVisible(bool isTargetVisible)
 	this->isTargetVisible = isTargetVisible;
 }
 
+bool Pawn::setIsPossibleVisible(int currentTeamId, int dice, sf::RenderWindow* window, Board* board) //highlight possible move
+{
+	if(this->canMove(dice, board) && currentTeamId == this->team->getId()) {
+		this->possibleTexture.loadFromFile(string(TEXTURE_PATH) + "possible.png");
+		this->possible.setTexture(possibleTexture);
+		this->possible.setOrigin(this->sprite.getOrigin());
+		this->possible.setPosition(this->sprite.getPosition());
+		this->isPossibleVisible = true;
+		return true;
+	}
+	this->isPossibleVisible = false;
+	return false;
+}
+
+bool Pawn::canMove(int dice, Board* board)
+{
+	return ((dice == 1 || dice == 6) && this->isAtBase && this->canMoveFurther(1, board)) || (!this->isAtBase && this->canMoveFurther(dice, board));
+}
+
 int Pawn::getId()  const
 {
 	return this->id;
@@ -108,6 +130,29 @@ Tile* Pawn::getCurrentTile()
 	return this->currentTile;
 }
 
+Tile* Pawn::getDesiredTile(int dice, Board* board)
+{
+	int nextId = this->getCurrentTile()->getId();
+	for (int i = 0; i < dice; i++) { //get desired tile
+		nextId = this->getNextTileId(nextId);
+	}
+	return board->getTileById(nextId);
+}
+
+int Pawn::getDistanceFromStart(Board* board)
+{
+	if (this->isAtBase) {
+		return Board::LAST_TILE+1;
+	}
+	int distance = 0;
+	int tileId = this->team->getStartingTile()->getId();
+	while (this->currentTile->getId() != tileId) {
+		tileId = this->getNextTileId(tileId);
+		distance++;
+	}
+	return distance;
+}
+
 bool Pawn::getIsAtBase() const
 {
 	return this->isAtBase;
@@ -120,7 +165,7 @@ bool Pawn::getIsAtTarget() const
 
 bool Pawn::canMoveFurther(int tiles, Board* board)
 {
-	int nextId = this->currentTile->getId();
+	int nextId = this->getCurrentTile()->getId();
 	for (int i = 0; i < tiles; i++) { //get desired tile
 		nextId = this->getNextTileId(nextId);
 	}
