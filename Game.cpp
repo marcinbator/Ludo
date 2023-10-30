@@ -234,6 +234,7 @@ void Game::handlePlayerTossClick() {
     int autoMove = this->teams[this->currentTeamId]->getIsPossibleMovesOne(this->dice, this->board);
     if (autoMove != -1) { //auto move - one option
         this->handlePawnClick(autoMove);
+        return;
     }
     this->board->getDial()->setText("Ruch gracza: " + this->teams[this->currentTeamId]->getName());
     this->board->getTossButton()->canToss = false;

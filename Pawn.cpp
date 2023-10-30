@@ -136,7 +136,7 @@ Tile* Pawn::getDesiredTile(int dice, Board* board)
 	for (int i = 0; i < dice; i++) { //get desired tile
 		nextId = this->getNextTileId(nextId);
 	}
-	return board->getTileById(id);
+	return board->getTileById(nextId);
 }
 
 int Pawn::getDistanceFromStart(Board* board)
