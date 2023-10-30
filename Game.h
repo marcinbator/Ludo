@@ -23,7 +23,7 @@ class Game
     static const int MOVE_SOUND_ID = 0;
     static const int OBSTRUCTED_SOUND_ID = 1;
     static const int WIN_SOUND_ID = 2;
-    static const int BASE_DELAY = 3000;
+    static const int BASE_DELAY = 1000;
 
     int dice{};
     int livePlayersAmount{};
@@ -31,7 +31,7 @@ class Game
     int playersAmount{};
     int currentTeamId{};
     int currentFreePodiumPlace = 1;
-    int delayTime = 1000;
+    int delayTime = BASE_DELAY;
     bool isWarp = false;
     bool isSound = true;
     bool& restart;
