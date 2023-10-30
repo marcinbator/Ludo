@@ -23,6 +23,7 @@ class Game
     static const int MOVE_SOUND_ID = 0;
     static const int OBSTRUCTED_SOUND_ID = 1;
     static const int WIN_SOUND_ID = 2;
+    static const int BASE_DELAY = 3000;
 
     int dice{};
     int livePlayersAmount{};
@@ -64,6 +65,7 @@ private:
     void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void orderPlayers(const string* namesOrder);
     void renderPawns();
+    void playSound(int soundId);
     
     void handleAiMove();
     void handlePlayerTossClick();

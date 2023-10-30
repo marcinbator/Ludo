@@ -131,7 +131,7 @@ vector<int> Ai::selectFromDice(vector<int> possible)
 			minId = possible.at(i);
 		}
 	}
-	if (this->dice > 2) {
+	if (this->dice > 2 || max - Board::LAST_TILE < this->dice) {
 		newPossible.push_back(maxId);
 		return newPossible;
 	}
