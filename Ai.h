@@ -31,7 +31,9 @@ private:
 	int decide();
 	vector<int> getPossibleMoves();
 	vector<int> checkStrike(vector<int> possible);
+	vector<int> selectIfExit(vector<int> possible);
 	vector<int> selectFromDice(vector<int> possible);
+	int getRandom(vector<int> possible);
 	void setNextPawnId();
 };
 

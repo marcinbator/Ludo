@@ -159,7 +159,18 @@ void Game::createAiPlayers(const string* names, const int* baseTiles, const int*
     for (int i = this->livePlayersAmount; i < this->playersAmount; i++) {
         for (int j = menuAiPlayersUsed; j < this->PAWNS_TEAM; j++) {
             if (this->initialMenu->getAiPlayersColors()[j] != "") {  //player exists
-                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], this->initialMenu->getLevel(), this->board);
+                int lvl = 0;
+                switch (this->initialMenu->getLevel()) {
+                case 0:
+                    lvl = 0;
+                    break;
+                case 1:
+                    lvl = random(0, 1);
+                    break;
+                case 2:
+                    lvl = 1;
+                }
+                Team* team = new Team(i, true, names[j], this->board->getTileById(startTiles[j]), aiImages[j], lvl, this->board);
                 this->teams[i] = team;
                 menuAiPlayersUsed = j + 1;
                 for (int k = 0; k < this->PAWNS_TEAM; k++) {

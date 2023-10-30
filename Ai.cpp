@@ -14,8 +14,9 @@ Ai::Ai(int level, Team* team, Board* board)
 bool Ai::move(int dice, sf::RenderWindow* window)
 {
 	this->dice = dice;
-	if (this->decide() != 0) {
-		this->team->getPawns()[this->decide()]->handleClick(dice, window, this->board);
+	this->pawnToMoveId = this->decide();
+	if (this->pawnToMoveId != -1) {
+		this->team->getPawns()[this->pawnToMoveId]->handleClick(dice, window, this->board);
 		return true;
 	}
 	return false;
@@ -24,14 +25,21 @@ bool Ai::move(int dice, sf::RenderWindow* window)
 int Ai::decide()
 {
 	auto possible = this->getPossibleMoves();
-	while (possible.size() > 1) {
-		possible = this->checkStrike(possible);
-		possible = this->selectFromDice(possible);
+	if (this->level == 1) {
+		while (possible.size() > 1) {
+			possible = this->checkStrike(possible);
+			if (possible.size() > 1) {
+				possible = this->selectIfExit(possible);
+			}
+			if (possible.size() > 1) {
+				possible = this->selectFromDice(possible);
+			}
+		}
 	}
 	if (possible.size() == 0) {
 		return 0;
 	}
-	return possible.front();
+	return this->getRandom(possible);
 }
 
 vector<int> Ai::getPossibleMoves()
@@ -40,7 +48,6 @@ vector<int> Ai::getPossibleMoves()
 	for (int i = 0; i < Game::PAWNS_TEAM; i++) {
 		if (this->team->getPawns()[i]->canMove(this->dice, this->board)) {
 			possible.push_back(i);
-			cout << i;
 		}
 	}
 	return possible;
@@ -78,24 +85,63 @@ vector<int> Ai::checkStrike(vector<int> possible)
 	return possible;
 }
 
-vector<int> Ai::selectFromDice(vector<int> possible)
+vector<int> Ai::selectIfExit(vector<int> possible)
 {
-	int maxDistance = 0;
-	int maxDistanceId = 0;
-	vector<int> newPossible;
-	for (int i = 0; i < possible.size(); i++) {
-		int distance = this->team->getPawns()[possible.at(i)]->getDistanceFromStart(this->board);
-		if (distance > maxDistance) {
-			maxDistance = distance;
-			maxDistanceId = i;
+	if (this->dice == 1 || this->dice == 6) {
+		vector<int> notAtBase;
+		vector<int> atBase;
+		vector<int> newPossible;
+		for (int i = 0; i < possible.size(); i++) {
+			if (!this->team->getPawns()[possible.at(i)]->getIsAtBase() && !this->team->getPawns()[possible.at(i)]->getIsAtTarget()) {
+				notAtBase.push_back(possible.at(i));
+			}
+			else {
+				atBase.push_back(possible.at(i));
+			}
 		}
-	}
-	if (this->dice < 3) {
-		newPossible.push_back(possible.front());
+		if (notAtBase.size() < 2) {
+			newPossible.push_back(this->getRandom(atBase));
+			return newPossible;
+		}
+		newPossible.push_back(this->getRandom(notAtBase));
 		return newPossible;
 	}
-	newPossible.push_back(maxDistanceId);
+	return possible;
+}
+
+vector<int> Ai::selectFromDice(vector<int> possible)
+{
+	vector<int> distancesFromStart;
+	for (int i = 0; i < possible.size(); i++) {
+		auto pawn = this->team->getPawns()[possible.at(i)];
+		distancesFromStart.push_back(pawn->getDistanceFromStart(this->board));
+	}
+	int max = 0;
+	int maxId;
+	int min = Board::LAST_TILE;
+	int minId;
+	vector<int> newPossible;
+	for (int i = 0; i < distancesFromStart.size(); i++) {
+		if (distancesFromStart.at(i) > max) {
+			max = distancesFromStart.at(i);
+			maxId = possible.at(i);
+		}
+		if (distancesFromStart.at(i) < min) {
+			min = distancesFromStart.at(i);
+			minId = possible.at(i);
+		}
+	}
+	if (this->dice > 2) {
+		newPossible.push_back(maxId);
+		return newPossible;
+	}
+	newPossible.push_back(minId);
 	return newPossible;
+}
+
+int Ai::getRandom(vector<int> possible)
+{
+	return possible.at(random(0, possible.size()-1));
 }
 
 void Ai::setNextPawnId()
