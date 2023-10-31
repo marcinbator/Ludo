@@ -51,7 +51,7 @@ class Game
 public:
     static const int PAWNS_TEAM = 4;
     static const int MAX_TEAMS = 4;
-    static const int MIN_PLAYERS = 1; //debug = normal->2
+    static const int MIN_PLAYERS = 2;
 
     Game() = delete;
     Game(bool& restart);

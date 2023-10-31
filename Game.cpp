@@ -65,7 +65,7 @@ void Game::render()
 }
 
 void Game::initWindow() {
-    this->window = new sf::RenderWindow(sf::VideoMode(900, 900), "Ludo", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(sf::VideoMode(900, 900), "Chinczyk", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
     sf::Image icon;
     icon.loadFromFile(string(TEXTURE_PATH) + "logo.png");
