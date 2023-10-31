@@ -27,7 +27,6 @@ private:
 	vector<int> selectIfDeploy(vector<int> possible);
 	vector<int> selectFromDice(vector<int> possible);
 	int getRandom(vector<int> possible);
-	vector<int> getMinMaxDistanceId(vector<int> possible);
 	void setNextPawnId();
 };
 
