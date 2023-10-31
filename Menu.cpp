@@ -35,7 +35,7 @@ void Menu::initBackground(int centerX, int centerY)
 
 void Menu::initMenu(int centerX, int centerY)
 {
-    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+    this->font.loadFromFile(string(FONTS_PATH)+"YoungSerif-Regular.ttf");
     this->title = sf::Text("Menu", this->font, 30);
     this->title.setFillColor(sf::Color::White);
     this->title.setOrigin(this->title.getGlobalBounds().width / 2, this->title.getGlobalBounds().height / 2);

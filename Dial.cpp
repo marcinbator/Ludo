@@ -25,7 +25,7 @@ void Dial::setText(string text, sf::Color color)
 
 void Dial::initText(string text, int x, int y)
 {
-    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+    this->font.loadFromFile(string(FONTS_PATH)+"YoungSerif-Regular.ttf");
     this->text.setFont(this->font);
     this->text.setCharacterSize(20);
     this->text.setFillColor(sf::Color::White);

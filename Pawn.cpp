@@ -35,11 +35,8 @@ bool Pawn::handleClick(int dice, sf::RenderWindow* window, Board* board)
 		return deploy(dice, window, board);
 	}
 	if (this->canMoveFurther(dice, board)) { //pawn move not exceeding its route
-		int nextId = this->currentTile->getId();
-		for (int i = 0; i < dice; i++) { //get desired tile
-			nextId = this->getNextTileId(nextId);
-		}
-		if (this->move(board->getTileById(nextId), window, board)) { //move possible
+		Tile* desired = this->getDesiredTile(dice, board);
+		if (this->move(desired, window, board)) { //move possible
 			return true;
 		}
 	}
@@ -49,11 +46,7 @@ bool Pawn::handleClick(int dice, sf::RenderWindow* window, Board* board)
 void Pawn::handleMouseOver(int dice, sf::RenderWindow* window, Board* board)
 {
 	if (!this->isAtBase || dice == 1 || dice == 6) {
-		int nextId = this->currentTile->getId();
-		for (int i = 0; i < dice; i++) { //get desired tile
-			nextId = this->getNextTileId(nextId);
-		}
-		Tile* destination = board->getTileById(nextId);
+		Tile* destination = this->getDesiredTile(dice, board);
 		if (destination != nullptr) {
 			this->targetTexture.loadFromFile(string(TEXTURE_PATH) + "target.png");
 			this->target.setTexture(targetTexture);
@@ -165,10 +158,7 @@ bool Pawn::getIsAtTarget() const
 
 bool Pawn::canMoveFurther(int tiles, Board* board)
 {
-	int nextId = this->getCurrentTile()->getId();
-	for (int i = 0; i < tiles; i++) { //get desired tile
-		nextId = this->getNextTileId(nextId);
-	}
+	int nextId = this->getDesiredTile(tiles, board)->getId();
 	if (nextId <= this->team->getStartingTile()->getId() + Board::TARGET_LAST_ID) //pawn next move not exceed its route
 	{
 		Tile* tile = board->getTileById(nextId);

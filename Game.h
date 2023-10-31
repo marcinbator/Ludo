@@ -6,6 +6,8 @@
 #include <SFML/Audio.hpp>
 
 constexpr auto TEXTURE_PATH = "images/";
+constexpr auto SOUND_PATH = "music/";
+constexpr auto FONTS_PATH = "fonts/";
 
 using namespace std;
 
@@ -65,12 +67,12 @@ private:
     void createAiPlayers(const string* names, const int* baseTiles, const int* startTiles);
     void orderPlayers(const string* namesOrder);
     void renderPawns();
-    void playSound(int soundId);
     
     void handleAiMove();
     void handlePlayerTossClick();
     void handlePawnClick(int pawnId);
     void handleMouseOverPawn(int pawnId);
+    void handlePlaySound(int soundId);
     void handleWarpClick();
     void handleSoundClick();
     void handleAllObstructed();

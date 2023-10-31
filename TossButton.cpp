@@ -18,7 +18,7 @@ void TossButton::handleClick(int& dice, Board* board)
 
 void TossButton::initText(string text)
 {
-    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+    this->font.loadFromFile(string(FONTS_PATH)+"YoungSerif-Regular.ttf");
     this->text.setFont(this->font);
     this->text.setCharacterSize(16);
     this->text.setFillColor(sf::Color::Black);

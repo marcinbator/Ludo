@@ -2,7 +2,7 @@
 
 Button::Button(string text, string texturePath, int x, int y)
 {
-    this->font.loadFromFile("fonts/YoungSerif-Regular.ttf");
+    this->font.loadFromFile(string(FONTS_PATH)+"YoungSerif-Regular.ttf");
     this->initSprite(texturePath, x, y);
     this->initText(text, x, y);
 }
