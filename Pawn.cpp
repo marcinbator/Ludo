@@ -158,7 +158,10 @@ bool Pawn::getIsAtTarget() const
 
 bool Pawn::canMoveFurther(int tiles, Board* board)
 {
-	int nextId = this->getDesiredTile(tiles, board)->getId();
+	int nextId = this->getCurrentTile()->getId();
+	for (int i = 0; i < tiles; i++) { //get desired tile
+		nextId = this->getNextTileId(nextId);
+	}
 	if (nextId <= this->team->getStartingTile()->getId() + Board::TARGET_LAST_ID) //pawn next move not exceed its route
 	{
 		Tile* tile = board->getTileById(nextId);

@@ -29,13 +29,16 @@ C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Tile
           [
               T=float
           ]
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(55,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(79,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(118,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(127,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(58,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(67,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(73,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(93,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(105,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(116,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Ai.cpp(125,20): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  4 of 525 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+  2 of 524 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    5 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Chińczyk.vcxproj -> C:\Users\marci\Desktop\Repozytorium\Projekty\Projekty desktopowe\C_CPP\Ludo\Release\Ludo.exe
