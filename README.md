@@ -8,7 +8,7 @@ This is a simple implementation of the classic LUDO game in C++14, utilizing the
 - Classic LUDO Rules: Follow the traditional rules of the LUDO game.
 - Turn-based Gameplay: Take turns to roll the dice and move your pieces.
 - Winning Condition: The first player to move all their pieces to the finish line wins.
-## Requirements
+## Requirements for coding
 - C++14 compiler (preferably Visual Studio 2022)
 - SFML library (Window, Graphics)
 ## Installation
